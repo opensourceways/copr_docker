@@ -12,10 +12,12 @@ on:
     tags: [ 'v*.*.*' ]
     paths: 
       - '${{github.workflow}}/**'
+      - '.github/workflows/backend-publish.yml'
   pull_request:
     branches: [ "main" ]
     paths: 
       - '${{github.workflow}}/**'
+      - '.github/workflows/backend-publish.yml'
 
 env:
   # Use docker.io for Docker Hub if empty
