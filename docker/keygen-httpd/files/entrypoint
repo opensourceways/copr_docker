@@ -1,0 +1,5 @@
+#! /bin/sh
+
+# restore the ownership on files on volumes
+rpm --setugids copr-signer
+exec /usr/sbin/httpd "-DFOREGROUND"
