@@ -11,12 +11,12 @@ on:
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
     paths: 
-      - ${{github.workflow}}/**
+      - backend/**
       - '.github/workflows/backend-publish.yml'
   pull_request:
     branches: [ "main" ]
     paths: 
-      - ${{github.workflow}}/**
+      - backend/**
       - '.github/workflows/backend-publish.yml'
 
 env:
