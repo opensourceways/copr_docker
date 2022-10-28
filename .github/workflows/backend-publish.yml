@@ -1,4 +1,4 @@
-name: Docker
+name: backend
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -10,14 +10,18 @@ on:
     branches: [ "main" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
+    paths: 
+      - '${{github.workflow}}/**'
   pull_request:
     branches: [ "main" ]
+    paths: 
+      - '${{github.workflow}}/**'
 
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{github.repository_owner}}/copr_backend
+  IMAGE_NAME: ${{github.repository_owner}}/copr_${{github.workflow}}
 
 
 jobs:
@@ -69,7 +73,7 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         with:
-          context: docker/backend/
+          context: docker/${{github.workflow}}/
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
