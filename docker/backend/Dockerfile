@@ -4,7 +4,8 @@ MAINTAINER infra@openeuler.org
 ENV export LANG=en_US.UTF-8
 ENV PYTHONPATH="/usr/share/copr/"
 
-RUN dnf -y install dnf-plugins-core && dnf -y copr enable @copr/copr
+RUN dnf -y install dnf-plugins-core 
+#&& dnf -y copr enable @copr/copr
 
 # TERM is to make the tito work in container, rhbz#1733043
 ENV TERM=linux \
