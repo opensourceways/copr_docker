@@ -89,7 +89,9 @@ jobs:
           context: docker/${{github.workflow}}/
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }},${{env.IMANGE_NAME}}
+          tags: |
+          ${{ steps.meta.outputs.tags }}
+          ${{ env.IMAGE_NAME }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
