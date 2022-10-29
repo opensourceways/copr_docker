@@ -6,6 +6,7 @@ name: keygen-signd
 # documentation.
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
     # Publish semver tags as releases.
