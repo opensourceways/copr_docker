@@ -1,5 +1,5 @@
 FROM registry.fedoraproject.org/fedora:35
-MAINTAINER infra@openeuler.org
+LABEL maintainer="infra@openeuler.org"
 
 ENV export LANG=en_US.UTF-8
 ENV PYTHONPATH="/usr/share/copr/"

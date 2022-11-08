@@ -1,5 +1,5 @@
 FROM registry.fedoraproject.org/fedora:35
-MAINTAINER infra@openeuler.org
+LABEL maintainer="infra@openeuler.org"
 
 # Copy files from the host into the container
 COPY files/ /

@@ -1,5 +1,5 @@
 FROM registry.fedoraproject.org/fedora:35
-MAINTAINER infra@openeuler.org
+LABEL maintainer="infra@openeuler.org"
 
 # Deployment instructions are described here
 # https://github.com/praiskup/resalloc/blob/master/docs/start-resalloc-server.txt

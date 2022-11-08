@@ -1,6 +1,6 @@
 FROM registry.fedoraproject.org/fedora:35
 
-MAINTAINER infra@openeuler.org
+LABEL maintainer="infra@openeuler.org"
 
 
 # Create copr-signer:copr-signer manually, so we can

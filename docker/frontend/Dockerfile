@@ -1,5 +1,5 @@
 FROM registry.fedoraproject.org/fedora:35
-MAINTAINER infra@openeuler.org
+LABEL maintainer="infra@openeuler.org"
 
 # TERM is to make the tito work in container, rhbz#1733043
 ENV TERM=linux
@@ -25,7 +25,8 @@ RUN dnf -y update && \
                    mock-core-configs \
                    findutils \
                    copr-frontend \
-                   modulemd-tools
+                   modulemd-tools \
+                   python-flask-oidc
 
 COPY files/ /
 
