@@ -12,12 +12,12 @@ on:
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
     paths: 
-      - resalloc/**
+      - docker/resalloc/**
       - '.github/workflows/resalloc-publish.yml'
   pull_request:
     branches: [ "main" ]
     paths: 
-      - resalloc/**
+      - docker/resalloc/**
       - '.github/workflows/resalloc-publish.yml'
 
 env:

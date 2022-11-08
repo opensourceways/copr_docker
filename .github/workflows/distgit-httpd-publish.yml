@@ -12,12 +12,12 @@ on:
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
     paths: 
-      - distgit-httpd/**
+      - docker/distgit-httpd/**
       - '.github/workflows/distgit-httpd-publish.yml'
   pull_request:
     branches: [ "main" ]
     paths: 
-      - distgit-httpd/**
+      - docker/distgit-httpd/**
       - '.github/workflows/distgit-httpd-publish.yml'
 
 env:

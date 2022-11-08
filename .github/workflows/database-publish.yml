@@ -12,12 +12,12 @@ on:
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
     paths: 
-      - database/**
+      - docker/database/**
       - '.github/workflows/database-publish.yml'
   pull_request:
     branches: [ "main" ]
     paths: 
-      - database/**
+      - docker/database/**
       - '.github/workflows/database-publish.yml'
 
 env:
