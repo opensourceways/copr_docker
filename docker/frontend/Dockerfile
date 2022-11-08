@@ -26,8 +26,7 @@ RUN dnf -y update && \
                    findutils \
                    copr-frontend \
                    modulemd-tools \
-                   python-flask-oidc
-
+                   python3-pip
 COPY files/ /
 
 RUN sed -i 's/User apache/User copr-fe/g' /etc/httpd/conf/httpd.conf
@@ -66,6 +65,8 @@ RUN chmod -R g+rwX \
 # Use copr-fe user when running outside of OpenShift
 USER copr-fe
 
+# using pyodic which not existed in fedora repo
+RUN pip install flask-pyoidc
 # Since home directory for `copr-fe` user is `/usr/share/copr/coprs_frontend`
 # and we don't want .bashrc file in there, the bash prompt is `bash-5.0$` which
 # looks bad in copy-pasted outputs and tutorials. I borrowed this one from
