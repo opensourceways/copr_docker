@@ -26,7 +26,8 @@ RUN dnf -y update && \
                    findutils \
                    copr-frontend \
                    modulemd-tools \
-                   python3-pip
+                   python3-pip \
+                   patch
 COPY files/ /
 
 RUN sed -i 's/User apache/User copr-fe/g' /etc/httpd/conf/httpd.conf
@@ -66,13 +67,14 @@ RUN chmod -R g+rwX \
 USER copr-fe
 
 # using pyodic which not existed in fedora repo
-RUN pip install flask-pyoidc
+RUN pip install flask-pyoidc==3.11.0 oic==1.4.0
 # Since home directory for `copr-fe` user is `/usr/share/copr/coprs_frontend`
 # and we don't want .bashrc file in there, the bash prompt is `bash-5.0$` which
 # looks bad in copy-pasted outputs and tutorials. I borrowed this one from
 # /root/.bashrc
 ENV PS1="[\u@\h \W]\$ "
-
+# authing return updated_at as a string, there's a patch for it
+RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.10/site-packages/oic/oic/message.py < authing.patch
 EXPOSE 5000
 
 CMD ["/entrypoint"]
