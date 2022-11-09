@@ -30,7 +30,6 @@ def fed_raw_name(oidname):
     config_parse = urlparse(app.config["OPENID_PROVIDER_URL"])
     return oidname_parse.netloc.replace(".{0}".format(config_parse.netloc), "")
 
-
 @app.before_request
 def before_request():
     """
@@ -49,7 +48,7 @@ def before_request():
     elif "krb5_login" in flask.session:
         username = flask.session["krb5_login"]
     elif "oidc" in flask.session:
-        username = flask.session["oidc"].userinfo.username
+        username = flask.session["oidc"]
 
     if username:
         flask.g.user = models.User.query.filter(
@@ -100,10 +99,10 @@ def workaround_ipsilon_email_login_bug_handler(f):
 @misc.route("/oidc_login/", methods=["GET"])
 @auth.oidc_auth(app.config['OIDC_PROVIDER_NAME'])
 def oidc_login():
-    app.logger.info("oidc login for {} session {}".format(app.config['OIDC_PROVIDER_NAME'], flask.session))
     user_session = UserSession(flask.session)
-    flask.session["oidc"] = user_session
-    return create_or_login(user_session.userinfo.username, user_session.userinfo.email, user_session.userinfo.zoneinfo, None)
+    flask.session["oidc"] = user_session.userinfo['username']
+    zoneinfo = user_session.userinfo['zoneinfo'] if 'zoneinfo' in user_session.userinfo and user_session.userinfo['zoneinfo'] else None
+    return create_or_login(user_session.userinfo['username'], user_session.userinfo['email'], zoneinfo, None)
 
 @misc.route("/login/", methods=["GET"])
 @workaround_ipsilon_email_login_bug_handler
