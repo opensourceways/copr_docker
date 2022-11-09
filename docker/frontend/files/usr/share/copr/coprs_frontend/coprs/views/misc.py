@@ -5,7 +5,7 @@ from functools import wraps
 from urllib.parse import urlparse
 import flask
 
-from flask import send_file
+from flask import send_file, jsonify
 
 from openid_teams.teams import TeamsRequest
 
@@ -48,14 +48,17 @@ def before_request():
         username = fed_raw_name(flask.session["openid"])
     elif "krb5_login" in flask.session:
         username = flask.session["krb5_login"]
+    elif "oidc" in flask.session:
+        username = flask.session["oidc"].userinfo.username
 
     if username:
         flask.g.user = models.User.query.filter(
             models.User.username == username).first()
 
+auth_params = {'scope': app.config['OIDC_SCOPES']} # specify the scope to request
 PROVIDER_CONFIG = ProviderConfiguration(issuer=app.config['OIDC_ISSUER'],
-                                         client_metadata=ClientMetadata(app.config['OIDC_CLIENT'], app.config['OIDC_SECRET']))
-auth = OIDCAuthentication({app.config['OIDC_PROVIDER_NAME']: PROVIDER_CONFIG})
+                                         client_metadata=ClientMetadata(app.config['OIDC_CLIENT'], app.config['OIDC_SECRET']), auth_request_params=auth_params)
+auth = OIDCAuthentication({app.config['OIDC_PROVIDER_NAME']: PROVIDER_CONFIG}, app)
 misc = flask.Blueprint("misc", __name__)
 
 
@@ -97,10 +100,10 @@ def workaround_ipsilon_email_login_bug_handler(f):
 @misc.route("/oidc_login/", methods=["GET"])
 @auth.oidc_auth(app.config['OIDC_PROVIDER_NAME'])
 def oidc_login():
+    app.logger.info("oidc login for {} session {}".format(app.config['OIDC_PROVIDER_NAME'], flask.session))
     user_session = UserSession(flask.session)
-    return jsonify(access_token=user_session.access_token,
-                   id_token=user_session.id_token,
-                   userinfo=user_session.userinfo)
+    flask.session["oidc"] = user_session
+    return create_or_login(user_session.userinfo.username, user_session.userinfo.email, user_session.userinfo.zoneinfo, None)
 
 @misc.route("/login/", methods=["GET"])
 @workaround_ipsilon_email_login_bug_handler
@@ -121,32 +124,35 @@ def login():
                              ask_for=["email", "timezone"],
                              extensions=[team_req])
 
-
 @oid.after_login
-def create_or_login(resp):
+def oid_create_or_login(resp):
+    team_resp = None
     flask.session["openid"] = resp.identity_url
     fasusername = fed_raw_name(resp.identity_url)
+    if "lp" in resp.extensions:
+        team_resp = resp.extensions['lp']  # name space for the teams extension
 
+    return create_or_login(fasusername, resp.email, resp.timezone, team_resp)
+
+def create_or_login(username, email, timezone, team_resp=None):
     # kidding me.. or not
-    if fasusername and (
+    if username and (
             (
                 app.config["USE_ALLOWED_USERS"] and
-                fasusername in app.config["ALLOWED_USERS"]
+                username in app.config["ALLOWED_USERS"]
             ) or not app.config["USE_ALLOWED_USERS"]):
 
-        username = fed_raw_name(resp.identity_url)
         user = models.User.query.filter(
             models.User.username == username).first()
         if not user:  # create if not created already
             app.logger.info("First login for user '%s', "
                             "creating a database record", username)
-            user = UsersLogic.create_user_wrapper(username, resp.email,
-                                                  resp.timezone)
+            user = UsersLogic.create_user_wrapper(username, email,
+                                                  timezone)
         else:
-            user.mail = resp.email
-            user.timezone = resp.timezone
-        if "lp" in resp.extensions:
-            team_resp = resp.extensions['lp']  # name space for the teams extension
+            user.mail = email
+            user.timezone = timezone
+        if team_resp:
             user.openid_groups = {"fas_groups": team_resp.teams}
 
         db.session.add(user)
@@ -166,13 +172,14 @@ def create_or_login(resp):
         flask.flash("User '{0}' is not allowed".format(fasusername))
         return flask.redirect(oid.get_next_url())
 
-
 @misc.route("/logout/")
+@auth.oidc_logout
 def logout():
     if flask.g.user:
         app.logger.info("User '%s' logging out", flask.g.user.name)
     flask.session.pop("openid", None)
     flask.session.pop("krb5_login", None)
+    flask.session.pop("oidc", None)
     flask.flash(u"You were signed out")
     return flask.redirect(oid.get_next_url())
 
