@@ -72,7 +72,7 @@ def login_menu():
         if config['OIDC_LOGIN']:
             menu.append({
                 'link': flask.url_for("misc.oidc_login"),
-                'desc': 'oidc login',
+                'desc': '{} login'.format(app.config['OIDC_PROVIDER_NAME']),
             })
 
     return dict(login_menu=menu)

@@ -56,7 +56,9 @@ def before_request():
 
 auth_params = {'scope': app.config['OIDC_SCOPES']} # specify the scope to request
 PROVIDER_CONFIG = ProviderConfiguration(issuer=app.config['OIDC_ISSUER'],
-                                         client_metadata=ClientMetadata(app.config['OIDC_CLIENT'], app.config['OIDC_SECRET']), auth_request_params=auth_params)
+                                         client_metadata=ClientMetadata(app.config['OIDC_CLIENT'], app.config['OIDC_SECRET'],
+                                         post_logout_redirect_uris = [app.config['OIDC_POST_LOGOUT_REDIRECT_URI']]),
+                                         auth_request_params=auth_params)
 auth = OIDCAuthentication({app.config['OIDC_PROVIDER_NAME']: PROVIDER_CONFIG}, app)
 misc = flask.Blueprint("misc", __name__)
 
