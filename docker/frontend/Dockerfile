@@ -29,6 +29,7 @@ RUN dnf -y update && \
                    python3-pip \
                    patch
 COPY files/ /
+COPY authing.patch /
 
 RUN sed -i 's/User apache/User copr-fe/g' /etc/httpd/conf/httpd.conf
 RUN sed -i 's/Group apache/Group copr-fe/g' /etc/httpd/conf/httpd.conf
@@ -74,7 +75,8 @@ RUN pip install flask-pyoidc==3.11.0 oic==1.4.0
 # /root/.bashrc
 ENV PS1="[\u@\h \W]\$ "
 # authing return updated_at as a string, there's a patch for it
-RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.10/site-packages/oic/oic/message.py < authing.patch
+# ref: https://github.com/OpenIDC/pyoidc/issues/830 
+RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.10/site-packages/oic/oic/message.py < /authing.patch
 EXPOSE 5000
 
 CMD ["/entrypoint"]
