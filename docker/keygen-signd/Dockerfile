@@ -8,7 +8,7 @@ ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr-dev"
 # be sure that the UID and GID is same on all keygen containers
 RUN groupadd -r copr-signer -g 992
 RUN useradd -r copr-signer -u 993 -g 992 -G 0 -d /var/lib/copr-keygen
-
+RUN mkdir -p /var/lib/copr-keygen/.gnupg && chowm copr-signer:copr-signer /var/lib/copr-keygen/.gnupg
 # base packages
 RUN set -ex ; \
     test -z "${ADDITIONAL_COPR_REPOSITORIES}" \
@@ -27,6 +27,7 @@ RUN set -ex ; \
                    postgresql-server \
                    redis \
                    tini \
+                   obs-signd-2.5.10-4.20210907git5c32050 \
                    && \
     dnf -y install copr-keygen && \
     dnf clean all

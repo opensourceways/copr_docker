@@ -58,7 +58,8 @@ RUN set -x ; \
     touch /home/copr/.ssh/authorized_keys && chmod 600 /home/copr/.ssh/authorized_keys && \
     cat /home/copr/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys && \
     cat /home/copr/.ssh/id_rsa.pub >> /home/copr/.ssh/authorized_keys && \
-    chown copr:copr -R /home/copr
+    mkdir -p /home/copr/.gnupg && chown copr:copr -R /home/copr
+
 
 # system setup for copr-backend
 RUN usermod -a -G mock copr
