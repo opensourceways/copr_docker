@@ -1,5 +1,5 @@
-FROM registry.fedoraproject.org/fedora:35
-LABEL maintainer="infra@openeuler.org"
+FROM registry.fedoraproject.org/fedora:37
+MAINTAINER copr-devel@lists.fedorahosted.org
 
 # Deployment instructions are described here
 # https://github.com/praiskup/resalloc/blob/master/docs/start-resalloc-server.txt
@@ -7,12 +7,15 @@ LABEL maintainer="infra@openeuler.org"
 # Copr production deployment is described here
 # https://pagure.io/fedora-infra/ansible/blob/master/f/roles/copr/backend/tasks/resalloc.yml
 
-RUN dnf install -y vim \
+RUN dnf install -y ansible \
+                   vim \
                    resalloc \
+                   resalloc-aws \
                    resalloc-server \
                    sqlite \
                    findutils \
-                   openssh-clients
+                   openssh-clients \
+    && dnf clean all
 
 # copy filesystem setup
 COPY files/ /
