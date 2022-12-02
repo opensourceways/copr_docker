@@ -27,7 +27,7 @@ RUN set -ex ; \
                    postgresql-server \
                    redis \
                    tini \
-                   obs-signd-2.5.10-4.20210907git5c32050 \
+                   obs-signd-2.5.10 \
                    && \
     dnf -y install copr-keygen && \
     dnf clean all
