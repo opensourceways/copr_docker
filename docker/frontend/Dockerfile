@@ -32,6 +32,7 @@ RUN set -ex ; \
                    modulemd-tools \
                    python-pip \
                    patch \
+                   git \
     && dnf clean all
 
 COPY files/ /
@@ -73,7 +74,7 @@ RUN chmod -R g+rwX \
 USER copr-fe
 
 # using pyodic which not existed in fedora repo
-RUN pip install flask-pyoidc==3.11.0 oic==1.4.0
+RUN pip install flask-pyoidc==3.11.0 git+https://github.com/OpenIDC/pyoidc.git@b3c93f53cadccd76344e726cdfce556bc879bce8
 # Since home directory for `copr-fe` user is `/usr/share/copr/coprs_frontend`
 # and we don't want .bashrc file in there, the bash prompt is `bash-5.0$` which
 # looks bad in copy-pasted outputs and tutorials. I borrowed this one from
