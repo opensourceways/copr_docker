@@ -9,3 +9,12 @@
          "_claim_names": OPTIONAL_MESSAGE,
          "_claim_sources": OPTIONAL_MESSAGE,
      }
+@@ -564,7 +564,7 @@
+     def verify(self, **kwargs):
+         super().verify(**kwargs)
+
+-        if "birthdate" in self:
++        if "birthdate" in self and self["birthdate"]:
+             # Either YYYY-MM-DD or just YYYY or 0000-MM-DD
+             try:
+                 time.strptime(self["birthdate"], "%Y-%m-%d")

@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/fedora:37
+FROM registry.fedoraproject.org/fedora:35
 MAINTAINER copr-devel@lists.fedorahosted.org
 
 ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr-dev"
@@ -32,7 +32,6 @@ RUN set -ex ; \
                    modulemd-tools \
                    python-pip \
                    patch \
-                   git \
     && dnf clean all
 
 COPY files/ /
@@ -74,7 +73,7 @@ RUN chmod -R g+rwX \
 USER copr-fe
 
 # using pyodic which not existed in fedora repo
-RUN pip install flask-pyoidc==3.11.0 git+https://github.com/OpenIDC/pyoidc.git@b3c93f53cadccd76344e726cdfce556bc879bce8
+RUN pip install flask-pyoidc==3.11.0 oic==1.4.0
 # Since home directory for `copr-fe` user is `/usr/share/copr/coprs_frontend`
 # and we don't want .bashrc file in there, the bash prompt is `bash-5.0$` which
 # looks bad in copy-pasted outputs and tutorials. I borrowed this one from
@@ -82,7 +81,7 @@ RUN pip install flask-pyoidc==3.11.0 git+https://github.com/OpenIDC/pyoidc.git@b
 ENV PS1="[\u@\h \W]\$ "
 # authing return updated_at as a string, there's a patch for it
 # ref: https://github.com/OpenIDC/pyoidc/issues/830 
-RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.11/site-packages/oic/oic/message.py < /authing.patch
+RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.10/site-packages/oic/oic/message.py < /authing.patch
 EXPOSE 5000
 
 CMD ["/entrypoint"]
