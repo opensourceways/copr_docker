@@ -1,0 +1,20 @@
+--- message.py  2022-11-09 15:24:21.448857807 +0000
++++ message-fix.py      2022-11-09 15:30:17.000308903 +0000
+@@ -556,7 +556,7 @@
+         "phone_number": SINGLE_OPTIONAL_STRING,
+         "phone_number_verified": SINGLE_OPTIONAL_BOOLEAN,
+         "address": OPTIONAL_ADDRESS,
+-        "updated_at": SINGLE_OPTIONAL_INT,
++        "updated_at": SINGLE_OPTIONAL_STRING,
+         "_claim_names": OPTIONAL_MESSAGE,
+         "_claim_sources": OPTIONAL_MESSAGE,
+     }
+@@ -564,7 +564,7 @@
+     def verify(self, **kwargs):
+         super().verify(**kwargs)
+
+-        if "birthdate" in self:
++        if "birthdate" in self and self["birthdate"]:
+             # Either YYYY-MM-DD or just YYYY or 0000-MM-DD
+             try:
+                 time.strptime(self["birthdate"], "%Y-%m-%d")
