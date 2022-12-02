@@ -1,15 +1,19 @@
-FROM registry.fedoraproject.org/fedora:35
-LABEL maintainer="infra@openeuler.org"
+FROM registry.fedoraproject.org/fedora:37
+MAINTAINER copr-devel@lists.fedorahosted.org
+
+ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr-dev"
 
 # TERM is to make the tito work in container, rhbz#1733043
 ENV TERM=linux
 ENV LANG=en_US.UTF-8
 ENV REDIS_HOST=redis
 
-RUN dnf -y install dnf-plugins-core && dnf -y copr enable @copr/copr
-
 # base packages
-RUN dnf -y update && \
+RUN set -ex ; \
+    test -z "${ADDITIONAL_COPR_REPOSITORIES}" \
+        || dnf -y install dnf-plugins-core \
+        && for repo in $ADDITIONAL_COPR_REPOSITORIES ; do dnf -y copr enable $repo; done ; \
+    dnf -y update && \
     dnf -y install htop \
                    make \
                    which \
@@ -26,10 +30,11 @@ RUN dnf -y update && \
                    findutils \
                    copr-frontend \
                    modulemd-tools \
-                   python3-pip \
-                   patch
+                   python-pip \
+                   patch \
+    && dnf clean all
+
 COPY files/ /
-COPY authing.patch /
 
 RUN sed -i 's/User apache/User copr-fe/g' /etc/httpd/conf/httpd.conf
 RUN sed -i 's/Group apache/Group copr-fe/g' /etc/httpd/conf/httpd.conf
@@ -76,7 +81,7 @@ RUN pip install flask-pyoidc==3.11.0 oic==1.4.0
 ENV PS1="[\u@\h \W]\$ "
 # authing return updated_at as a string, there's a patch for it
 # ref: https://github.com/OpenIDC/pyoidc/issues/830 
-RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.10/site-packages/oic/oic/message.py < /authing.patch
+RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.11/site-packages/oic/oic/message.py < /authing.patch
 EXPOSE 5000
 
 CMD ["/entrypoint"]
