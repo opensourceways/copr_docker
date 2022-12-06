@@ -33,7 +33,7 @@ RUN echo "AliasMatch \"/repo(/.*)/md5(/.*)\" \"/var/lib/dist-git/cache/lookaside
 RUN sed -i 's/Listen 80/Listen 5001/' /etc/httpd/conf/httpd.conf
 
 RUN mkdir /tmp/copr-dist-git
-RUN chown copr-dist-git:packager /tmp/copr-dist-git
+RUN chmod 644 /etc/copr/copr-dist-git.conf && chmod 755 /copr-dist-git-assure-perm
 
 # copy filesystem setup and setup ownership and permissions
 COPY files/ /
@@ -51,7 +51,9 @@ RUN directories="/etc/httpd /var/run/httpd /var/log/httpd /var/lib/dist-git /run
     chown -R copr-dist-git:root $directories && \
     chmod -R g+rwX $directories
 
+RUN echo "copr-dist-git ALL = (root) NOPASSWD: /copr-dist-git-assure-perm" >> /etc/sudoers.d/copr-dist-git
+
 USER copr-dist-git
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["bash", "-c", "mkdir -p /var/lib/dist-git/cache /var/lib/dist-git/git && exec /usr/bin/copr-run-dispatcher imports"]
+CMD ["bash", "-c", "mkdir -p /var/lib/dist-git/cache /var/lib/dist-git/git && sudo /copr-dist-git-assure-perm && exec /usr/bin/copr-run-dispatcher imports"]
