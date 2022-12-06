@@ -1,5 +1,5 @@
 FROM registry.fedoraproject.org/fedora:37
-MAINTAINER copr-devel@lists.fedorahosted.org
+LABEL maintainer="infra@openeuler.org"
 
 ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr-dev"
 
@@ -59,7 +59,6 @@ RUN set -x ; \
     cat /home/copr/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys && \
     cat /home/copr/.ssh/id_rsa.pub >> /home/copr/.ssh/authorized_keys && \
     mkdir -p /home/copr/.gnupg && chown copr:copr -R /home/copr
-
 
 # system setup for copr-backend
 RUN usermod -a -G mock copr

@@ -1,6 +1,6 @@
 FROM registry.fedoraproject.org/fedora:37
 
-MAINTAINER copr-devel@lists.fedorahosted.org
+LABEL maintainer="infra@openeuler.org"
 
 ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr-dev"
 

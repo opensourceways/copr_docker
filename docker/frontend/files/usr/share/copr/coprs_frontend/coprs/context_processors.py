@@ -53,7 +53,7 @@ def login_menu():
     else:
         if config['FAS_LOGIN']:
             menu.append({
-                'link': flask.url_for('misc.login'),
+                'link': flask.url_for('misc.oid_login'),
                 'desc': 'log in',
             })
 
@@ -69,7 +69,7 @@ def login_menu():
                 'desc': 'sign up',
             })
 
-        if config['OIDC_LOGIN']:
+        if config['OIDC_LOGIN'] and app.config['OIDC_PROVIDER_NAME']:
             menu.append({
                 'link': flask.url_for("misc.oidc_login"),
                 'desc': '{} login'.format(app.config['OIDC_PROVIDER_NAME']),
