@@ -37,7 +37,7 @@ RUN chmod 644 /etc/copr/copr-dist-git.conf && chmod 755 /copr-dist-git-assure-pe
 
 # copy filesystem setup and setup ownership and permissions
 COPY files/ /
-RUN chmod 644 /etc/copr/copr-dist-git.conf
+RUN chmod 644 /etc/copr/copr-dist-git.conf && chmod 755 /copr-dist-git-assure-perm
 
 RUN echo " [user]" >> /home/copr-dist-git/.gitconfig && \
     echo " email = copr-devel@lists.fedorahosted.org" >> /home/copr-dist-git/.gitconfig && \
