@@ -33,7 +33,7 @@ RUN echo "AliasMatch \"/repo(/.*)/md5(/.*)\" \"/var/lib/dist-git/cache/lookaside
 RUN sed -i 's/Listen 80/Listen 5001/' /etc/httpd/conf/httpd.conf
 
 RUN mkdir /tmp/copr-dist-git
-RUN chmod 644 /etc/copr/copr-dist-git.conf && chmod 755 /copr-dist-git-assure-perm
+RUN chown copr-dist-git:packager /tmp/copr-dist-git
 
 # copy filesystem setup and setup ownership and permissions
 COPY files/ /
