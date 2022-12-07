@@ -43,7 +43,7 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [EPOL]
 name=EPOL
-baseurl=https://mirrors.huaweicloud.com/openeuler/openEuler-20.09/EPOL/main/$basearch/
+baseurl=https://mirrors.huaweicloud.com/openeuler/openEuler-20.09/EPOL/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
