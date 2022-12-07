@@ -298,7 +298,7 @@ if app.config['OIDC_LOGIN']:
         @misc.route("/oidc_login/", methods=["GET"])
         @auth.oidc_auth(oidc_provider)
         def oidc_login():
-            if app.config['OIDC_LOGIN']:
+            if not app.config['OIDC_LOGIN']:
                 flask.flash("oidc login is disabled")
                 return flask.redirect(oid.get_next_url())
 
