@@ -29,35 +29,35 @@ user_agent={{ user_agent }}
 
 [OS]
 name=OS
-baseurl=http://mirrors.huaweicloud.com/openeuler/openEuler-20.03-LTS-SP3/OS/$basearch/
+baseurl=http://repo.openeuler.org/openEuler-20.03-LTS-SP3/OS/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [everything]
 name=everything
-baseurl=http://mirrors.huaweicloud.com/openeuler/openEuler-20.03-LTS-SP3/everything/$basearch/
+baseurl=http://repo.openeuler.org/openEuler-20.03-LTS-SP3/everything/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [EPOL]
 name=EPOL
-baseurl=https://mirrors.huaweicloud.com/openeuler/openEuler-20.03-LTS-SP3/EPOL/main/$basearch/
+baseurl=https://repo.openeuler.org/openEuler-20.03-LTS-SP3/EPOL/main/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [debuginfo]
 name=debuginfo
-baseurl=http://mirrors.huaweicloud.com/openeuler/openEuler-20.03-LTS-SP3/debuginfo/$basearch/
+baseurl=http://repo.openeuler.org/openEuler-20.03-LTS-SP3/debuginfo/$basearch/
 enabled=0
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [source]
 name=source
-baseurl=http://mirrors.huaweicloud.com/openeuler/openEuler-20.03-LTS-SP3/source/
+baseurl=http://repo.openeuler.org/openEuler-20.03-LTS-SP3/source/
 enabled=0
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
@@ -65,7 +65,7 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [update]
 name=update
-baseurl=http://mirrors.huaweicloud.com/openeuler/openEuler-20.03-LTS-SP3/update/$basearch/
+baseurl=http://repo.openeuler.org/openEuler-20.03-LTS-SP3/update/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
