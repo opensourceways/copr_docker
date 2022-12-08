@@ -31,6 +31,7 @@ RUN set -ex ; \
                    ca-certificates \
                    scl-utils-build \
                    ethtool \
+                   patch \
     && dnf -y install copr-builder \
     && dnf clean all
 
@@ -45,6 +46,7 @@ RUN echo 'root:passwd' | chpasswd && \
     touch /root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys && \
     cat /root/.ssh/id_backend.pub >> /root/.ssh/authorized_keys
 
+RUN patch /usr/lib/python3.11/site-packages/copr_rpmbuild/providers/pypi.py < /copr-rpmbuild.patch
 RUN echo 'config_opts["use_nspawn"] = False' >> /etc/mock/site-defaults.cfg
 
 CMD ["/usr/sbin/sshd", "-D"]

@@ -1,0 +1,10 @@
+--- pypi_orig.py        2022-12-08 03:00:54.416463797 +0000
++++ pypi.py     2022-12-08 02:59:52.855252024 +0000
+@@ -55,7 +55,6 @@
+         cmd = [
+             "pyp2spec",
+             self.pypi_package_name,
+-            "--fedora-compliant",
+             "--top-level",
+         ]
+         if self.pypi_package_version:
