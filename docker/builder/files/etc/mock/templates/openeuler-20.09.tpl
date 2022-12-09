@@ -6,7 +6,8 @@ config_opts['description'] = 'openEuler 20.09'
 config_opts['extra_chroot_dirs'] = [ '/run/lock', ]
 config_opts['useradd'] = '/usr/sbin/useradd -o -m -u {{chrootuid}} -g {{chrootgid}} -d {{chroothome}} {{chrootuser}}'
 config_opts['bootstrap_image'] = 'docker.io/openeuler/openeuler:20.09'
-
+config_opts['nosync'] = True
+config_opts['nosync_force'] = True
 config_opts['dnf.conf'] = """
 [main]
 keepcache=1
