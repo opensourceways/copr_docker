@@ -8,20 +8,19 @@ ENV TERM=linux
 
 # base packages
 RUN set -ex ; \
-    rm /etc/yum.repos.d/fedora-cisco-openh264.repo \
-    sed -i 's/metalink=/#metalink=/g' /etc/yum.repos.d/* \
-    sed -i 's/#baseurl=/baseurl=/g' /etc/yum.repos.d/* \
-    sed -i 's/download.example\/pub\/fedora\/linux/mirrors.huaweicloud.com\/fedora/g' /etc/yum.repos.d/* \
+    rm /etc/yum.repos.d/fedora-cisco-openh264.repo && \
     test -z "${ADDITIONAL_COPR_REPOSITORIES}" \
         || dnf -y install dnf-plugins-core \
         && for repo in $ADDITIONAL_COPR_REPOSITORIES ; do dnf -y copr enable $repo; done ; \
-    dnf -y update && \
+    sed -i 's/metalink=/#metalink=/g' /etc/yum.repos.d/* \
+    && sed -i 's/#baseurl=/baseurl=/g' /etc/yum.repos.d/* \
+    && sed -i 's/download.example\/pub\/fedora\/linux/mirrors.huaweicloud.com\/fedora/g' /etc/yum.repos.d/* \
+    && dnf -y update && \
     dnf -y install htop \
                    which \
                    wget \
                    vim \
                    python3-ipdb \
-# builder packages
                    openssh-server \
                    fedora-packager \
                    mock \
