@@ -21,4 +21,4 @@ RUN dnf install -y ansible \
 COPY files/ /
 
 RUN cd $(rpm -ql resalloc-server |grep alembic.ini |xargs dirname) \
-    && alembic-3 upgrade head
+    && alembic-3 upgrade head && chmod 755 /resalloc-kubernetes

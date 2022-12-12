@@ -1,6 +1,6 @@
 local_x86_64_normal_prod:
-    max: 1
-    max_starting: 1
+    max: 5
+    max_starting: 5
     max_prealloc: 1
     tags:
     - copr_builder
@@ -15,6 +15,7 @@ local_x86_64_normal_prod:
     - arch_i686_native
     cmd_new: "/home/resalloc/provision/local-new"
     cmd_delete: "/home/resalloc/provision/local-delete"
+    cmd_livecheck: "/home/resalloc/provision/check-pod"
     livecheck_period: 180
     reuse_opportunity_time: 180
     reuse_max_count: 8

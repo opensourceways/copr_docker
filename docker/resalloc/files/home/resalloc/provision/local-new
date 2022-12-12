@@ -1,3 +1,7 @@
 #!/bin/bash
-
-echo builder
+namespace=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+if [ -z $namespace ];then
+    exit 1
+fi
+/resalloc-kubernetes add --image-tag ghcr.io/pkking/copr_builder@sha256:98dac18ef12200cbecd7ee2ee7247272ccb57d1757b2447a6df188298a2f102c \
+    --namespace $namespace --cpu-resource 500m --memory-resource 769Mi --privileged --timeout 360
