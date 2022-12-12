@@ -33,6 +33,8 @@ RUN set -ex ; \
                    ethtool \
                    patch \
     && dnf -y install copr-builder \
+    && dnf -y install https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/34/Everything/x86_64/os/Packages/n/nosync-1.1-10.fc34.i686.rpm \
+                    https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/34/Everything/x86_64/os/Packages/n/nosync-1.1-10.fc34.x86_64.rpm \
     && dnf clean all
 
 COPY files/ /
