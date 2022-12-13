@@ -33,12 +33,12 @@ RUN set -ex ; \
                    ethtool \
                    patch \
     && dnf -y install copr-builder \
-    && dnf -y downgrade nosync \
-    && dnf -y downgrade nosync \
     && dnf clean all
 
 COPY files/ /
 
+RUN dnf -y downgrade nosync \
+    && dnf -y downgrade nosync && dnf clean all
 # needed to run sshd
 RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -q
 
