@@ -1,0 +1,6 @@
+[fc34]
+name=Fedora $releasever - $basearch - Debug
+baseurl= https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/34/Everything/$basearch/os/
+enabled=1
+gpgcheck=0
+skip_if_unavailable=False
