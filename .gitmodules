@@ -1,3 +1,7 @@
 [submodule "copr"]
 	path = copr
 	url = https://github.com/pkking/copr.git
+[submodule "design"]
+	path = docker/frontend/files/copr_design
+	url = https://github.com/opensourceways/copr_design.git
+	branch = main

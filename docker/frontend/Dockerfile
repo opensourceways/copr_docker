@@ -36,7 +36,7 @@ RUN set -ex ; \
     && dnf clean all
 
 COPY files/ /
-
+RUN cp -r /copr_design/sources/usr / && rm -rf /copr_design
 RUN sed -i 's/User apache/User copr-fe/g' /etc/httpd/conf/httpd.conf
 RUN sed -i 's/Group apache/Group copr-fe/g' /etc/httpd/conf/httpd.conf
 
