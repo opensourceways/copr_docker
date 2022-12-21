@@ -303,6 +303,12 @@ if app.config['OIDC_LOGIN']:
                 return flask.redirect(oid.get_next_url())
 
             user_session = UserSession(flask.session)
+            if 'username' not in user_session.userinfo:
+                flask.flash("The {} user do not has a username, can't login to openEuler copr".format(oidc_provider))
+                return flask.redirect(oid.get_next_url())
+            if 'email' not in user_session.userinfo:
+                flask.flash("The {} user({}) do not has a email address, can't login to openEuler copr".format(oidc_provider, user_session.userinfo['username']))
+                return flask.redirect(oid.get_next_url())
             flask.session["oidc"] = user_session.userinfo['username']
             zoneinfo = user_session.userinfo['zoneinfo'] if 'zoneinfo' in user_session.userinfo and user_session.userinfo['zoneinfo'] else None
 
