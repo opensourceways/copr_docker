@@ -32,6 +32,13 @@ spec:
             pathType: ImplementationSpecific
           - backend:
               service:
+                name: copr-distgit
+                port:
+                  number: 5001
+            path: /per-task-logs/
+            pathType: ImplementationSpecific
+          - backend:
+              service:
                 name: copr-frontend
                 port:
                   number: 5000

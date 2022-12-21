@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: copr-resalloc
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
@@ -12,8 +14,11 @@ spec:
       labels:
         component: copr-resalloc
     spec:
+      nodeSelector:
+        os.architecture: amd64
+      serviceAccountName: resalloc
       containers:
-        - image: pkking/copr_resalloc:main
+        - image: ghcr.io/pkking/copr_resalloc@sha256:72f72f9cda5ff06f64e03d5f69169ac1568068e07208f335a01e9f6a9baaade1
           imagePullPolicy: IfNotPresent
           name: resalloc
           livenessProbe:
@@ -37,9 +42,11 @@ spec:
             - /bin/sh
             - -c
             - |
-              cp /home/resalloc/provision/local-new-ro /home/resalloc/provision/local-new;
+              cp /home/resalloc/provision/local-new-x86-ro /home/resalloc/provision/local-new-x86;
+              cp /home/resalloc/provision/local-new-aarch64-ro /home/resalloc/provision/local-new-aarch64;
+              cp /home/resalloc/provision/local-delete-ro /home/resalloc/provision/local-delete;
               cp /root/.ssh/id_rsa-ro /root/.ssh/id_rsa;
-              chmod +x /home/resalloc/provision/local-new;
+              chmod +x /home/resalloc/provision/local-*;
               chmod 0400 /root/.ssh/id_rsa;
               exec /usr/bin/resalloc-server;
           volumeMounts:
@@ -52,16 +59,27 @@ spec:
             - mountPath: /home/resalloc/provision/local-new-ro
               name: copr-resalloc
               subPath: local-new
+            - mountPath: /home/resalloc/provision/local-delete-ro
+              name: copr-resalloc
+              subPath: local-delete
             - mountPath: /root/.ssh/builder_config
               name: copr-resalloc
               subPath: builder_config
             - mountPath: /root/.ssh/id_rsa-ro
               name: copr-resalloc
               subPath: id_rsa
+            - name: resalloc-data
+              mountPath: /var/lib/resallocserver
+            - name: resalloc-data
+              mountPath: /var/log/resallocserver
       volumes:
         - name: copr-resalloc
           configMap:
             name: copr-resalloc
+        - name: resalloc-data
+          persistentVolumeClaim:
+            claimName: resalloc-data
+
 ---
 apiVersion: v1
 kind: Service
@@ -76,3 +94,52 @@ spec:
   selector:
     component: copr-resalloc
   type: ClusterIP
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: fedora-copr
+  name: builder-manage
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods"]
+  verbs: ["create", "delete", "list", "get", "watch"]
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["persistentvolumeclaims"]
+  verbs: ["create", "delete"]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: resalloc
+  namespace: fedora-copr
+---
+apiVersion: rbac.authorization.k8s.io/v1
+# This role binding allows "jane" to read pods in the "default" namespace.
+# You need to already have a Role named "pod-reader" in that namespace.
+kind: RoleBinding
+metadata:
+  name: resalloc-role-binding
+  namespace: fedora-copr
+subjects:
+# You can specify more than one "subject"
+- kind: ServiceAccount
+  name: resalloc
+  namespace: fedora-copr
+roleRef:
+  # "roleRef" specifies the binding to a Role / ClusterRole
+  kind: Role #this must be Role or ClusterRole
+  name: builder-manage # this must match the name of the Role or ClusterRole you wish to bind to
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: resalloc-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ssd

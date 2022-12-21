@@ -4,7 +4,7 @@ metadata:
   name: copr-backend
 spec:
   replicas: 1
-  strategy: 
+  strategy:
     type: Recreate
   selector:
     matchLabels:
@@ -22,7 +22,7 @@ spec:
           image: ebiqe/alpine-nc:latest
           command: [ "sh", "-c", "until nc -z redis.fedora-copr.svc.cluster.local 6379; do echo waiting for redis service ; sleep 2; done;" ]
       containers:
-        - image: pkking/copr_backend_httpd:main
+        - image: ghcr.io/pkking/copr_backend_httpd@sha256:74069eed66b0a721148f7e5a6910c3b23ed5a04e20a04e8770bced59b08c11ab
           imagePullPolicy: IfNotPresent
           name: httpd
           livenessProbe:
@@ -44,15 +44,12 @@ spec:
             - containerPort: 5002
               protocol: TCP
           volumeMounts:
-            - mountPath: /opt/app-root/etc/nginx.d/copr-be.conf
-              name: copr-backend
-              subPath: nginx.conf
             - mountPath: /var/lib/copr/public_html/results
               name: copr-backend-data
-        - image: pkking/copr_backend-log:main
+        - image: ghcr.io/pkking/copr_backend@sha256:55ba48fba227fe412d2ec959a40b454a3b82ea2b355bdb5a6e8684c0c9b679c2
           imagePullPolicy: IfNotPresent
           name: log
-          command: ["/tini", "--", "/usr/sbin/runuser", "-u", "copr", "-g", "copr", "--", "/usr/bin/copr_run_logger.py"]
+          command: ["/usr/bin/copr_run_logger.py"]
           resources:
             requests:
               cpu: 200m
@@ -66,13 +63,10 @@ spec:
             - mountPath: /etc/copr/copr-be.conf
               name: copr-backend
               subPath: copr-be.conf
-            - mountPath: /etc/sign.conf
-              name: copr-backend
-              subPath: sign.conf
-        - image: pkking/copr_backend-action:main
+        - image: ghcr.io/pkking/copr_backend@sha256:55ba48fba227fe412d2ec959a40b454a3b82ea2b355bdb5a6e8684c0c9b679c2
           imagePullPolicy: IfNotPresent
           name: action
-          command: ["/tini", "--", "/usr/sbin/runuser", "-u", "copr", "-g", "copr", "--", "/usr/bin/copr-run-dispatcher", "actions"]
+          command: ["/run-backend", "--sign-host", "copr-keygen", "/usr/bin/copr-run-dispatcher", "actions"]
           resources:
             requests:
               cpu: 200m
@@ -81,26 +75,17 @@ spec:
             - mountPath: /etc/copr/copr-be.conf
               name: copr-backend
               subPath: copr-be.conf
-            - mountPath: /etc/sign.conf
-              name: copr-backend
-              subPath: sign.conf
             - mountPath: /var/lib/copr/public_html/results
               name: copr-backend-data
-        - image: pkking/copr_backend-build:main
+        - image: ghcr.io/pkking/copr_backend@sha256:55ba48fba227fe412d2ec959a40b454a3b82ea2b355bdb5a6e8684c0c9b679c2
           imagePullPolicy: IfNotPresent
           name: build
-          command: ["/tini", "--", "/usr/sbin/runuser", "-u", "copr", "-g", "copr","-G", "obsrun", "--", "/usr/bin/copr-run-dispatcher", "builds"]
+          command: ["/run-backend", "--sign-host", "copr-keygen", "/usr/bin/copr-run-dispatcher", "builds"]
           resources:
             requests:
               cpu: 200m
               memory: 200Mi
           volumeMounts:
-            - mountPath: /etc/sign.conf
-              name: copr-backend
-              subPath: sign.conf
-            - mountPath: /etc/nginx/conf.d/copr-be.conf
-              name: copr-backend
-              subPath: nginx.conf
             - mountPath: /home/copr/.ssh/builder_config
               name: copr-backend
               subPath: builder_config

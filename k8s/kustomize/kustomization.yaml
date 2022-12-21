@@ -4,12 +4,10 @@ resources:
 - redis.yaml
 - frontend.yaml
 - keygen.yaml
-- builder.yaml
 - distgit.yaml
 - resalloc.yaml
 - backend.yaml
 - ingress.yaml
-- build-sf.yaml
 commonLabels:
   app: copr
 configMapGenerator:
@@ -21,28 +19,22 @@ configMapGenerator:
     - copr-dist-git.conf=config/distgit/copr-dist-git.conf
   name: copr-distgit
 - files:
-  - sign.conf=config/keygen/sign.conf
   - copr-keygen.conf=config/keygen/copr-keygen.conf
   name: copr-keygen
 - files:
-  - client.ini=config/builder/client.ini
-  - rpmbuild.ini=config/builder/rpmbuild.ini
-  - id_backend.pub=config/builder/id_backend.pub
-  name: copr-builder
-- files:
-  - local-new=config/resalloc/local-new
+  - local-new-x86_64=config/resalloc/local-new-x86_64
+  - local-new-aarch64=config/resalloc/local-new-aarch64
+  - local-delete=config/resalloc/local-delete
   - pools.yaml=config/resalloc/pools.yaml
   - server.yaml=config/resalloc/server.yaml
   - builder_config=config/backend/.ssh/builder_config
   - id_rsa=config/backend/.ssh/id_rsa
   name: copr-resalloc
 - files:
-  - nginx.conf=config/backend/nginx.conf
   - copr-be.conf=config/backend/copr-be.conf
   - builder_config=config/backend/.ssh/builder_config
   - id_rsa=config/backend/.ssh/id_rsa
   - id_rsa.pub=config/backend/.ssh/id_rsa.pub
-  - sign.conf=config/backend/sign.conf
   name: copr-backend
 secretGenerator:
 - name: copr-frontend-tls

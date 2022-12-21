@@ -13,7 +13,7 @@ spec:
         component: copr-builder
     spec:
       containers:
-        - image: pkking/copr_builder:main
+        - image: ghcr.io/pkking/copr_builder@sha256:70f2da827280ff2f55f92f90bf64d706c01c65ab22395f645634c9073ad8ada2
           imagePullPolicy: IfNotPresent
           name: builder
           securityContext:
@@ -30,25 +30,11 @@ spec:
             timeoutSeconds: 5
           resources:
             requests:
-              cpu: 200m
-              memory: 200Mi
+              cpu: 500m
+              memory: 768Mi
           ports:
             - containerPort: 22
               protocol: TCP
-          volumeMounts:
-            - mountPath: /etc/copr-distgit-client/docker.ini
-              name: copr-builder
-              subPath: client.ini
-            - mountPath: /etc/copr-rpmbuild/main.ini
-              name: copr-builder
-              subPath: rpmbuild.ini
-            - mountPath: /root/.ssh/id_backend_pub
-              name: copr-builder
-              subPath: id_backend_pub
-      volumes:
-        - name: copr-builder
-          configMap:
-            name: copr-builder
 ---
 apiVersion: v1
 kind: Service

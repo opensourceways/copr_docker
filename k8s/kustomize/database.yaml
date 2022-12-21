@@ -4,7 +4,7 @@ metadata:
   name: copr-database
 spec:
   replicas: 1
-  strategy: 
+  strategy:
     type: Recreate
   selector:
     matchLabels:
@@ -15,7 +15,7 @@ spec:
         component: copr-database
     spec:
       containers:
-        - image: pkking/copr_database:main
+        - image: ghcr.io/pkking/copr_database@sha256:ffed9199e6b6728d57d2fc5a10ab2e36d241fd7d849185321c797c19c4b25f69
           imagePullPolicy: IfNotPresent
           name: copr-postgres
           livenessProbe:

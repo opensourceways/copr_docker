@@ -4,7 +4,7 @@ metadata:
   name: copr-redis
 spec:
   replicas: 1
-  strategy: 
+  strategy:
     type: Recreate
   selector:
     matchLabels:

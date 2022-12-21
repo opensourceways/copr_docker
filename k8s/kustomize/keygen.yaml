@@ -4,7 +4,7 @@ metadata:
   name: copr-keygen
 spec:
   replicas: 1
-  strategy: 
+  strategy:
     type: Recreate
   selector:
     matchLabels:
@@ -15,8 +15,9 @@ spec:
         component: copr-keygen
     spec:
       containers:
-        - image: pkking/copr_keygen-signd:main
+        - image: ghcr.io/pkking/copr_keygen-signd@sha256:2ff6e1fb80fe39bda59b743f619e586b679fff3729e8dc06496f78934a67181a
           imagePullPolicy: IfNotPresent
+          command: ["/signd-entrypoint", "0.0.0.0/0"]
           name: copr-keygen-signer
           livenessProbe:
             tcpSocket:
@@ -38,19 +39,9 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/copr-keygen
               name: copr-keygen-data
-            - mountPath: /etc/sign.conf
-              name: copr-keygen
-              subPath: sign.conf
-        - image: pkking/copr_keygen-httpd:main
+        - image: ghcr.io/pkking/copr_keygen-signd@sha256:2ff6e1fb80fe39bda59b743f619e586b679fff3729e8dc06496f78934a67181a
           imagePullPolicy: IfNotPresent
-          command:
-            - /bin/sh
-            - -c
-            - |
-              mkdir --mode=0777 -p /var/lib/copr-keygen/phrases /var/lib/copr-keygen/gnupg
-              chown copr-signer:copr-signer /etc/httpd/logs;
-              mkdir --mode=0777 -p /var/run/httpd
-              exec /entrypoint;
+          command: ["/usr/sbin/httpd", "-DFOREGROUND"]
           name: copr-keygen-httpd
           livenessProbe:
             tcpSocket:
