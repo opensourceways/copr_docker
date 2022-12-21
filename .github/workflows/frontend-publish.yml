@@ -19,6 +19,10 @@ on:
     paths: 
       - docker/frontend/**
       - '.github/workflows/frontend-publish.yml'
+  # Allows external webhook trigger
+  repository_dispatch:
+    types:
+      - webhook
 
 env:
   # Use docker.io for Docker Hub if empty
