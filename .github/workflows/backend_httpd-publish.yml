@@ -26,7 +26,7 @@ env:
   # github.repository as <account>/<repo>
   GH_IMAGE_NAME: ${{github.repository_owner}}/copr_${{github.workflow}}
   REPO: pkking
-  DH_IMAGE_NAME: ${{env.REPO}}/copr_${{github.workflow}}
+  DH_IMAGE_NAME: pkking/copr_${{github.workflow}}
 
 jobs:
   build:
