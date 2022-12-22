@@ -56,9 +56,12 @@ spec:
             - mountPath: /etc/resallocserver/server.yaml
               name: copr-resalloc
               subPath: server.yaml
-            - mountPath: /home/resalloc/provision/local-new-ro
+            - mountPath: /home/resalloc/provision/local-new-x86-ro
               name: copr-resalloc
-              subPath: local-new
+              subPath: local-new-x86
+            - mountPath: /home/resalloc/provision/local-new-aarch64-ro
+              name: copr-resalloc
+              subPath: local-new-aarch64
             - mountPath: /home/resalloc/provision/local-delete-ro
               name: copr-resalloc
               subPath: local-delete
