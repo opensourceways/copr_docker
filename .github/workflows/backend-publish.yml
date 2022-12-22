@@ -24,8 +24,9 @@ env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{github.repository_owner}}/copr_${{github.workflow}}
-
+  GH_IMAGE_NAME: ${{github.repository_owner}}/copr_${{github.workflow}}
+  REPO: pkking
+  DH_IMAGE_NAME: pkking/copr_${{github.workflow}}
 
 jobs:
   build:
@@ -79,7 +80,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@57396166ad8aefe6098280995947635806a0e6ea
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-action,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-log,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-build,${{ env.IMAGE_NAME }},${{ env.IMAGE_NAME }}-action,${{ env.IMAGE_NAME }}-log,${{ env.IMAGE_NAME }}-build
+          images: ${{ env.REGISTRY }}/${{ env.GH_IMAGE_NAME }},${{ env.REGISTRY }}/${{ env.GH_IMAGE_NAME }}-action,${{ env.REGISTRY }}/${{ env.GH_IMAGE_NAME }}-log,${{ env.REGISTRY }}/${{ env.GH_IMAGE_NAME }}-build,${{ env.DH_IMAGE_NAME }},${{ env.DH_IMAGE_NAME }}-action,${{ env.DH_IMAGE_NAME }}-log,${{ env.DH_IMAGE_NAME }}-build
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
