@@ -1,16 +1,22 @@
 #!/bin/bash
-/usr/bin/find /var/lib/dist-git/git ! -user copr-dist-git -exec chown copr-dist-git {} \;
-/usr/bin/find /var/lib/dist-git/git ! -group packager  -exec chown :packager {} \;
 
-/usr/bin/find /var/lib/dist-git/git -type d ! -perm 2775 -exec chmod 2775 {} \;
-/usr/bin/find /var/lib/dist-git/git -type f ! -perm 664 -exec chmod 664 {} \;
+if [ -d /var/lib/dist-git/git ];then
+    /usr/bin/find /var/lib/dist-git/git ! -user copr-dist-git -exec chown copr-dist-git {} \;
+    /usr/bin/find /var/lib/dist-git/git ! -group packager  -exec chown :packager {} \;
+    /usr/bin/find /var/lib/dist-git/git -type d ! -perm 2775 -exec chmod 2775 {} \;
+    /usr/bin/find /var/lib/dist-git/git -type f ! -perm 664 -exec chmod 664 {} \;
+fi
 
-/usr/bin/find /var/lib/copr-dist-git ! -user copr-dist-git -exec chown copr-dist-git {} \;
-/usr/bin/find /var/lib/copr-dist-git ! -group copr-dist-git -exec chown :copr-dist-git {} \;
-/usr/bin/find /var/lib/copr-dist-git -type d ! -perm 755 -exec chmod 775 {} \;
-/usr/bin/find /var/lib/copr-dist-git -type f ! -perm 664 -exec chmod 664 {} \;
+if [ -d /var/lib/copr-dist-git ];then
+    /usr/bin/find /var/lib/copr-dist-git ! -user copr-dist-git -exec chown copr-dist-git {} \;
+    /usr/bin/find /var/lib/copr-dist-git ! -group copr-dist-git -exec chown :copr-dist-git {} \;
+    /usr/bin/find /var/lib/copr-dist-git -type d ! -perm 755 -exec chmod 775 {} \;
+    /usr/bin/find /var/lib/copr-dist-git -type f ! -perm 664 -exec chmod 664 {} \;
+fi
 
-/usr/bin/find /var/lib/dist-git/cache/lookaside ! -user copr-dist-git  -exec chown copr-dist-git {} \;
-/usr/bin/find /var/lib/dist-git/cache/lookaside ! -group copr-dist-git -exec chown :copr-dist-git {} \;
-/usr/bin/find /var/lib/dist-git/cache/lookaside -type d ! -perm 775 -exec chmod 775 {} \;
-/usr/bin/find /var/lib/dist-git/cache/lookaside -type f ! -perm 664 -exec chmod 664 {} \;
+if [ -d /var/lib/dist-git/cache/lookaside ];then
+    /usr/bin/find /var/lib/dist-git/cache/lookaside ! -user copr-dist-git  -exec chown copr-dist-git {} \;
+    /usr/bin/find /var/lib/dist-git/cache/lookaside ! -group copr-dist-git -exec chown :copr-dist-git {} \;
+    /usr/bin/find /var/lib/dist-git/cache/lookaside -type d ! -perm 775 -exec chmod 775 {} \;
+    /usr/bin/find /var/lib/dist-git/cache/lookaside -type f ! -perm 664 -exec chmod 664 {} \;
+fi
