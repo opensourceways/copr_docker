@@ -11,7 +11,7 @@ from coprs import oid
 from coprs import app
 from coprs.exceptions import CoprHttpException, AccessRestricted
 from coprs.logic.users_logic import UsersLogic
-
+from flask_pyoidc.user_session import UserSession
 
 class UserAuth:
     """
@@ -368,6 +368,26 @@ class OpenIDConnect:
     """
     Authentication via Open ID Connect
     """
+    @staticmethod
+    def enabled(config):
+        return 'OIDC_LOGIN' in config and config['OIDC_LOGIN'] == True
+
+    @staticmethod
+    def is_config_valid(config):
+        return (config.get('OIDC_ISSUER') or ( config.get('OIDC_CLIENT_ISSUER') and app.config.get('OIDC_AUTH_URL') and app.config.get('OIDC_TOKEN_URL') and app.config.get('OIDC_USERINFO_URL' ))) \
+            and app.config.get('OIDC_CLIENT') and app.config.get('OIDC_SECRET') \
+            and app.config.get('OIDC_POST_LOGOUT_REDIRECT_URI')
+
+    @staticmethod
+    def get_userinfo(path):
+        # if user info is construct in "{'msg':200, 'data':{'username':'bbb ...}}"
+        # we should let path = ['data']
+        session = UserSession(flask.session)
+        data = session.userinfo
+        for p in path:
+            data = data.get(p)
+        return data
+
     @staticmethod
     def username():
         """
