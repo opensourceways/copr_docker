@@ -1,0 +1,112 @@
+diff --git a/backend/copr_backend/actions.py b/backend/copr_backend/actions.py
+index 825b9577..023be38e 100644
+--- a/backend/copr_backend/actions.py
++++ b/backend/copr_backend/actions.py
+@@ -176,7 +176,7 @@ class Fork(Action, GPGMixin):
+                 # Generate brand new gpg key.
+                 self.generate_gpg_key(data["user"], data["copr"])
+                 # Put the new public key into forked build directory.
+-                get_pubkey(data["user"], data["copr"], self.log, pubkey_path)
++                get_pubkey(data["user"], data["copr"], self.log, self.opts, pubkey_path)
+ 
+             chroot_paths = set()
+             for chroot, src_dst_dir in builds_map.items():
+diff --git a/backend/copr_backend/background_worker_build.py b/backend/copr_backend/background_worker_build.py
+index 637f73fe..a0a8afab 100644
+--- a/backend/copr_backend/background_worker_build.py
++++ b/backend/copr_backend/background_worker_build.py
+@@ -693,7 +693,7 @@ class BuildBackgroundWorker(BackendBackgroundWorker):
+         # TODO: uncomment this when key revoke/change will be implemented
+         # if os.path.exists(pubkey_path):
+         #    return
+-        get_pubkey(user, project, self.log, pubkey_path)
++        get_pubkey(user, project, self.log, self.opts, pubkey_path)
+         self.log.info("Added pubkey for user %s project %s into: %s",
+                       user, project, pubkey_path)
+ 
+diff --git a/backend/copr_backend/helpers.py b/backend/copr_backend/helpers.py
+index f730f81b..5208ebf9 100644
+--- a/backend/copr_backend/helpers.py
++++ b/backend/copr_backend/helpers.py
+@@ -34,7 +34,7 @@ from copr_backend.constants import DEF_BUILD_USER, DEF_BUILD_TIMEOUT, DEF_CONSEC
+ from copr_backend.exceptions import CoprBackendError, CoprBackendSrpmError
+ 
+ from . import constants
+-
++from sign import DOMAIN
+ 
+ LOG_COMPONENTS = [
+     "spawner", "terminator", "vmm", "build_dispatcher", "action_dispatcher",
+@@ -301,6 +301,9 @@ class BackendConfigReader(object):
+         opts.build_groups_count = _get_conf(
+             cp, "backend", "build_groups", 1, mode="int")
+ 
++        opts.sign_domain = _get_conf(
++            cp, "backend", "sign_domain", DOMAIN)
++
+         opts.build_groups = []
+         for group_id in range(opts.build_groups_count):
+             archs = _get_conf(cp, "backend",
+diff --git a/backend/copr_backend/sign.py b/backend/copr_backend/sign.py
+index 54687ccf..669f7f39 100644
+--- a/backend/copr_backend/sign.py
++++ b/backend/copr_backend/sign.py
+@@ -20,12 +20,12 @@ SIGN_BINARY = "/bin/sign"
+ DOMAIN = "fedorahosted.org"
+ 
+ 
+-def create_gpg_email(username, projectname):
++def create_gpg_email(username, projectname, domain):
+     """
+     Creates canonical name_email to identify gpg key
+     """
+ 
+-    return "{}#{}@copr.{}".format(username, projectname, DOMAIN)
++    return "{}#{}@copr.{}".format(username, projectname, domain)
+ 
+ 
+ def call_sign_bin(cmd, log):
+@@ -54,7 +54,7 @@ def call_sign_bin(cmd, log):
+     return handle.returncode, stdout, stderr
+ 
+ 
+-def get_pubkey(username, projectname, log, outfile=None):
++def get_pubkey(username, projectname, log, opts, outfile=None):
+     """
+     Retrieves public key for user/project from signer host.
+ 
+@@ -64,7 +64,7 @@ def get_pubkey(username, projectname, log, outfile=None):
+     :raises CoprSignError: failed to retrieve key, see error message
+     :raises CoprSignNoKeyError: if there are no such user in keyring
+     """
+-    usermail = create_gpg_email(username, projectname)
++    usermail = create_gpg_email(username, projectname, opts.sign_domain)
+     cmd = [SIGN_BINARY, "-u", usermail, "-p"]
+ 
+     returncode, stdout, stderr = call_sign_bin(cmd, log)
+@@ -163,14 +163,14 @@ def sign_rpms_in_dir(username, projectname, path, chroot, opts, log):
+     hashtype = gpg_hashtype_for_chroot(chroot, opts)
+ 
+     try:
+-        get_pubkey(username, projectname, log)
++        get_pubkey(username, projectname, log, opts)
+     except CoprSignNoKeyError:
+         create_user_keys(username, projectname, opts)
+ 
+     errors = []  # tuples (rpm_filepath, exception)
+     for rpm in rpm_list:
+         try:
+-            _sign_one(rpm, create_gpg_email(username, projectname),
++            _sign_one(rpm, create_gpg_email(username, projectname, opts.sign_domain),
+                       hashtype, log)
+             log.info("signed rpm: {}".format(rpm))
+ 
+@@ -195,7 +195,7 @@ def create_user_keys(username, projectname, opts):
+     """
+     data = {
+         "name_real": "{}_{}".format(username, projectname),
+-        "name_email": create_gpg_email(username, projectname)
++        "name_email": create_gpg_email(username, projectname, opts.sign_domain)
+     }
+ 
+     log = get_redis_logger(opts, "sign", "actions")
