@@ -72,7 +72,15 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+      - uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: resalloc-kubernetes --root .
+      - run: |
+          mv bin/resalloc-kubernetes docker/${{github.workflow}}/files
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
