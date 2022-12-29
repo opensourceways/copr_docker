@@ -139,10 +139,13 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: resalloc-data
+  labels:
+    failure-domain.beta.kubernetes.io/zone: cn-north-4a
+  annotations:
+    everest.io/disk-volume-type: SSD
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
-  storageClassName: ssd
+      storage: 20Gi
