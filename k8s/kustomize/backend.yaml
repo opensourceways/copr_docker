@@ -48,7 +48,7 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/copr/public_html/results
               name: copr-backend-data
-        - image: pkking/copr_backend@sha256:55ba48fba227fe412d2ec959a40b454a3b82ea2b355bdb5a6e8684c0c9b679c2
+        - image: pkking/copr_backend@sha256:6916528292526767037333c62e919b71628d7da2b48f0c5cc155777f145adaa0
           imagePullPolicy: IfNotPresent
           name: log
           command: ["/usr/bin/copr_run_logger.py"]
@@ -65,7 +65,7 @@ spec:
             - mountPath: /etc/copr/copr-be.conf
               name: copr-backend
               subPath: copr-be.conf
-        - image: pkking/copr_backend@sha256:55ba48fba227fe412d2ec959a40b454a3b82ea2b355bdb5a6e8684c0c9b679c2
+        - image: pkking/copr_backend@sha256:6916528292526767037333c62e919b71628d7da2b48f0c5cc155777f145adaa0
           imagePullPolicy: IfNotPresent
           name: action
           command: ["/run-backend", "--sign-host", "copr-keygen", "/usr/bin/copr-run-dispatcher", "actions"]
@@ -79,7 +79,7 @@ spec:
               subPath: copr-be.conf
             - mountPath: /var/lib/copr/public_html/results
               name: copr-backend-data
-        - image: pkking/copr_backend@sha256:55ba48fba227fe412d2ec959a40b454a3b82ea2b355bdb5a6e8684c0c9b679c2
+        - image: pkking/copr_backend@sha256:6916528292526767037333c62e919b71628d7da2b48f0c5cc155777f145adaa0
           imagePullPolicy: IfNotPresent
           name: build
           command: ["/run-backend", "--sign-host", "copr-keygen", "/usr/bin/copr-run-dispatcher", "builds"]
