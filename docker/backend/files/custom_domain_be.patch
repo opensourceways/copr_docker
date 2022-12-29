@@ -25,19 +25,18 @@ index 637f73fe..a0a8afab 100644
                        user, project, pubkey_path)
  
 diff --git a/backend/copr_backend/helpers.py b/backend/copr_backend/helpers.py
-index f730f81b..5208ebf9 100644
+index f730f81b..c785d253 100644
 --- a/backend/copr_backend/helpers.py
 +++ b/backend/copr_backend/helpers.py
-@@ -34,7 +34,7 @@ from copr_backend.constants import DEF_BUILD_USER, DEF_BUILD_TIMEOUT, DEF_CONSEC
- from copr_backend.exceptions import CoprBackendError, CoprBackendSrpmError
+@@ -35,6 +35,7 @@ from copr_backend.exceptions import CoprBackendError, CoprBackendSrpmError
  
  from . import constants
--
-+from copr_backend.sign import DOMAIN
+ 
++DOMAIN = "fedorahosted.org"
  
  LOG_COMPONENTS = [
      "spawner", "terminator", "vmm", "build_dispatcher", "action_dispatcher",
-@@ -301,6 +301,9 @@ class BackendConfigReader(object):
+@@ -301,6 +302,9 @@ class BackendConfigReader(object):
          opts.build_groups_count = _get_conf(
              cp, "backend", "build_groups", 1, mode="int")
  
@@ -48,13 +47,16 @@ index f730f81b..5208ebf9 100644
          for group_id in range(opts.build_groups_count):
              archs = _get_conf(cp, "backend",
 diff --git a/backend/copr_backend/sign.py b/backend/copr_backend/sign.py
-index 54687ccf..669f7f39 100644
+index 54687ccf..679b4802 100644
 --- a/backend/copr_backend/sign.py
 +++ b/backend/copr_backend/sign.py
-@@ -20,12 +20,12 @@ SIGN_BINARY = "/bin/sign"
- DOMAIN = "fedorahosted.org"
+@@ -17,15 +17,13 @@ from .exceptions import CoprSignError, CoprSignNoKeyError, \
  
  
+ SIGN_BINARY = "/bin/sign"
+-DOMAIN = "fedorahosted.org"
+ 
+-
 -def create_gpg_email(username, projectname):
 +def create_gpg_email(username, projectname, domain):
      """
@@ -66,7 +68,7 @@ index 54687ccf..669f7f39 100644
  
  
  def call_sign_bin(cmd, log):
-@@ -54,7 +54,7 @@ def call_sign_bin(cmd, log):
+@@ -54,7 +52,7 @@ def call_sign_bin(cmd, log):
      return handle.returncode, stdout, stderr
  
  
@@ -75,7 +77,7 @@ index 54687ccf..669f7f39 100644
      """
      Retrieves public key for user/project from signer host.
  
-@@ -64,7 +64,7 @@ def get_pubkey(username, projectname, log, outfile=None):
+@@ -64,7 +62,7 @@ def get_pubkey(username, projectname, log, outfile=None):
      :raises CoprSignError: failed to retrieve key, see error message
      :raises CoprSignNoKeyError: if there are no such user in keyring
      """
@@ -84,7 +86,7 @@ index 54687ccf..669f7f39 100644
      cmd = [SIGN_BINARY, "-u", usermail, "-p"]
  
      returncode, stdout, stderr = call_sign_bin(cmd, log)
-@@ -163,14 +163,14 @@ def sign_rpms_in_dir(username, projectname, path, chroot, opts, log):
+@@ -163,14 +161,14 @@ def sign_rpms_in_dir(username, projectname, path, chroot, opts, log):
      hashtype = gpg_hashtype_for_chroot(chroot, opts)
  
      try:
@@ -101,7 +103,7 @@ index 54687ccf..669f7f39 100644
                        hashtype, log)
              log.info("signed rpm: {}".format(rpm))
  
-@@ -195,7 +195,7 @@ def create_user_keys(username, projectname, opts):
+@@ -195,7 +193,7 @@ def create_user_keys(username, projectname, opts):
      """
      data = {
          "name_real": "{}_{}".format(username, projectname),
