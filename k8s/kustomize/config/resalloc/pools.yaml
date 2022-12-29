@@ -13,7 +13,7 @@ local_x86_64_normal_prod:
     - arch_i586_native
     - arch_i686
     - arch_i686_native
-    cmd_new: "/home/resalloc/provision/local-new-x86_64"
+    cmd_new: "/home/resalloc/provision/local-new-x86"
     cmd_delete: "/home/resalloc/provision/local-delete"
     cmd_livecheck: "/usr/bin/resalloc-check-vm-ip"
     livecheck_period: 180
@@ -24,7 +24,7 @@ local_x86_64_normal_prod:
 local_aarch64_normal_prod:
     max: 5
     max_starting: 5
-    max_prealloc: 0
+    max_prealloc: 1
     tags:
     - copr_builder
     - arch_aarch64
