@@ -14,6 +14,8 @@ spec:
       labels:
         component: copr-distgit
     spec:
+      nodeSelector:
+        usage: test
       initContainers:
         - name: init-distgit
           image: busybox:1.28

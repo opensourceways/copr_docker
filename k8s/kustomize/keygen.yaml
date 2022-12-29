@@ -14,6 +14,8 @@ spec:
       labels:
         component: copr-keygen
     spec:
+      nodeSelector:
+        usage: test
       containers:
         - image: ghcr.io/pkking/copr_keygen-signd@sha256:2ff6e1fb80fe39bda59b743f619e586b679fff3729e8dc06496f78934a67181a
           imagePullPolicy: IfNotPresent

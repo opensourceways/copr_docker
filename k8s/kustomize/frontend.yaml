@@ -12,6 +12,8 @@ spec:
       labels:
         component: copr-frontend
     spec:
+      nodeSelector:
+        usage: test
       initContainers:
         - name: init-frontend-database
           image: ebiqe/alpine-nc:latest

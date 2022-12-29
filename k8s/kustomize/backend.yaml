@@ -14,6 +14,8 @@ spec:
       labels:
         component: copr-backend
     spec:
+      nodeSelector:
+        usage: test
       initContainers:
         - name: init-backend-resalloc
           image: ebiqe/alpine-nc:latest

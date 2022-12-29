@@ -14,6 +14,8 @@ spec:
       labels:
         component: copr-database
     spec:
+      nodeSelector:
+        usage: test
       containers:
         - image: ghcr.io/pkking/copr_database@sha256:ffed9199e6b6728d57d2fc5a10ab2e36d241fd7d849185321c797c19c4b25f69
           imagePullPolicy: IfNotPresent

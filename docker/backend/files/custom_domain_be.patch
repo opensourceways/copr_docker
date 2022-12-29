@@ -33,7 +33,7 @@ index f730f81b..5208ebf9 100644
  
  from . import constants
 -
-+from sign import DOMAIN
++from copr_backend.sign import DOMAIN
  
  LOG_COMPONENTS = [
      "spawner", "terminator", "vmm", "build_dispatcher", "action_dispatcher",
