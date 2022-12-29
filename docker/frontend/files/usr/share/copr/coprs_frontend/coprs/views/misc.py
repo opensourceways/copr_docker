@@ -283,7 +283,7 @@ if OpenIDConnect.enabled(app.config):
     user_info_path = app.config.get('OIDC_USERINFO_PATH', [])
     if app.config['OIDC_SCOPES']:
         auth_params = {'scope': app.config['OIDC_SCOPES']} # specify the scope to request
-    if OpenIDConnect.is_config_valid(config):
+    if OpenIDConnect.is_config_valid(app.config):
         if app.config.get('OIDC_ISSUER') :
             PROVIDER_CONFIG = ProviderConfiguration(issuer=app.config['OIDC_ISSUER'],
                                             client_metadata=ClientMetadata(app.config['OIDC_CLIENT'], app.config['OIDC_SECRET'],
