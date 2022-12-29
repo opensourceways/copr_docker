@@ -3,5 +3,5 @@ namespace=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
 if [ -z $namespace ];then
     exit 1
 fi
-/resalloc-kubernetes add --image-tag ghcr.io/pkking/copr_builder@sha256:e0eac3df81605d23944bed3d1ba367c353e01bb062d35a3968914cd3d6655b7d \
+/resalloc-kubernetes add --image-tag pkking/copr_builder@sha256:e0eac3df81605d23944bed3d1ba367c353e01bb062d35a3968914cd3d6655b7d \
     --namespace $namespace --cpu-resource 500m --memory-resource 769Mi --privileged --timeout 120 --node-selector "os.architecture=amd64"

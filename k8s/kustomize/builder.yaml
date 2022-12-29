@@ -13,7 +13,7 @@ spec:
         component: copr-builder
     spec:
       containers:
-        - image: ghcr.io/pkking/copr_builder@sha256:70f2da827280ff2f55f92f90bf64d706c01c65ab22395f645634c9073ad8ada2
+        - image: pkking/copr_builder@sha256:70f2da827280ff2f55f92f90bf64d706c01c65ab22395f645634c9073ad8ada2
           imagePullPolicy: IfNotPresent
           name: builder
           securityContext:

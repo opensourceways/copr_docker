@@ -17,7 +17,7 @@ spec:
       nodeSelector:
         usage: test
       containers:
-        - image: ghcr.io/pkking/copr_keygen-signd@sha256:2ff6e1fb80fe39bda59b743f619e586b679fff3729e8dc06496f78934a67181a
+        - image: pkking/copr_keygen-signd@sha256:2ff6e1fb80fe39bda59b743f619e586b679fff3729e8dc06496f78934a67181a
           imagePullPolicy: IfNotPresent
           command: ["/signd-entrypoint", "0.0.0.0/0"]
           name: copr-keygen-signer
@@ -41,7 +41,7 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/copr-keygen
               name: copr-keygen-data
-        - image: ghcr.io/pkking/copr_keygen-signd@sha256:2ff6e1fb80fe39bda59b743f619e586b679fff3729e8dc06496f78934a67181a
+        - image: pkking/copr_keygen-signd@sha256:2ff6e1fb80fe39bda59b743f619e586b679fff3729e8dc06496f78934a67181a
           imagePullPolicy: IfNotPresent
           command: ["/usr/sbin/httpd", "-DFOREGROUND"]
           name: copr-keygen-httpd

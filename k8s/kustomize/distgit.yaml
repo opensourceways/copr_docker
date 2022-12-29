@@ -21,7 +21,7 @@ spec:
           image: busybox:1.28
           command: [ "sh", "-c", "until nslookup copr-frontend.fedora-copr.svc.cluster.local; do echo waiting for frontend service ; sleep 2; done;" ]
       containers:
-        - image: ghcr.io/pkking/copr_distgit@sha256:567134793da6035fd75405723c9eb2d9695dcaef26a58c5cd1fa2fdcc589e01c
+        - image: pkking/copr_distgit@sha256:567134793da6035fd75405723c9eb2d9695dcaef26a58c5cd1fa2fdcc589e01c
           imagePullPolicy: IfNotPresent
           name: copr-distgit-httpd
           livenessProbe:
@@ -51,7 +51,7 @@ spec:
             - mountPath: /var/log/httpd
               name: logs
           command: ["/usr/sbin/httpd", "-DFOREGROUND"]
-        - image: ghcr.io/pkking/copr_distgit@sha256:567134793da6035fd75405723c9eb2d9695dcaef26a58c5cd1fa2fdcc589e01c
+        - image: pkking/copr_distgit@sha256:567134793da6035fd75405723c9eb2d9695dcaef26a58c5cd1fa2fdcc589e01c
           imagePullPolicy: IfNotPresent
           name: copr-distgit
           resources:
