@@ -74,7 +74,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: prepare
         run: |
-          sudo apt install -qq crossbuild-essential-arm64
+          sudo apt install -qq crossbuild-essential-arm64 libssl-dev
           rustup target add aarch64-unknown-linux-gnu
       - uses: actions-rs/toolchain@v1
         with:
