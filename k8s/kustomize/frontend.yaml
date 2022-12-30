@@ -23,7 +23,7 @@ spec:
           image: ebiqe/alpine-nc:latest
           command: [ "sh", "-c", "until nc -z redis.fedora-copr.svc.cluster.local 6379; do echo waiting for redis service ; sleep 2; done;" ]
       containers:
-        - image: pkking/copr_frontend@sha256:3f857d19d33504c55d05045dba1b67bafac98f32f7903fee67da5c7b84c84613
+        - image: pkking/copr_frontend@sha256:5c249ee1dcb5f5e89ef9b18d1b549feee32f61bf3f5c5c84688292a9c35846e3
           imagePullPolicy: IfNotPresent
           name: copr-frontend-httpd
           livenessProbe:
