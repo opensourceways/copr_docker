@@ -1,6 +1,6 @@
 FROM registry.fedoraproject.org/fedora:37
 LABEL maintainer="infra@openeuler.org"
-
+ARG TARGETARCH
 # Deployment instructions are described here
 # https://github.com/praiskup/resalloc/blob/master/docs/start-resalloc-server.txt
 #
@@ -19,6 +19,7 @@ RUN dnf install -y ansible \
 
 # copy filesystem setup
 COPY files/ /
+RUN mv /resalloc-kubernetes-$TARGETARCH /resalloc-kubernetes
 
 RUN cd $(rpm -ql resalloc-server |grep alembic.ini |xargs dirname) \
     && alembic-3 upgrade head && chmod 755 /resalloc-kubernetes

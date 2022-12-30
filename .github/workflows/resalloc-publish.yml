@@ -72,15 +72,17 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - run: |
+        sudo apt install -qq crossbuild-essential-arm64 &&
+        rustup target add aarch64-unknown-linux-gnu
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
-      - uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: resalloc-kubernetes --root .
       - run: |
-          mv bin/resalloc-kubernetes docker/${{github.workflow}}/files
+          cargo install resalloc-kubernetes --root . --target aarch64-unknown-linux-gnu &&
+          mv bin/resalloc-kubernetes docker/${{github.workflow}}/files/resalloc-kubernetes-arm64 &&
+          cargo install resalloc-kubernetes --root . &&
+          mv bin/resalloc-kubernetes docker/${{github.workflow}}/files/resalloc-kubernetes-amd64
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
