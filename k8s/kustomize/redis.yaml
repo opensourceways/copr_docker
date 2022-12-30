@@ -16,6 +16,7 @@ spec:
     spec:
       nodeSelector:
         usage: test
+        os.architecture: amd64
       containers:
         - image: centos/redis-32-centos7
           imagePullPolicy: IfNotPresent
