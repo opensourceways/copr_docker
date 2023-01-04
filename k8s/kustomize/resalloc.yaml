@@ -48,6 +48,7 @@ spec:
               cp /root/.ssh/id_rsa-ro /root/.ssh/id_rsa;
               chmod +x /home/resalloc/provision/local-*;
               chmod 0400 /root/.ssh/id_rsa;
+              ln -sf /dev/stdout /var/log/resallocserver/main.log
               exec /usr/bin/resalloc-server;
           volumeMounts:
             - mountPath: /etc/resallocserver/pools.yaml

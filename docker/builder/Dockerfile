@@ -36,6 +36,7 @@ RUN set -ex ; \
     && dnf clean all
 
 COPY files/ /
+RUN mv /pypi.py /usr/lib/python*/site-packages/copr_rpmbuild/providers/pypi.py
 
 RUN dnf -y downgrade nosync \
     && dnf -y downgrade nosync && dnf clean all
@@ -51,9 +52,9 @@ RUN echo 'root:passwd' | chpasswd && \
 # using huawei cloud mirrors
 RUN sed -i 's/metalink=/#metalink=/g' /etc/yum.repos.d/* \
     && sed -i 's/#baseurl=/baseurl=/g' /etc/yum.repos.d/* \
-    && sed -i 's/download.example\/pub\/fedora\/linux/mirrors.huaweicloud.com\/fedora/g' /etc/yum.repos.d/*
+    && sed -i 's/download.example\/pub\/fedora\/linux/mirrors.huaweicloud.com\/fedora/g' /etc/yum.repos.d/*\
+    && pip install pyporter
 
-RUN patch /usr/lib/python3.11/site-packages/copr_rpmbuild/providers/pypi.py < /copr-rpmbuild.patch
 RUN echo 'config_opts["use_nspawn"] = False' >> /etc/mock/site-defaults.cfg
 
 CMD ["/usr/sbin/sshd", "-D"]
