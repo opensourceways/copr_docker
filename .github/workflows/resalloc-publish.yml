@@ -90,10 +90,10 @@ jobs:
       - name: do compile
         working-directory: docker/resalloc/files/resalloc-kubernetes
         run: |
-          cargo build --release --target aarch64-unknown-linux-gnu
-          mv target/aarch64-unknown-linux-gnu/release/resalloc-kubernetes docker/${{github.workflow}}/files/resalloc-kubernetes-arm64
-          cargo build --release
-          mv target/release/resalloc-kubernetes docker/${{github.workflow}}/files/resalloc-kubernetes-amd64
+          cargo build --release --target aarch64-unknown-linux-gnu -Z unstable-options --out-dir aarch64
+          mv aarch64/resalloc-kubernetes docker/${{github.workflow}}/files/resalloc-kubernetes-arm64
+          cargo build --release -Z unstable-options --out-dir amd64
+          mv amd64/resalloc-kubernetes docker/${{github.workflow}}/files/resalloc-kubernetes-amd64
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
