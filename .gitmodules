@@ -5,3 +5,6 @@
 	path = docker/frontend/files/copr_design
 	url = https://github.com/opensourceways/copr_design.git
 	branch = main
+[submodule "docker/resalloc/files/resalloc-kubernetes"]
+	path = docker/resalloc/files/resalloc-kubernetes
+	url = https://github.com/TommyLike/resalloc-kubernetes.git
