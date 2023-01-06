@@ -1,0 +1,7 @@
+#!/bin/bash
+namespace=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+if [ -z $namespace ];then
+    exit 1
+fi
+/resalloc-kubernetes add --image-tag pkking/copr_builder@sha256:eed510719f5906e941b09871b1e14c936dc9609e3ec8920325a3f2db13a2b2bc \
+    --namespace $namespace --cpu-resource 500m --memory-resource 769Mi --privileged --timeout 120 --node-selector "os.architecture=aarch64" --node-selector "usage=test"

@@ -22,9 +22,6 @@ configMapGenerator:
   - copr-keygen.conf=config/keygen/copr-keygen.conf
   name: copr-keygen
 - files:
-  - local-new-x86=config/resalloc/local-new-x86
-  - local-new-aarch64=config/resalloc/local-new-aarch64
-  - local-delete=config/resalloc/local-delete
   - pools.yaml=config/resalloc/pools.yaml
   - server.yaml=config/resalloc/server.yaml
   - builder_config=config/backend/.ssh/builder_config

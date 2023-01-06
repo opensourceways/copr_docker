@@ -1,3 +1,0 @@
-#!/bin/bash
-ip=$(echo $RESALLOC_RESOURCE_DATA |base64 -d)
-/resalloc-kubernetes delete --name $ip --namespace $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)

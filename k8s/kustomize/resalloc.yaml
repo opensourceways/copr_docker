@@ -42,9 +42,6 @@ spec:
             - /bin/sh
             - -c
             - |
-              cp /home/resalloc/provision/local-new-x86-ro /home/resalloc/provision/local-new-x86;
-              cp /home/resalloc/provision/local-new-aarch64-ro /home/resalloc/provision/local-new-aarch64;
-              cp /home/resalloc/provision/local-delete-ro /home/resalloc/provision/local-delete;
               cp /root/.ssh/id_rsa-ro /root/.ssh/id_rsa;
               chmod +x /home/resalloc/provision/local-*;
               chmod 0400 /root/.ssh/id_rsa;
@@ -57,15 +54,6 @@ spec:
             - mountPath: /etc/resallocserver/server.yaml
               name: copr-resalloc
               subPath: server.yaml
-            - mountPath: /home/resalloc/provision/local-new-x86-ro
-              name: copr-resalloc
-              subPath: local-new-x86
-            - mountPath: /home/resalloc/provision/local-new-aarch64-ro
-              name: copr-resalloc
-              subPath: local-new-aarch64
-            - mountPath: /home/resalloc/provision/local-delete-ro
-              name: copr-resalloc
-              subPath: local-delete
             - mountPath: /root/.ssh/builder_config
               name: copr-resalloc
               subPath: builder_config
