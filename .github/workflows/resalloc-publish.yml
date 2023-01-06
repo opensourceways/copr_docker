@@ -87,9 +87,9 @@ jobs:
           EOF
       - name: do compile
         run: |
-          cargo install --root . --target aarch64-unknown-linux-gnu
+          cargo install resalloc-kubernetes --root . --target aarch64-unknown-linux-gnu
           mv bin/resalloc-kubernetes docker/${{github.workflow}}/files/resalloc-kubernetes-arm64
-          cargo install --root .
+          cargo install resalloc-kubernetes --root .
           mv bin/resalloc-kubernetes docker/${{github.workflow}}/files/resalloc-kubernetes-amd64
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
