@@ -18,7 +18,7 @@ spec:
         usage: test
       serviceAccountName: resalloc
       containers:
-        - image: pkking/copr_resalloc@sha256:7092f2de0e499f0ff387c4b9aada88ff625cca132aed32bf00506bb6789a48cc
+        - image: pkking/copr_resalloc@sha256:7da8201e53be87022aeee9f8b656a3786b80bce7f72cfee1dff13df358e314b1
           imagePullPolicy: IfNotPresent
           name: resalloc
           livenessProbe:
