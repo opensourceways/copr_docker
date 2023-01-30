@@ -52,7 +52,7 @@ spec:
         - image: pkking/copr_backend@sha256:6916528292526767037333c62e919b71628d7da2b48f0c5cc155777f145adaa0
           imagePullPolicy: IfNotPresent
           name: log
-          command: ["/usr/bin/copr_run_logger.py"]
+          args: ["/usr/bin/copr_run_logger.py"]
           resources:
             requests:
               cpu: 200m
@@ -69,7 +69,7 @@ spec:
         - image: pkking/copr_backend@sha256:6916528292526767037333c62e919b71628d7da2b48f0c5cc155777f145adaa0
           imagePullPolicy: IfNotPresent
           name: action
-          command: ["/run-backend", "--sign-host", "copr-keygen", "/usr/bin/copr-run-dispatcher", "actions"]
+          args: ["/run-backend", "--sign-host", "copr-keygen", "/usr/bin/copr-run-dispatcher", "actions"]
           resources:
             requests:
               cpu: 200m
@@ -83,7 +83,7 @@ spec:
         - image: pkking/copr_backend@sha256:6916528292526767037333c62e919b71628d7da2b48f0c5cc155777f145adaa0
           imagePullPolicy: IfNotPresent
           name: build
-          command: ["/run-backend", "--sign-host", "copr-keygen", "/usr/bin/copr-run-dispatcher", "builds"]
+          args: ["/run-backend", "--sign-host", "copr-keygen", "/usr/bin/copr-run-dispatcher", "builds"]
           resources:
             requests:
               cpu: 200m

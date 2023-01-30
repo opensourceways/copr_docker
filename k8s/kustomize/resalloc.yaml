@@ -38,6 +38,9 @@ spec:
           ports:
             - containerPort: 49100
               protocol: TCP
+          env:
+            - name: BUILDER_SHA256
+              value: "sha256:5d3309555db550ee5257726a87e0bb0dafd1d2631a32c532cf8e1d5fc85f418f"
           command:
             - /bin/sh
             - -c

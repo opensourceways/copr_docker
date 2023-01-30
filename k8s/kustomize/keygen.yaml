@@ -19,7 +19,7 @@ spec:
       containers:
         - image: pkking/copr_keygen-signd@sha256:2ff6e1fb80fe39bda59b743f619e586b679fff3729e8dc06496f78934a67181a
           imagePullPolicy: IfNotPresent
-          command: ["/signd-entrypoint", "0.0.0.0/0"]
+          args: ["/signd-entrypoint", "0.0.0.0/0"]
           name: copr-keygen-signer
           livenessProbe:
             tcpSocket:
@@ -43,7 +43,6 @@ spec:
               name: copr-keygen-data
         - image: pkking/copr_keygen-signd@sha256:2ff6e1fb80fe39bda59b743f619e586b679fff3729e8dc06496f78934a67181a
           imagePullPolicy: IfNotPresent
-          command: ["/usr/sbin/httpd", "-DFOREGROUND"]
           name: copr-keygen-httpd
           livenessProbe:
             tcpSocket:
