@@ -1,7 +1,7 @@
 local_x86_64_normal_prod:
-    max: 10
+    max: 20
     max_starting: 10
-    max_prealloc: 0
+    max_prealloc: 2
     tags:
     - copr_builder
     - arch_noarch
@@ -17,14 +17,14 @@ local_x86_64_normal_prod:
     cmd_delete: "/home/resalloc/provision/local-delete"
     cmd_livecheck: "/usr/bin/resalloc-check-vm-ip"
     livecheck_period: 180
-    reuse_opportunity_time: 180
-    reuse_max_count: 8
-    reuse_max_time: 1800
+    reuse_opportunity_time: 3600
+    reuse_max_count: 0
+    reuse_max_time: 3600
 
 local_aarch64_normal_prod:
-    max: 10
+    max: 20
     max_starting: 10
-    max_prealloc: 0
+    max_prealloc: 2
     tags:
     - copr_builder
     - arch_aarch64
@@ -33,6 +33,6 @@ local_aarch64_normal_prod:
     cmd_delete: "/home/resalloc/provision/local-delete"
     cmd_livecheck: "/usr/bin/resalloc-check-vm-ip"
     livecheck_period: 180
-    reuse_opportunity_time: 180
-    reuse_max_count: 8
-    reuse_max_time: 1800
+    reuse_opportunity_time: 3600
+    reuse_max_count: 0
+    reuse_max_time: 3600
