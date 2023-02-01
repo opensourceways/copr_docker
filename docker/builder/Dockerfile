@@ -31,7 +31,7 @@ RUN set -ex ; \
                    ca-certificates \
                    scl-utils-build \
                    ethtool \
-                   patch \
+                   git \
     && dnf -y install copr-builder \
     && dnf clean all
 
@@ -42,7 +42,8 @@ RUN dnf -y downgrade nosync \
     && dnf -y downgrade nosync && dnf clean all
 # needed to run sshd
 RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -q
-
+# install pyporter
+RUN git clone https://gitee.com/openeuler/pyporter.git && cd pyporter && python3 setup.py install
 # setup root user
 RUN echo 'root:passwd' | chpasswd && \
     chmod 700 /root /root/.ssh && \
@@ -52,8 +53,7 @@ RUN echo 'root:passwd' | chpasswd && \
 # using huawei cloud mirrors
 RUN sed -i 's/metalink=/#metalink=/g' /etc/yum.repos.d/* \
     && sed -i 's/#baseurl=/baseurl=/g' /etc/yum.repos.d/* \
-    && sed -i 's/download.example\/pub\/fedora\/linux/mirrors.huaweicloud.com\/fedora/g' /etc/yum.repos.d/*\
-    && pip install pyporter
+    && sed -i 's/download.example\/pub\/fedora\/linux/mirrors.huaweicloud.com\/fedora/g' /etc/yum.repos.d/*
 
 RUN echo 'config_opts["use_nspawn"] = False' >> /etc/mock/site-defaults.cfg
 
