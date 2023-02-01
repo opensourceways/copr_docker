@@ -1,7 +1,7 @@
 local_x86_64_normal_prod:
-    max: 5
-    max_starting: 5
-    max_prealloc: 1
+    max: 10
+    max_starting: 10
+    max_prealloc: 0
     tags:
     - copr_builder
     - arch_noarch
@@ -22,9 +22,9 @@ local_x86_64_normal_prod:
     reuse_max_time: 1800
 
 local_aarch64_normal_prod:
-    max: 5
-    max_starting: 5
-    max_prealloc: 1
+    max: 10
+    max_starting: 10
+    max_prealloc: 0
     tags:
     - copr_builder
     - arch_aarch64
