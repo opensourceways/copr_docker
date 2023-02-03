@@ -36,14 +36,15 @@ RUN set -ex ; \
     && dnf clean all
 
 COPY files/ /
-RUN mv /pypi.py /usr/lib/python*/site-packages/copr_rpmbuild/providers/pypi.py
+RUN mv /{pypi.py, rubygems.py} /usr/lib/python*/site-packages/copr_rpmbuild/providers/
 
 RUN dnf -y downgrade nosync \
     && dnf -y downgrade nosync && dnf clean all
 # needed to run sshd
 RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -q
-# install pyporter
+# install pyporter & rubyporter
 RUN git clone https://gitee.com/openeuler/pyporter.git && cd pyporter && python3 setup.py install
+RUN git clone https://gitee.com/openeuler/rubyporter.git && cd rubyporter && python3 setup.py install
 # setup root user
 RUN echo 'root:passwd' | chpasswd && \
     chmod 700 /root /root/.ssh && \
