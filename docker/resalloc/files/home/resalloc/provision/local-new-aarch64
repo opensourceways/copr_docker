@@ -4,4 +4,4 @@ if [ -z $namespace ];then
     exit 1
 fi
 /resalloc-kubernetes add --image-tag pkking/copr_builder@${BUILDER_SHA256} \
-    --namespace $namespace --cpu-resource 500m --memory-resource 769Mi --privileged --timeout 120 --node-selector "os.architecture=aarch64" --node-selector "usage=test"
+    --namespace $namespace --cpu-resource ${BUILDER_CPU} --memory-resource ${BUILDER_MEM} --privileged --timeout ${BUILDER_TIMEOUT} --node-selector "os.architecture=aarch64" --node-selector "usage=test"
