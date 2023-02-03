@@ -36,7 +36,8 @@ RUN set -ex ; \
     && dnf clean all
 
 COPY files/ /
-RUN mv /{pypi.py, rubygems.py} /usr/lib/python*/site-packages/copr_rpmbuild/providers/
+RUN mv /pypi.py /usr/lib/python*/site-packages/copr_rpmbuild/providers/ && \
+    mv /rubygems.py /usr/lib/python*/site-packages/copr_rpmbuild/providers/
 
 RUN dnf -y downgrade nosync \
     && dnf -y downgrade nosync && dnf clean all
