@@ -41,6 +41,12 @@ spec:
           env:
             - name: BUILDER_SHA256
               value: "sha256:3d9c01fb9d22d1658ed39ac03ecff616fbf798070dfa76ef51fa477240b08e05"
+            - name: BUILDER_CPU
+              value: "1"
+            - name: BUILDER_MEM
+              value: "1Gi"
+            - name: BUILDER_TIMEOUT
+              value: 360
           command:
             - /bin/sh
             - -c
