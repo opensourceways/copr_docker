@@ -1,1 +1,1 @@
-createdb -U postgres resalloc -O resalloc
+createdb -U copr-fe resalloc -O resalloc
