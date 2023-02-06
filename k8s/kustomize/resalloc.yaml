@@ -40,7 +40,7 @@ spec:
               protocol: TCP
           env:
             - name: BUILDER_SHA256
-              value: "sha256:794f15243ee086143093640a95a100372aadca79e40af682831a32b62741991f"
+              value: "sha256:3d9c01fb9d22d1658ed39ac03ecff616fbf798070dfa76ef51fa477240b08e05"
           command:
             - /bin/sh
             - -c
