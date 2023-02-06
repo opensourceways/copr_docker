@@ -12,6 +12,10 @@ commonLabels:
   app: copr
 configMapGenerator:
 - files:
+  - inituser.sql=config/database/inituser.sql
+  - initdb.sh=config/database/initdb.sh
+  name: copr-database
+- files:
   - httpd.conf=config/frontend/httpd.conf
   - copr.conf=config/frontend/copr.conf
   name: copr-frontend

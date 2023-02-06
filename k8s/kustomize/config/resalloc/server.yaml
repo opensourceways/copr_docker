@@ -6,8 +6,8 @@
 #For PostgreSQL connection without password using unix socket auth method.
 #db_url: 'postgresql://resalloc@/resalloc'
 #For PostgreSQL listening on host/port, using password.
-#db_url: 'postgresql://resalloc:pass@localhost:5432/resalloc'
-db_url: 'sqlite:////var/lib/resallocserver/db.sqlite'
+db_url: 'postgresql://resalloc:resallocpass@database.fedora-copr.svc.cluster.local/resalloc'
+#db_url: 'sqlite:////var/lib/resallocserver/db.sqlite'
 
 logdir: '/var/log/resallocserver'
 

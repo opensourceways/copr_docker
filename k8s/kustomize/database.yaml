@@ -18,21 +18,13 @@ spec:
         usage: test
         os.architecture: amd64
       containers:
-        - image: pkking/copr_database@sha256:ffed9199e6b6728d57d2fc5a10ab2e36d241fd7d849185321c797c19c4b25f69
+        - image: pkking/copr_database@sha256:54af68a2402acb19c19bdf406f05e6a9fd64befabdc4dd23b720656daf2575e6
           imagePullPolicy: IfNotPresent
           name: copr-postgres
           livenessProbe:
-            exec:
-              command:
-                - /usr/libexec/check-container
-                - --live
-            initialDelaySeconds: 120
-            timeoutSeconds: 5
-          readinessProbe:
-            exec:
-              command:
-                - /usr/libexec/check-container
-            initialDelaySeconds: 5
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 30
             timeoutSeconds: 5
           resources:
             requests:
@@ -42,28 +34,37 @@ spec:
             - containerPort: 5432
               protocol: TCP
           env:
-            - name: POSTGRESQL_USER
+            - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
                   key: database-user
                   name: copr-database
-            - name: POSTGRESQL_PASSWORD
+            - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: database-password
                   name: copr-database
-            - name: POSTGRESQL_DATABASE
+            - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
                   key: database-name
                   name: copr-database
           volumeMounts:
-            - mountPath: /var/lib/pgsql/data
+            - mountPath: /var/lib/postgresql/data
               name: postgresql-data
+            - mountPath: /docker-entrypoint-initdb.d/0-inituser.sql
+              name: copr-database
+              subPath: inituser.sql
+            - mountPath: /docker-entrypoint-initdb.d/1-initdb.sh
+              name: copr-database
+              subPath: initdb.sh
       volumes:
         - name: postgresql-data
           persistentVolumeClaim:
             claimName: copr-database-data
+        - name: copr-database
+          configMap:
+            name: copr-database
 ---
 apiVersion: v1
 kind: Service
