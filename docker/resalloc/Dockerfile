@@ -12,9 +12,9 @@ RUN dnf install -y ansible \
                    resalloc \
                    resalloc-aws \
                    resalloc-server \
-                   sqlite \
                    findutils \
                    openssh-clients \
+                   python3-psycopg2 \
     && dnf clean all
 
 # copy filesystem setup
