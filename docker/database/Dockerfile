@@ -1,2 +1,2 @@
-FROM centos/postgresql-12-centos7
+FROM postgres:12
 LABEL maintainer="infra@openeuler.org"
