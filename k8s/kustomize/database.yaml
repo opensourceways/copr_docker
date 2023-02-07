@@ -53,8 +53,8 @@ spec:
             - mountPath: /var/lib/postgresql/data
               name: postgresql-data
             - mountPath: /docker-entrypoint-initdb.d/0-inituser.sql
-              name: copr-database
-              subPath: inituser.sql
+              name: copr-secrets
+              subPath: database_inituser.sql
             - mountPath: /docker-entrypoint-initdb.d/1-initdb.sh
               name: copr-database
               subPath: initdb.sh
@@ -65,6 +65,9 @@ spec:
         - name: copr-database
           configMap:
             name: copr-database
+        - name: copr-secrets
+          secret:
+            secretName: copr-secrets
 ---
 apiVersion: v1
 kind: Service

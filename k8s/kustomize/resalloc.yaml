@@ -40,7 +40,7 @@ spec:
               protocol: TCP
           env:
             - name: BUILDER_SHA256
-              value: "sha256:3d9c01fb9d22d1658ed39ac03ecff616fbf798070dfa76ef51fa477240b08e05"
+              value: "sha256:30b0e82910c7f81b91b685cd438b42125c0444e100807d114f70996361e679f3"
             - name: BUILDER_CPU
               value: "1"
             - name: BUILDER_MEM
@@ -61,14 +61,14 @@ spec:
               name: copr-resalloc
               subPath: pools.yaml
             - mountPath: /etc/resallocserver/server.yaml
-              name: copr-resalloc
-              subPath: server.yaml
+              name: copr-secrets
+              subPath: resalloc_server.yaml
             - mountPath: /root/.ssh/builder_config
               name: copr-resalloc
               subPath: builder_config
             - mountPath: /root/.ssh/id_rsa-ro
-              name: copr-resalloc
-              subPath: id_rsa
+              name: copr-secrets
+              subPath: backend_id_rsa
             - name: resalloc-data
               mountPath: /var/lib/resallocserver
             - name: resalloc-data
@@ -80,7 +80,9 @@ spec:
         - name: resalloc-data
           persistentVolumeClaim:
             claimName: resalloc-data
-
+        - name: copr-secrets
+          secret:
+            secretName: copr-secrets
 ---
 apiVersion: v1
 kind: Service

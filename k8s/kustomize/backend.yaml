@@ -93,16 +93,16 @@ spec:
               name: copr-backend
               subPath: builder_config
             - mountPath: /home/copr/.ssh/id_rsa
-              name: copr-backend
-              subPath: id_rsa
+              name: copr-secrets
+              subPath: backend_id_rsa
             - mountPath: /home/copr/.ssh/id_rsa.pub
-              name: copr-backend
-              subPath: id_rsa.pub
+              name: copr-secrets
+              subPath: backend_id_rsa.pub
             - mountPath: /var/lib/copr/public_html/results
               name: copr-backend-data
             - mountPath: /etc/copr/copr-be.conf
-              name: copr-backend
-              subPath: copr-be.conf
+              name: copr-secrets
+              subPath: backend_copr-be.conf
       volumes:
         - name: copr-backend
           configMap:
@@ -110,6 +110,9 @@ spec:
         - name: copr-backend-data
           persistentVolumeClaim:
             claimName: copr-backend-data
+        - name: copr-secrets
+          secret:
+            secretName: copr-secrets
 ---
 apiVersion: v1
 kind: Service

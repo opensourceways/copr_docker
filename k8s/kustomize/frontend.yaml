@@ -46,8 +46,8 @@ spec:
               protocol: TCP
           volumeMounts:
             - mountPath: /etc/copr/copr.conf
-              name: copr-frontend
-              subPath: copr.conf
+              name: copr-secrets
+              subPath: frontend_copr.conf
             - mountPath: /etc/httpd/conf.d/copr.conf
               name: copr-frontend
               subPath: httpd.conf
@@ -55,7 +55,9 @@ spec:
         - name: copr-frontend
           configMap:
             name: copr-frontend
-
+        - name: copr-secrets
+          secret:
+            secretName: copr-secrets
 ---
 apiVersion: v1
 kind: Service

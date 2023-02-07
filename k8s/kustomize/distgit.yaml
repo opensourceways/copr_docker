@@ -63,8 +63,8 @@ spec:
             - mountPath: /var/lib/dist-git
               name: copr-distgit-data
             - mountPath: /etc/copr/copr-dist-git.conf
-              name: copr-distgit
-              subPath: copr-dist-git.conf
+              name: copr-secrets
+              subPath: distgit_copr-dist-git.conf
             - name: logs
               mountPath: /var/lib/copr-dist-git
             - name: logs
@@ -86,6 +86,9 @@ spec:
         - name: locks
           persistentVolumeClaim:
             claimName: copr-distgit-locks
+        - name: copr-secrets
+          secret:
+            secretName: copr-secrets
 ---
 apiVersion: v1
 kind: Service
