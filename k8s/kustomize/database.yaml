@@ -38,17 +38,17 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: database-user
-                  name: copr-database
+                  name: copr-secrets
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: database-password
-                  name: copr-database
+                  name: copr-secrets
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
                   key: database-name
-                  name: copr-database
+                  name: copr-secrets
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgresql-data

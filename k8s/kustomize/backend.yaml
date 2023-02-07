@@ -59,13 +59,13 @@ spec:
               memory: 200Mi
           volumeMounts:
             - mountPath: /etc/nginx/conf.d/copr-be.conf
-              name: copr-backend
-              subPath: copr-be.conf
+              name: copr-secrets
+              subPath: backend_copr-be.conf
             - mountPath: /var/lib/copr/public_html/results
               name: copr-backend-data
             - mountPath: /etc/copr/copr-be.conf
-              name: copr-backend
-              subPath: copr-be.conf
+              name: copr-secrets
+              subPath: backend_copr-be.conf
         - image: pkking/copr_backend@sha256:6916528292526767037333c62e919b71628d7da2b48f0c5cc155777f145adaa0
           imagePullPolicy: IfNotPresent
           name: action
@@ -76,8 +76,8 @@ spec:
               memory: 200Mi
           volumeMounts:
             - mountPath: /etc/copr/copr-be.conf
-              name: copr-backend
-              subPath: copr-be.conf
+              name: copr-secrets
+              subPath: backend_copr-be.conf
             - mountPath: /var/lib/copr/public_html/results
               name: copr-backend-data
         - image: pkking/copr_backend@sha256:6916528292526767037333c62e919b71628d7da2b48f0c5cc155777f145adaa0
