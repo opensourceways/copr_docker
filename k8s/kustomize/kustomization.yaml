@@ -28,15 +28,6 @@ configMapGenerator:
 - files:
   - builder_config=config/backend/.ssh/builder_config
   name: copr-backend
-secretGenerator:
-- name: copr-database
-  envs:
-  - config/database/credential.env
-  type: Opaque
-  namespace: fedora-copr
-  options:
-    labels:
-      app: copr
 namespace: fedora-copr
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
