@@ -1,5 +1,10 @@
 #! /bin/sh
 
+# redirect log in docker env
+ln -sf /dev/stdout /var/log/copr-backend/alembic.log
+ln -sf /dev/stdout /var/log/copr-backend/manage.log
+ln -sf /dev/stdout /var/log/copr-backend/frontend.log
+
 cd /usr/share/copr/coprs_frontend/
 ./manage.py create-db --alembic alembic.ini
 ./manage.py create-chroot $(ls /etc/mock/openeuler-*-{i386,x86_64,aarch64}.cfg |xargs -I{} -n1 basename {} .cfg)
