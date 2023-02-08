@@ -35,8 +35,9 @@ RUN set -ex ; \
 # Copy files from the host into the container
 COPY files/ /
 
-RUN sed -i 's/Listen 80/#Listen 80/g' /etc/httpd/conf/httpd.conf
-
+RUN sed -i 's/Listen 80/#Listen 80/g' /etc/httpd/conf/httpd.conf \
+    sed -i 's/ErrorLog.*/ErrorLog "/dev/stdout"/g' /etc/httpd/conf/httpd.conf \
+    sed -i 's/CustomLog.*/CustomLog "/dev/stdout" combined/g' /etc/httpd/conf/httpd.conf
 # OpenShift runs this project as <RANDOMUID>:root
 # Podman runs this as copr-signer with root in supplementary groups
 RUN chmod g+rwx /var/log/httpd
@@ -59,6 +60,7 @@ RUN dirs="/var/run/signd /var/run/httpd" ; \
     done
 
 USER copr-signer
+RUN mkdir -p /var/log/copr-keygen && ln -sf /dev/stdout /var/log/copr-keygen/main.log
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["/usr/sbin/httpd", "-DFOREGROUND"]

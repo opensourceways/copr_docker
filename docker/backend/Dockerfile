@@ -83,13 +83,24 @@ RUN chown copr:root /etc/sign.conf && \
     chmod 0660 /etc/sign.conf
 
 # Not sure why the directory wasn't created automatically
-RUN mkdir /var/lock/copr-backend
-RUN chown copr:copr /var/lock/copr-backend
+RUN mkdir /var/lock/copr-backend /var/log/copr-backend
+RUN chown copr:copr /var/lock/copr-backend /var/log/copr-backend
 
 # using /dev/urandom is a hack just for devel, /dev/hwrandom or /dev/hwrng should be used in production
 RUN rngd -r /dev/urandom
 
 USER copr
-
+RUN ln -sf /proc/self/fd/1 /var/log/copr-backend/action_dispatcher.log && \
+              ln -sf /proc/self/fd/1 /var/log/copr-backend/build_dispatcher.log && \
+              ln -sf /proc/self/fd/1 /var/log/copr-backend/actions.log && \
+              ln -sf /proc/self/fd/1 /var/log/copr-backend/analyze-results.log && \
+              ln -sf /proc/self/fd/1 /var/log/copr-backend/backend.log && \
+              ln -sf /proc/self/fd/1 /var/log/copr-backend/logger.log && \
+              ln -sf /proc/self/fd/1 /var/log/copr-backend/modifyrepo.log && \
+              ln -sf /proc/self/fd/1 /var/log/copr-backend/pruner.log && \
+              ln -sf /proc/self/fd/1 /var/log/copr-backend/spawner.log && \
+              ln -sf /proc/self/fd/1 /var/log/copr-backend/terminator.log && \
+              ln -sf /proc/self/fd/1 /var/log/copr-backend/vmm.log && \
+              ln -sf /proc/self/fd/1 /var/log/copr-backend/worker.log
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["/run-backend"]

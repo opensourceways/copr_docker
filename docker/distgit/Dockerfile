@@ -30,9 +30,11 @@ RUN rm /etc/httpd/conf.d/ssl.conf
 RUN echo "AliasMatch \"/repo(/.*)/md5(/.*)\" \"/var/lib/dist-git/cache/lookaside\\$1\\$2\"" >> /etc/httpd/conf.d/dist-git/lookaside-copr.conf && \
     echo "Alias /repo/ /var/lib/dist-git/cache/lookaside/" >>  /etc/httpd/conf.d/dist-git/lookaside-copr.conf
 
-RUN sed -i 's/Listen 80/Listen 5001/' /etc/httpd/conf/httpd.conf
+RUN sed -i 's/Listen 80/Listen 5001/' /etc/httpd/conf/httpd.conf \
+    sed -i 's/ErrorLog.*/ErrorLog "/dev/stdout"/g' /etc/httpd/conf/httpd.conf \
+    sed -i 's/CustomLog.*/CustomLog "/dev/stdout" combined/g' /etc/httpd/conf/httpd.conf
 
-RUN mkdir /tmp/copr-dist-git
+RUN mkdir /tmp/copr-dist-git /var/log/copr-dist-git
 RUN chown copr-dist-git:packager /tmp/copr-dist-git
 
 # copy filesystem setup and setup ownership and permissions
@@ -40,9 +42,9 @@ COPY files/ /
 RUN chmod 644 /etc/copr/copr-dist-git.conf && chmod 755 /copr-dist-git-assure-perm
 
 RUN echo " [user]" >> /home/copr-dist-git/.gitconfig && \
-    echo " email = copr-devel@lists.fedorahosted.org" >> /home/copr-dist-git/.gitconfig && \
+    echo " email = infra@openeuler.org" >> /home/copr-dist-git/.gitconfig && \
     echo " name = Copr dist git" >> /home/copr-dist-git/.gitconfig && \
-    chown copr-dist-git:copr-dist-git /home/copr-dist-git/.gitconfig
+    chown copr-dist-git:copr-dist-git /home/copr-dist-git/.gitconfig /var/log/copr-dist-git
 
 RUN sed -i "s/^cache-size.*//" /etc/cgitrc
 RUN echo 'scan-path=/var/lib/dist-git/git/rpms' | tee -a /etc/cgitrc
@@ -54,6 +56,8 @@ RUN directories="/etc/httpd /var/run/httpd /var/log/httpd /var/lib/dist-git /run
 RUN echo "copr-dist-git ALL = (root) NOPASSWD: /copr-dist-git-assure-perm" >> /etc/sudoers.d/copr-dist-git
 
 USER copr-dist-git
+
+RUN ln -sf /proc/self/fd/1 /var/log/copr-dist-git/main.log
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["bash", "-c", "mkdir -p /var/lib/dist-git/cache /var/lib/dist-git/git && sudo /copr-dist-git-assure-perm && exec /usr/bin/copr-run-dispatcher imports"]

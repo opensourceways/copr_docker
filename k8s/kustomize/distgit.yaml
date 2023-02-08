@@ -47,10 +47,6 @@ spec:
               name: copr-distgit-data
             - mountPath: /var/lib/copr-dist-git
               name: logs
-            - mountPath: /var/log/copr-dist-git
-              name: logs
-            - mountPath: /var/log/httpd
-              name: logs
           command: ["/usr/sbin/httpd", "-DFOREGROUND"]
         - image: pkking/copr_distgit@sha256:693c6ec64af3e5ded298cc9eb26a432ca4960a6463058b76e03ec7f946947364
           imagePullPolicy: IfNotPresent
@@ -67,10 +63,6 @@ spec:
               subPath: distgit_copr-dist-git.conf
             - name: logs
               mountPath: /var/lib/copr-dist-git
-            - name: logs
-              mountPath: /var/log/copr-dist-git
-            - name: logs
-              mountPath: /var/log/httpd
             - name: locks
               mountPath: /var/lock/copr-dist-git
       volumes:
