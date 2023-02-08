@@ -77,7 +77,7 @@ RUN chmod -R g+rwX \
 USER copr-fe
 
 # using pyodic which not existed in fedora repo
-RUN pip install flask-pyoidc
+RUN pip install flask-pyoidc oid==1.5.0
 # workaround for https://github.com/fedora-copr/copr/issues/2448
 RUN sed -i 's|~User.coprs.any|User.coprs.any|g' /usr/share/copr/coprs_frontend/coprs/logic/users_logic.py
 # Since home directory for `copr-fe` user is `/usr/share/copr/coprs_frontend`
