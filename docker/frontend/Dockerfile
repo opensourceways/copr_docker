@@ -40,6 +40,9 @@ RUN cp -r /copr_design/sources/usr / && rm -rf /copr_design
 RUN sed -i 's/User apache/User copr-fe/g' /etc/httpd/conf/httpd.conf
 RUN sed -i 's/Group apache/Group copr-fe/g' /etc/httpd/conf/httpd.conf
 
+RUN sed -i 's/ErrorLog.*/ErrorLog "\/dev\/stdout"/g' /etc/httpd/conf/httpd.conf && \
+    sed -i 's/CustomLog.*/CustomLog "\/dev\/stdout" combined/g' /etc/httpd/conf/httpd.conf
+
 # We cannot expose privileged port as non-root user
 RUN sed -i 's/Listen 80/#Listen 80/g' /etc/httpd/conf/httpd.conf
 

@@ -4,8 +4,6 @@
 ln -sf /dev/stdout /var/log/copr-frontend/alembic.log
 ln -sf /dev/stdout /var/log/copr-frontend/manage.log
 ln -sf /dev/stdout /var/log/copr-frontend/frontend.log
-ln -sf /dev/stdout /var/log/httpd/error_log
-ln -sf /dev/stdout /var/log/httpd/access_log
 
 cd /usr/share/copr/coprs_frontend/
 ./manage.py create-db --alembic alembic.ini
