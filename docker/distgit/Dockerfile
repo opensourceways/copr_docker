@@ -30,8 +30,8 @@ RUN rm /etc/httpd/conf.d/ssl.conf
 RUN echo "AliasMatch \"/repo(/.*)/md5(/.*)\" \"/var/lib/dist-git/cache/lookaside\\$1\\$2\"" >> /etc/httpd/conf.d/dist-git/lookaside-copr.conf && \
     echo "Alias /repo/ /var/lib/dist-git/cache/lookaside/" >>  /etc/httpd/conf.d/dist-git/lookaside-copr.conf
 
-RUN sed -i 's/Listen 80/Listen 5001/' /etc/httpd/conf/httpd.conf \
-    sed -i 's/ErrorLog.*/ErrorLog "\/dev\/stdout"/g' /etc/httpd/conf/httpd.conf \
+RUN sed -i 's/Listen 80/Listen 5001/' /etc/httpd/conf/httpd.conf && \
+    sed -i 's/ErrorLog.*/ErrorLog "\/dev\/stdout"/g' /etc/httpd/conf/httpd.conf && \
     sed -i 's/CustomLog.*/CustomLog "\/dev\/stdout" combined/g' /etc/httpd/conf/httpd.conf
 
 RUN mkdir /tmp/copr-dist-git /var/log/copr-dist-git
