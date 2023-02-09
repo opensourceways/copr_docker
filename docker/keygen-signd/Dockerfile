@@ -60,7 +60,8 @@ RUN dirs="/var/run/signd /var/run/httpd" ; \
     done
 
 USER copr-signer
-RUN mkdir -p /var/log/copr-keygen && ln -sf /dev/stdout /var/log/copr-keygen/main.log
+RUN mkdir -p /var/log/copr-keygen && ln -sf /proc/1/fd/1 /var/log/copr-keygen/main.log \
+        && ln -sf /proc/1/fd/1 /var/log/copr-keygen/gpg-copr.log
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["/usr/sbin/httpd", "-DFOREGROUND"]

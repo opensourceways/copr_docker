@@ -57,7 +57,7 @@ RUN echo "copr-dist-git ALL = (root) NOPASSWD: /copr-dist-git-assure-perm" >> /e
 
 USER copr-dist-git
 
-RUN ln -sf /proc/self/fd/1 /var/log/copr-dist-git/main.log
+RUN ln -sf /proc/1/fd/1 /var/log/copr-dist-git/main.log
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["bash", "-c", "mkdir -p /var/lib/dist-git/cache /var/lib/dist-git/git && sudo /copr-dist-git-assure-perm && exec /usr/bin/copr-run-dispatcher imports"]

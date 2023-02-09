@@ -1,9 +1,9 @@
 #! /bin/sh
 
 # redirect log in docker env
-ln -sf /dev/stdout /var/log/copr-frontend/alembic.log
-ln -sf /dev/stdout /var/log/copr-frontend/manage.log
-ln -sf /dev/stdout /var/log/copr-frontend/frontend.log
+ln -sf /proc/1/fd/1 /var/log/copr-frontend/alembic.log
+ln -sf /proc/1/fd/1 /var/log/copr-frontend/manage.log
+ln -sf /proc/1/fd/1 /var/log/copr-frontend/frontend.log
 
 cd /usr/share/copr/coprs_frontend/
 ./manage.py create-db --alembic alembic.ini

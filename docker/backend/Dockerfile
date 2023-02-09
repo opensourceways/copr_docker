@@ -89,17 +89,17 @@ RUN chown copr:copr /var/lock/copr-backend /var/log/copr-backend
 RUN rngd -r /dev/urandom
 
 USER copr
-RUN ln -sf /proc/self/fd/1 /var/log/copr-backend/action_dispatcher.log && \
-              ln -sf /proc/self/fd/1 /var/log/copr-backend/build_dispatcher.log && \
-              ln -sf /proc/self/fd/1 /var/log/copr-backend/actions.log && \
-              ln -sf /proc/self/fd/1 /var/log/copr-backend/analyze-results.log && \
-              ln -sf /proc/self/fd/1 /var/log/copr-backend/backend.log && \
-              ln -sf /proc/self/fd/1 /var/log/copr-backend/logger.log && \
-              ln -sf /proc/self/fd/1 /var/log/copr-backend/modifyrepo.log && \
-              ln -sf /proc/self/fd/1 /var/log/copr-backend/pruner.log && \
-              ln -sf /proc/self/fd/1 /var/log/copr-backend/spawner.log && \
-              ln -sf /proc/self/fd/1 /var/log/copr-backend/terminator.log && \
-              ln -sf /proc/self/fd/1 /var/log/copr-backend/vmm.log && \
-              ln -sf /proc/self/fd/1 /var/log/copr-backend/worker.log
+RUN ln -sf /proc/1/fd/1 /var/log/copr-backend/action_dispatcher.log && \
+              ln -sf /proc/1/fd/1 /var/log/copr-backend/build_dispatcher.log && \
+              ln -sf /proc/1/fd/1 /var/log/copr-backend/actions.log && \
+              ln -sf /proc/1/fd/1 /var/log/copr-backend/analyze-results.log && \
+              ln -sf /proc/1/fd/1 /var/log/copr-backend/backend.log && \
+              ln -sf /proc/1/fd/1 /var/log/copr-backend/logger.log && \
+              ln -sf /proc/1/fd/1 /var/log/copr-backend/modifyrepo.log && \
+              ln -sf /proc/1/fd/1 /var/log/copr-backend/pruner.log && \
+              ln -sf /proc/1/fd/1 /var/log/copr-backend/spawner.log && \
+              ln -sf /proc/1/fd/1 /var/log/copr-backend/terminator.log && \
+              ln -sf /proc/1/fd/1 /var/log/copr-backend/vmm.log && \
+              ln -sf /proc/1/fd/1 /var/log/copr-backend/worker.log
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["/run-backend"]
