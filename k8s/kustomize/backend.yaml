@@ -25,7 +25,7 @@ spec:
           image: ebiqe/alpine-nc:latest
           command: [ "sh", "-c", "until nc -z redis.fedora-copr.svc.cluster.local 6379; do echo waiting for redis service ; sleep 2; done;" ]
       containers:
-        - image: pkking/copr_backend_httpd@sha256:74069eed66b0a721148f7e5a6910c3b23ed5a04e20a04e8770bced59b08c11ab
+        - image: pkking/copr_backend_httpd@sha256:aab152da7eb07f3a8ce59fae34fb92b24bbef5de16f7dbf581cf138185ed7a36
           imagePullPolicy: IfNotPresent
           name: httpd
           livenessProbe:
@@ -49,7 +49,7 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/copr/public_html/results
               name: copr-backend-data
-        - image: pkking/copr_backend@sha256:07648b9aaee675ef0e79ea7aa618b84b14afc806b0997694a23ec0d1a1ee389b
+        - image: pkking/copr_backend@sha256:010dbd45c4580d6d3c245c5f17a02287b5bce945f5cb0213aa50ba7054473372
           imagePullPolicy: IfNotPresent
           name: log
           args: ["/usr/bin/copr_run_logger.py"]
@@ -66,7 +66,7 @@ spec:
             - mountPath: /etc/copr/copr-be.conf
               name: copr-secrets
               subPath: backend_copr-be.conf
-        - image: pkking/copr_backend@sha256:07648b9aaee675ef0e79ea7aa618b84b14afc806b0997694a23ec0d1a1ee389b
+        - image: pkking/copr_backend@sha256:010dbd45c4580d6d3c245c5f17a02287b5bce945f5cb0213aa50ba7054473372
           imagePullPolicy: IfNotPresent
           name: action
           args: ["/run-backend", "--sign-host", "copr-keygen", "/usr/bin/copr-run-dispatcher", "actions"]
@@ -80,7 +80,7 @@ spec:
               subPath: backend_copr-be.conf
             - mountPath: /var/lib/copr/public_html/results
               name: copr-backend-data
-        - image: pkking/copr_backend@sha256:07648b9aaee675ef0e79ea7aa618b84b14afc806b0997694a23ec0d1a1ee389b
+        - image: pkking/copr_backend@sha256:010dbd45c4580d6d3c245c5f17a02287b5bce945f5cb0213aa50ba7054473372
           imagePullPolicy: IfNotPresent
           name: build
           args: ["/run-backend", "--sign-host", "copr-keygen", "/usr/bin/copr-run-dispatcher", "builds"]

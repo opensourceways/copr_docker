@@ -16,8 +16,9 @@ spec:
     spec:
       nodeSelector:
         usage: test
+        os.architecture: amd64
       containers:
-        - image: pkking/copr_keygen-signd@sha256:f0b3a2f8f364388a82156a01604508498af0b73e727b3e7a1dd8e829b07a477c
+        - image: pkking/copr_keygen-signd@sha256:6483f9e5fa4a66a8c70ec092fd7ea39b9b0619794d91ee7a0f76be60a0671834
           imagePullPolicy: IfNotPresent
           args: ["/signd-entrypoint", "0.0.0.0/0"]
           name: copr-keygen-signer
@@ -41,7 +42,7 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/copr-keygen
               name: copr-keygen-data
-        - image: pkking/copr_keygen-signd@sha256:f0b3a2f8f364388a82156a01604508498af0b73e727b3e7a1dd8e829b07a477c
+        - image: pkking/copr_keygen-signd@sha256:6483f9e5fa4a66a8c70ec092fd7ea39b9b0619794d91ee7a0f76be60a0671834
           imagePullPolicy: IfNotPresent
           name: copr-keygen-httpd
           livenessProbe:

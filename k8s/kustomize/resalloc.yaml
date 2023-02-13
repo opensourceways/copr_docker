@@ -16,6 +16,7 @@ spec:
     spec:
       nodeSelector:
         usage: test
+        os.architecture: amd64
       serviceAccountName: resalloc
       containers:
         - image: pkking/copr_resalloc@sha256:806b614cef95eb0b57276045ac48c60229738f5d7cb166cfed5754f46d58279f
