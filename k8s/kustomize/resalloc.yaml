@@ -41,7 +41,7 @@ spec:
               protocol: TCP
           env:
             - name: BUILDER_SHA256
-              value: "sha256:30b0e82910c7f81b91b685cd438b42125c0444e100807d114f70996361e679f3"
+              value: "sha256:77411d5fb1fa1062910a3af349848d8ce26594251c36f15fc0c0bf23bad1d5ec"
             - name: BUILDER_CPU
               value: "1"
             - name: BUILDER_MEM
