@@ -15,11 +15,17 @@ RUN dnf install -y ansible \
                    findutils \
                    openssh-clients \
                    python3-psycopg2 \
+                   gcc \
+                   cargo \
+                   perl \
     && dnf clean all
 
+# install the resalloc-kubernetes
+RUN cargo install resalloc-kubernetes --root . && mv bin/resalloc-kubernetes /
 # copy filesystem setup
 COPY files/ /
-RUN mv /resalloc-kubernetes-$TARGETARCH /resalloc-kubernetes
+# cleanup
+RUN dnf remove gcc cargo perl -y && dnf clean all && rm -rf /var/cache/dnf
 
 RUN cd $(rpm -ql resalloc-server |grep alembic.ini |xargs dirname) \
     && alembic-3 upgrade head && chmod 755 /resalloc-kubernetes
