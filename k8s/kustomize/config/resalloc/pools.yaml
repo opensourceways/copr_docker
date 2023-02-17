@@ -17,7 +17,7 @@ local_x86_64_normal_prod:
     cmd_delete: "/home/resalloc/provision/local-delete"
     cmd_livecheck: "/usr/bin/resalloc-check-vm-ip"
     livecheck_period: 180
-    reuse_opportunity_time: 3600
+    reuse_opportunity_time: 0
     reuse_max_count: 0
     reuse_max_time: 3600
 
@@ -33,6 +33,6 @@ local_aarch64_normal_prod:
     cmd_delete: "/home/resalloc/provision/local-delete"
     cmd_livecheck: "/usr/bin/resalloc-check-vm-ip"
     livecheck_period: 180
-    reuse_opportunity_time: 3600
+    reuse_opportunity_time: 0
     reuse_max_count: 0
     reuse_max_time: 3600
