@@ -44,7 +44,7 @@ RUN dnf -y downgrade nosync \
 # needed to run sshd
 RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -q
 # install pyporter & rubyporter
-RUN git clone https://gitee.com/openeuler/pyporter.git && cd pyporter && python3 setup.py install
+RUN git clone https://gitee.com/mywaaagh_admin/pyporter.git && cd pyporter && python3 setup.py install
 RUN git clone https://gitee.com/openeuler/rubyporter.git && cd rubyporter && python3 setup.py install
 # setup root user
 RUN echo 'root:passwd' | chpasswd && \

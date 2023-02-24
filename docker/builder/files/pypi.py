@@ -54,7 +54,10 @@ class PyPIProvider(Provider):
     def _produce_srpm_pyporter(self):
         spec = "python-{0}.spec".format(self.pypi_package_name)
         spec = os.path.join(self.resultdir, spec)
-        cmd = ["pyporter", "-s", self.pypi_package_name, "-o", spec]
+        cmd = ["pyporter", "-s", self.pypi_package_name, "-o", spec, "--mirror", "https://mirrors.aliyun.com/pypi"]
+
+        if self.pypi_package_version:
+            cmd += ["-v", self.pypi_package_version]
 
         try:
             run_cmd(cmd)
