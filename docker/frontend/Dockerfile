@@ -87,6 +87,7 @@ RUN sed -i 's|~User.coprs.any|User.coprs.any|g' /usr/share/copr/coprs_frontend/c
 ENV PS1="[\u@\h \W]\$ "
 # authing return updated_at as a string, there's a patch for it
 RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.11/site-packages/oic/oic/message.py < /authing.patch
+RUN cd /usr/share/copr && patch -p2 < /rubygem.patch
 
 EXPOSE 5000
 
