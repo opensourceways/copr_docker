@@ -61,10 +61,10 @@ spec:
             - mountPath: /etc/resallocserver/pools.yaml
               name: copr-resalloc
               subPath: pools.yaml
-            - mountPath: /home/resallo/provision/local-new-x86
+            - mountPath: /home/resalloc/provision/local-new-x86
               name: copr-resalloc
               subPath: local-new-x86
-            - mountPath: /home/resallo/provision/local-new-aarch64
+            - mountPath: /home/resalloc/provision/local-new-aarch64
               name: copr-resalloc
               subPath: local-new-aarch64
             - mountPath: /etc/resallocserver/server.yaml
