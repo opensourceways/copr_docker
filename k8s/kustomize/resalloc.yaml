@@ -19,7 +19,7 @@ spec:
         os.architecture: amd64
       serviceAccountName: resalloc
       containers:
-        - image: pkking/copr_resalloc@sha256:806b614cef95eb0b57276045ac48c60229738f5d7cb166cfed5754f46d58279f
+        - image: pkking/copr_resalloc@sha256:0e307894d96ffad55603e704b9a64734d0f2757c336da5f0c1eb8c16754b6690
           imagePullPolicy: IfNotPresent
           name: resalloc
           livenessProbe:
@@ -41,7 +41,7 @@ spec:
               protocol: TCP
           env:
             - name: BUILDER_SHA256
-              value: "pkking/copr_builder@sha256:77411d5fb1fa1062910a3af349848d8ce26594251c36f15fc0c0bf23bad1d5ec"
+              value: "pkking/copr_builder@sha256:fbb65f8c2d0e5d0cae12c4313523ffc3f8452c0e61e2cce4c270de9cd0a484df"
             - name: BUILDER_CPU
               value: "1"
             - name: BUILDER_MEM
@@ -61,6 +61,12 @@ spec:
             - mountPath: /etc/resallocserver/pools.yaml
               name: copr-resalloc
               subPath: pools.yaml
+            - mountPath: /home/resallo/provision/local-new-x86
+              name: copr-resalloc
+              subPath: local-new-x86
+            - mountPath: /home/resallo/provision/local-new-aarch64
+              name: copr-resalloc
+              subPath: local-new-aarch64
             - mountPath: /etc/resallocserver/server.yaml
               name: copr-secrets
               subPath: resalloc_server.yaml

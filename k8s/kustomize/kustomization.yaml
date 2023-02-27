@@ -24,6 +24,8 @@ configMapGenerator:
 - files:
   - pools.yaml=config/resalloc/pools.yaml
   - builder_config=config/backend/.ssh/builder_config
+  - local-new-aarch64=config/resalloc/local-new-aarch64
+  - local-new-x86=config/resalloc/local-new-x86
   name: copr-resalloc
 - files:
   - builder_config=config/backend/.ssh/builder_config

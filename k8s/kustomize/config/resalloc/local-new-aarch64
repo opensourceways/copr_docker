@@ -1,0 +1,7 @@
+#!/bin/bash
+namespace=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+if [ -z $namespace ];then
+    exit 1
+fi
+/resalloc-kubernetes add --image-tag ${BUILDER_SHA256} \
+    --namespace $namespace --cpu-resource ${BUILDER_CPU} --memory-resource ${BUILDER_MEM} --privileged --timeout ${BUILDER_TIMEOUT} --node-selector "os.architecture=aarch64" --node-selector "usage=test"
