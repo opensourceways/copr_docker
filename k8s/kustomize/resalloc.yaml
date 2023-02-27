@@ -52,19 +52,19 @@ spec:
             - /bin/sh
             - -c
             - |
-              cp /root/.ssh/id_rsa-ro /root/.ssh/id_rsa;
-              chmod +x /home/resalloc/provision/local-*;
-              chmod 0400 /root/.ssh/id_rsa;
-              ln -sf /dev/stdout /var/log/resallocserver/main.log
+              install -m 400 /root/.ssh/id_rsa-ro /root/.ssh/id_rsa;
+              install -m 755 /home/resalloc/provision/local-new-x86-ro /home/resalloc/provision/local-new-x86;
+              install -m 755 /home/resalloc/provision/local-new-aarch64-ro /home/resalloc/provision/local-new-aarch64;
+              ln -sf /dev/stdout /var/log/resallocserver/main.log;
               exec /usr/bin/resalloc-server;
           volumeMounts:
             - mountPath: /etc/resallocserver/pools.yaml
               name: copr-resalloc
               subPath: pools.yaml
-            - mountPath: /home/resalloc/provision/local-new-x86
+            - mountPath: /home/resalloc/provision/local-new-x86-ro
               name: copr-resalloc
               subPath: local-new-x86
-            - mountPath: /home/resalloc/provision/local-new-aarch64
+            - mountPath: /home/resalloc/provision/local-new-aarch64-ro
               name: copr-resalloc
               subPath: local-new-aarch64
             - mountPath: /etc/resallocserver/server.yaml
