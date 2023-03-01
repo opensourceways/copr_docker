@@ -25,7 +25,7 @@ RUN cargo install resalloc-kubernetes --root . && mv bin/resalloc-kubernetes /
 # copy filesystem setup
 COPY files/ /
 # cleanup
-RUN dnf remove gcc cargo perl -y && dnf clean all && rm -rf /var/cache/dnf
+RUN dnf remove gcc cargo perl -y && dnf clean all && rm -rf /var/cache/dnf && chmod +x /home/resalloc/provision/local-*
 
 RUN cd $(rpm -ql resalloc-server |grep alembic.ini |xargs dirname) \
     && alembic-3 upgrade head && chmod 755 /resalloc-kubernetes
