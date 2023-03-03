@@ -51,6 +51,8 @@ spec:
             - mountPath: /etc/httpd/conf.d/copr.conf
               name: copr-frontend
               subPath: httpd.conf
+            - mountPath: /usr/share/copr/data
+              name: copr-frontend-search-data
       volumes:
         - name: copr-frontend
           configMap:
@@ -58,6 +60,9 @@ spec:
         - name: copr-secrets
           secret:
             secretName: copr-secrets
+        - name: copr-frontend-search-data
+          persistentVolumeClaim:
+            claimName: copr-frontend-search-data
 ---
 apiVersion: v1
 kind: Service
@@ -72,3 +77,88 @@ spec:
   selector:
     component: copr-frontend
   type: ClusterIP
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: frontend-cronjob-hourly
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          nodeSelector:
+            usage: test
+            os.architecture: amd64
+          containers:
+          - image: pkking/copr_frontend@sha256:4a0ac667395ca3d4cb87ff96fe46c2ce2856ef910193139f3b5b6a5a893600d9
+            name: frontend-cronjob
+            command:
+            - /bin/sh
+            - -c
+            - /etc/cron.hourly/copr-frontend; /etc/cron.hourly/copr-frontend-optional
+            volumeMounts:
+            - mountPath: /usr/share/copr/data
+              name: copr-frontend-search-data
+            - mountPath: /etc/copr/copr.conf
+              name: copr-secrets
+              subPath: frontend_copr.conf
+          volumes:
+            - name: copr-frontend-search-data
+              persistentVolumeClaim:
+                claimName: copr-frontend-search-data
+            - name: copr-secrets
+              secret:
+                secretName: copr-secrets
+          restartPolicy: OnFailure
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: frontend-cronjob-daily
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          nodeSelector:
+            usage: test
+            os.architecture: amd64
+          containers:
+          - image: pkking/copr_frontend@sha256:4a0ac667395ca3d4cb87ff96fe46c2ce2856ef910193139f3b5b6a5a893600d9
+            name: frontend-cronjob
+            command:
+            - /bin/sh
+            - -c
+            - /etc/cron.daily/copr-frontend; /etc/cron.daily/copr-frontend-optional
+            volumeMounts:
+            - mountPath: /usr/share/copr/data
+              name: copr-frontend-search-data
+            - mountPath: /etc/copr/copr.conf
+              name: copr-secrets
+              subPath: frontend_copr.conf
+          volumes:
+            - name: copr-frontend-search-data
+              persistentVolumeClaim:
+                claimName: copr-frontend-search-data
+            - name: copr-secrets
+              secret:
+                secretName: copr-secrets
+          restartPolicy: OnFailure
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: copr-frontend-search-data
+  labels:
+    failure-domain.beta.kubernetes.io/zone: cn-north-4a
+spec:
+  storageClassName: csi-nas
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
