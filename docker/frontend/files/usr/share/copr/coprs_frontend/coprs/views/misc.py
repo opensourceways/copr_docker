@@ -117,12 +117,6 @@ def _do_create_or_login(user):
                                             username=user.name))
     return flask.redirect(oid.get_next_url())
 
-
-@misc.route("/logout/")
-def logout():
-    return UserAuth.logout()
-
-
 def api_login_required(f):
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
@@ -317,3 +311,18 @@ if OpenIDConnect.enabled(app.config):
 
             user = OpenIDConnect.user_from_username(user_info)
             return _do_create_or_login(user)
+
+        @misc.route("/logout/")
+        @auth.oidc_logout
+        def logout():
+            return UserAuth.logout()
+
+    else:
+        @misc.route("/logout/")
+        def logout():
+            return UserAuth.logout()
+
+else:
+    @misc.route("/logout/")
+    def logout():
+        return UserAuth.logout()

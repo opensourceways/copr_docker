@@ -55,6 +55,8 @@ jobs:
       - name: Install cosign
         if: github.event_name != 'pull_request'
         uses: sigstore/cosign-installer@main #v2.6.0
+      - run: |
+          cosign sign --help
       -
         # Add support for more platforms with QEMU (optional)
         # https://github.com/docker/setup-qemu-action
@@ -114,4 +116,4 @@ jobs:
           COSIGN_EXPERIMENTAL: "true"
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
-        run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign {}@${{ steps.build-and-push.outputs.digest }}
+        run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign -y {}@${{ steps.build-and-push.outputs.digest }}
