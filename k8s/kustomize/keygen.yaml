@@ -18,7 +18,7 @@ spec:
         usage: test
         os.architecture: amd64
       containers:
-        - image: pkking/copr_keygen-signd@sha256:faadecb03f6faa0c151a0cc628636b96e4c96fce86ffda84fc5c4fae5b8ba214
+        - image: pkking/copr_keygen-signd@sha256:246a5a1c5b7352cdadf8a2167b5b62523021031d6f646bc686e04bcb7dd802d5
           imagePullPolicy: IfNotPresent
           args: ["/signd-entrypoint", "0.0.0.0/0"]
           name: copr-keygen-signer
@@ -42,7 +42,7 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/copr-keygen
               name: copr-keygen-data
-        - image: pkking/copr_keygen-signd@sha256:faadecb03f6faa0c151a0cc628636b96e4c96fce86ffda84fc5c4fae5b8ba214
+        - image: pkking/copr_keygen-signd@sha256:246a5a1c5b7352cdadf8a2167b5b62523021031d6f646bc686e04bcb7dd802d5
           imagePullPolicy: IfNotPresent
           name: copr-keygen-httpd
           livenessProbe:
@@ -110,3 +110,35 @@ spec:
   resources:
     requests:
       storage: 20Gi
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: backend-cronjob-daily
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          nodeSelector:
+            usage: test
+            os.architecture: amd64
+          containers:
+          - image: pkking/copr_keygen-signd@sha256:246a5a1c5b7352cdadf8a2167b5b62523021031d6f646bc686e04bcb7dd802d5
+            name: backend-cronjob
+            command: ["sudo", "/etc/cron.daily/copr-keygen"]
+            volumeMounts:
+              - mountPath: /var/lib/copr-keygen
+                name: copr-keygen-data
+              - mountPath: /etc/httpd/conf.d/copr-keygen.conf
+                name: copr-keygen
+                subPath: copr-keygen.conf
+          volumes:
+            - name: copr-keygen-data
+              persistentVolumeClaim:
+                claimName: copr-keygen-data
+            - name: copr-keygen
+              configMap:
+                name: copr-keygen
+          restartPolicy: OnFailure
