@@ -176,16 +176,16 @@ spec:
               - mountPath: /etc/copr/copr-be.conf
                 name: copr-secrets
                 subPath: backend_copr-be.conf
-        volumes:
-          - name: copr-backend
-            configMap:
-              name: copr-backend
-          - name: copr-backend-data
-            persistentVolumeClaim:
-              claimName: copr-backend-data
-          - name: copr-secrets
-            secret:
-              secretName: copr-secrets
+          volumes:
+            - name: copr-backend
+              configMap:
+                name: copr-backend
+            - name: copr-backend-data
+              persistentVolumeClaim:
+                claimName: copr-backend-data
+            - name: copr-secrets
+              secret:
+                secretName: copr-secrets
           restartPolicy: OnFailure
 ---
 apiVersion: batch/v1beta1
@@ -220,14 +220,14 @@ spec:
               - mountPath: /etc/copr/copr-be.conf
                 name: copr-secrets
                 subPath: backend_copr-be.conf
-        volumes:
-          - name: copr-backend
-            configMap:
-              name: copr-backend
-          - name: copr-backend-data
-            persistentVolumeClaim:
-              claimName: copr-backend-data
-          - name: copr-secrets
-            secret:
-              secretName: copr-secrets
+          volumes:
+            - name: copr-backend
+              configMap:
+                name: copr-backend
+            - name: copr-backend-data
+              persistentVolumeClaim:
+                claimName: copr-backend-data
+            - name: copr-secrets
+              secret:
+                secretName: copr-secrets
           restartPolicy: OnFailure
