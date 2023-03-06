@@ -97,7 +97,7 @@ spec:
             command:
             - /bin/sh
             - -c
-            - /etc/cron.hourly/copr-frontend; /etc/cron.hourly/copr-frontend-optional
+            - sudo /etc/cron.hourly/copr-frontend; sudo /etc/cron.hourly/copr-frontend-optional
             volumeMounts:
             - mountPath: /usr/share/copr/data
               name: copr-frontend-search-data
@@ -132,7 +132,7 @@ spec:
             command:
             - /bin/sh
             - -c
-            - /etc/cron.daily/copr-frontend; /etc/cron.daily/copr-frontend-optional
+            - sudo /etc/cron.daily/copr-frontend; sudo /etc/cron.daily/copr-frontend-optional
             volumeMounts:
             - mountPath: /usr/share/copr/data
               name: copr-frontend-search-data
@@ -147,7 +147,6 @@ spec:
               secret:
                 secretName: copr-secrets
           restartPolicy: OnFailure
-
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

@@ -73,13 +73,14 @@ RUN chmod -R g+rwX \
     /var/run/httpd/ \
     /var/log/httpd/
 
+# setup for cronjob
+RUN echo 'copr-fe ALL=(root) NOPASSWD:/etc/cron.hourly/copr-frontend-optional,/etc/cron.hourly/copr-frontend,/etc/cron.daily/copr-frontend,/etc/cron.daily/copr-frontend-optional' >> /etc/sudoers.d/copr-fe
 # Use copr-fe user when running outside of OpenShift
 USER copr-fe
 
 # using pyodic which not existed in fedora repo
 RUN pip install flask-pyoidc oic==1.5.0
-# workaround for https://github.com/fedora-copr/copr/issues/2448
-RUN sed -i 's|~User.coprs.any|User.coprs.any|g' /usr/share/copr/coprs_frontend/coprs/logic/users_logic.py
+
 # Since home directory for `copr-fe` user is `/usr/share/copr/coprs_frontend`
 # and we don't want .bashrc file in there, the bash prompt is `bash-5.0$` which
 # looks bad in copy-pasted outputs and tutorials. I borrowed this one from
