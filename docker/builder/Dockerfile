@@ -43,9 +43,6 @@ RUN dnf -y downgrade nosync \
     && dnf -y downgrade nosync && dnf clean all
 # needed to run sshd
 RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -q
-# install pyporter & rubyporter
-RUN git clone https://gitee.com/mywaaagh_admin/pyporter.git && cd pyporter && python3 setup.py install
-RUN git clone https://gitee.com/openeuler/rubyporter.git && cd rubyporter && python3 setup.py install
 # setup root user
 RUN echo 'root:passwd' | chpasswd && \
     chmod 700 /root /root/.ssh && \
@@ -58,5 +55,13 @@ RUN sed -i 's/metalink=/#metalink=/g' /etc/yum.repos.d/* \
     && sed -i 's/download.example\/pub\/fedora\/linux/mirrors.huaweicloud.com\/fedora/g' /etc/yum.repos.d/*
 
 RUN echo 'config_opts["use_nspawn"] = False' >> /etc/mock/site-defaults.cfg
+
+# install pyporter & rubyporter
+# using ADD to skip cache
+ADD "https://gitee.com/api/v5/repos/mywaaagh_admin/pyporter/commits?page=1&per_page=1" pyporter_last_commit
+RUN git clone https://gitee.com/mywaaagh_admin/pyporter && cd pyporter && python3 setup.py install
+
+ADD "https://gitee.com/api/v5/repos/openeuler/rubyporter/commits?page=1&per_page=1" rubyporter_last_commit
+RUN git clone https://gitee.com/openeuler/rubyporter && cd rubyporter && python3 setup.py install
 
 CMD ["/usr/sbin/sshd", "-D"]
