@@ -58,7 +58,8 @@ RUN dirs="/var/run/signd /var/run/httpd" ; \
       chown root:root "$dir" && \
       chmod 0770 "$dir" ; \
     done
-
+# setup sudoer for cronjob
+RUN echo "copr-signer ALL = (root) NOPASSWD: /etc/cron.daily/copr-keygen" >> /etc/sudoers.d/copr_signer
 USER copr-signer
 RUN mkdir -p /var/log/copr-keygen && ln -sf /proc/1/fd/1 /var/log/copr-keygen/main.log \
         && ln -sf /proc/1/fd/1 /var/log/copr-keygen/gpg-copr.log
