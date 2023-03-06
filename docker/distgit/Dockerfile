@@ -53,7 +53,7 @@ RUN directories="/etc/httpd /var/run/httpd /var/log/httpd /var/lib/dist-git /run
     chown -R copr-dist-git:root $directories && \
     chmod -R g+rwX $directories
 
-RUN echo "copr-dist-git ALL = (root) NOPASSWD: /copr-dist-git-assure-perm" >> /etc/sudoers.d/copr-dist-git
+RUN echo "copr-dist-git ALL = (root) NOPASSWD: /copr-dist-git-assure-perm,/etc/cron.monthly/copr-dist-git" >> /etc/sudoers.d/copr-dist-git
 
 USER copr-dist-git
 
