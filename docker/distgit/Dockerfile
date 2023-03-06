@@ -48,6 +48,8 @@ RUN echo " [user]" >> /home/copr-dist-git/.gitconfig && \
 
 RUN sed -i "s/^cache-size.*//" /etc/cgitrc
 RUN echo 'scan-path=/var/lib/dist-git/git/rpms' | tee -a /etc/cgitrc
+RUN echo 'include=/var/lib/dist-git/cache/cgit/repo-configuration.rc' | tee -a /etc/cgitrc
+RUN mkdir -p /var/lib/dist-git/cache/cgit/ && chown apache:root /var/lib/dist-git/cache/cgit
 
 RUN directories="/etc/httpd /var/run/httpd /var/log/httpd /var/lib/dist-git /run/lock" ; \
     chown -R copr-dist-git:root $directories && \
