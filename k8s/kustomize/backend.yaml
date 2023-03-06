@@ -158,23 +158,34 @@ spec:
             usage: test
             os.architecture: amd64
           containers:
-          - image: pkking/copr_backend@sha256:647c58d8a2b66227888a1800b63034300d4cbeb48e38exit
-          e1396d96a556e97db902
+          - image: pkking/copr_backend@sha256:647c58d8a2b66227888a1800b63034300d4cbeb48e38e1396d96a556e97db902
             name: backend-cronjob
             command: ["sudo", "/etc/cron.weekly/copr-backend"]
             volumeMounts:
-            - mountPath: /usr/share/copr/data
-              name: copr-frontend-search-data
-            - mountPath: /etc/copr/copr.conf
-              name: copr-secrets
-              subPath: frontend_copr.conf
-          volumes:
-            - name: copr-frontend-search-data
-              persistentVolumeClaim:
-                claimName: copr-frontend-search-data
-            - name: copr-secrets
-              secret:
-                secretName: copr-secrets
+              - mountPath: /home/copr/.ssh/builder_config
+                name: copr-backend
+                subPath: builder_config
+              - mountPath: /home/copr/.ssh/id_rsa
+                name: copr-secrets
+                subPath: backend_id_rsa
+              - mountPath: /home/copr/.ssh/id_rsa.pub
+                name: copr-secrets
+                subPath: backend_id_rsa.pub
+              - mountPath: /var/lib/copr/public_html/results
+                name: copr-backend-data
+              - mountPath: /etc/copr/copr-be.conf
+                name: copr-secrets
+                subPath: backend_copr-be.conf
+        volumes:
+          - name: copr-backend
+            configMap:
+              name: copr-backend
+          - name: copr-backend-data
+            persistentVolumeClaim:
+              claimName: copr-backend-data
+          - name: copr-secrets
+            secret:
+              secretName: copr-secrets
           restartPolicy: OnFailure
 ---
 apiVersion: batch/v1beta1
@@ -195,16 +206,28 @@ spec:
             name: backend-cronjob
             command: ["sudo", "/etc/cron.daily/copr-backend"]
             volumeMounts:
-            - mountPath: /usr/share/copr/data
-              name: copr-frontend-search-data
-            - mountPath: /etc/copr/copr.conf
-              name: copr-secrets
-              subPath: frontend_copr.conf
-          volumes:
-            - name: copr-frontend-search-data
-              persistentVolumeClaim:
-                claimName: copr-frontend-search-data
-            - name: copr-secrets
-              secret:
-                secretName: copr-secrets
+              - mountPath: /home/copr/.ssh/builder_config
+                name: copr-backend
+                subPath: builder_config
+              - mountPath: /home/copr/.ssh/id_rsa
+                name: copr-secrets
+                subPath: backend_id_rsa
+              - mountPath: /home/copr/.ssh/id_rsa.pub
+                name: copr-secrets
+                subPath: backend_id_rsa.pub
+              - mountPath: /var/lib/copr/public_html/results
+                name: copr-backend-data
+              - mountPath: /etc/copr/copr-be.conf
+                name: copr-secrets
+                subPath: backend_copr-be.conf
+        volumes:
+          - name: copr-backend
+            configMap:
+              name: copr-backend
+          - name: copr-backend-data
+            persistentVolumeClaim:
+              claimName: copr-backend-data
+          - name: copr-secrets
+            secret:
+              secretName: copr-secrets
           restartPolicy: OnFailure
