@@ -114,7 +114,7 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: backend-cronjob-daily
+  name: keygen-cronjob-daily
 spec:
   schedule: "0 0 * * *"
   jobTemplate:
@@ -126,7 +126,7 @@ spec:
             os.architecture: amd64
           containers:
           - image: pkking/copr_keygen-signd@sha256:246a5a1c5b7352cdadf8a2167b5b62523021031d6f646bc686e04bcb7dd802d5
-            name: backend-cronjob
+            name: keygen-cronjob
             command: ["sudo", "/etc/cron.daily/copr-keygen"]
             volumeMounts:
               - mountPath: /var/lib/copr-keygen
