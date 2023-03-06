@@ -160,7 +160,7 @@ spec:
           containers:
           - image: pkking/copr_backend@sha256:647c58d8a2b66227888a1800b63034300d4cbeb48e38e1396d96a556e97db902
             name: backend-cronjob
-            command: ["sudo", "/etc/cron.weekly/copr-backend"]
+            args: ["sudo", "/etc/cron.weekly/copr-backend"]
             volumeMounts:
               - mountPath: /home/copr/.ssh/builder_config
                 name: copr-backend
@@ -204,7 +204,7 @@ spec:
           containers:
           - image: pkking/copr_backend@sha256:647c58d8a2b66227888a1800b63034300d4cbeb48e38e1396d96a556e97db902
             name: backend-cronjob
-            command: ["sudo", "/etc/cron.daily/copr-backend"]
+            args: ["sudo", "/etc/cron.daily/copr-backend"]
             volumeMounts:
               - mountPath: /home/copr/.ssh/builder_config
                 name: copr-backend

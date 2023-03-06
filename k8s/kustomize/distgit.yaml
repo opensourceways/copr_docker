@@ -22,7 +22,7 @@ spec:
           image: busybox:1.28
           command: [ "sh", "-c", "until nslookup copr-frontend.fedora-copr.svc.cluster.local; do echo waiting for frontend service ; sleep 2; done;" ]
       containers:
-        - image: pkking/copr_distgit@sha256:a0443bb2113059e699c2b5dde5068fa0af012d2f071630d7b7adbb39879d4126
+        - image: pkking/copr_distgit@sha256:e6a5c46f0fff5153d2d542769a7ece9bf2bb3ff198dc689e9d9582eb62a7edd1
           imagePullPolicy: IfNotPresent
           name: copr-distgit-httpd
           livenessProbe:
@@ -48,7 +48,7 @@ spec:
             - mountPath: /var/lib/copr-dist-git
               name: logs
           command: ["/usr/sbin/httpd", "-DFOREGROUND"]
-        - image: pkking/copr_distgit@sha256:a0443bb2113059e699c2b5dde5068fa0af012d2f071630d7b7adbb39879d4126
+        - image: pkking/copr_distgit@sha256:e6a5c46f0fff5153d2d542769a7ece9bf2bb3ff198dc689e9d9582eb62a7edd1
           imagePullPolicy: IfNotPresent
           name: copr-distgit
           resources:
@@ -140,3 +140,48 @@ spec:
   resources:
     requests:
       storage: "10M"
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: distgit-cronjob-month
+spec:
+  schedule: "0 0 1 * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          nodeSelector:
+            usage: test
+            os.architecture: amd64
+          containers:
+          - image: pkking/copr_distgit@sha256:e6a5c46f0fff5153d2d542769a7ece9bf2bb3ff198dc689e9d9582eb62a7edd1
+            name: distgit-cronjob
+            args: ["sudo", "/etc/cron.monthly/copr-dist-git"]
+            volumeMounts:
+              - mountPath: /var/lib/dist-git
+                name: copr-distgit-data
+              - mountPath: /etc/copr/copr-dist-git.conf
+                name: copr-secrets
+                subPath: distgit_copr-dist-git.conf
+              - name: logs
+                mountPath: /var/lib/copr-dist-git
+              - name: locks
+                mountPath: /var/lock/copr-dist-git
+          volumes:
+            - name: copr-distgit-data
+              persistentVolumeClaim:
+                claimName: copr-distgit-data
+            - name: copr-distgit
+              configMap:
+                name: copr-distgit
+            - name: logs
+              persistentVolumeClaim:
+                claimName: copr-distgit-logs
+            - name: locks
+              persistentVolumeClaim:
+                claimName: copr-distgit-locks
+            - name: copr-secrets
+              secret:
+                secretName: copr-secrets
+          restartPolicy: OnFailure
