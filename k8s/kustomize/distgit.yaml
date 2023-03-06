@@ -22,7 +22,7 @@ spec:
           image: busybox:1.28
           command: [ "sh", "-c", "until nslookup copr-frontend.fedora-copr.svc.cluster.local; do echo waiting for frontend service ; sleep 2; done;" ]
       containers:
-        - image: pkking/copr_distgit@sha256:e6a5c46f0fff5153d2d542769a7ece9bf2bb3ff198dc689e9d9582eb62a7edd1
+        - image: pkking/copr_distgit@sha256:9f49c01f985e8e75e6649ec5b954eca82f346d58acad395175daa76a02f97104
           imagePullPolicy: IfNotPresent
           name: copr-distgit-httpd
           livenessProbe:
@@ -48,7 +48,7 @@ spec:
             - mountPath: /var/lib/copr-dist-git
               name: logs
           command: ["/usr/sbin/httpd", "-DFOREGROUND"]
-        - image: pkking/copr_distgit@sha256:e6a5c46f0fff5153d2d542769a7ece9bf2bb3ff198dc689e9d9582eb62a7edd1
+        - image: pkking/copr_distgit@sha256:9f49c01f985e8e75e6649ec5b954eca82f346d58acad395175daa76a02f97104
           imagePullPolicy: IfNotPresent
           name: copr-distgit
           resources:
@@ -155,7 +155,7 @@ spec:
             usage: test
             os.architecture: amd64
           containers:
-          - image: pkking/copr_distgit@sha256:e6a5c46f0fff5153d2d542769a7ece9bf2bb3ff198dc689e9d9582eb62a7edd1
+          - image: pkking/copr_distgit@sha256:9f49c01f985e8e75e6649ec5b954eca82f346d58acad395175daa76a02f97104
             name: distgit-cronjob
             args: ["sudo", "/etc/cron.monthly/copr-dist-git"]
             volumeMounts:
