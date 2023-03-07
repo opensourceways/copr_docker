@@ -1,7 +1,7 @@
 FROM registry.fedoraproject.org/fedora:37
 LABEL maintainer="infra@openeuler.org"
 
-ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr-dev"
+ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr"
 
 # TERM is to make the tito work in container, rhbz#1733043
 ENV TERM=linux

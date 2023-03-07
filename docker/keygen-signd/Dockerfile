@@ -2,7 +2,7 @@ FROM registry.fedoraproject.org/fedora:37
 
 LABEL maintainer="infra@openeuler.org"
 
-ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr-dev"
+ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr"
 
 # Create copr-signer:copr-signer manually, so we can
 # be sure that the UID and GID is same on all keygen containers

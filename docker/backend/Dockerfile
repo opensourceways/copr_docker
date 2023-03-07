@@ -1,7 +1,7 @@
 FROM registry.fedoraproject.org/fedora:37
 LABEL maintainer="infra@openeuler.org"
 
-ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr-dev"
+ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr"
 
 ENV export LANG=en_US.UTF-8
 ENV PYTHONPATH="/usr/share/copr/"
