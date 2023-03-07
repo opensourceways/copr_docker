@@ -18,7 +18,7 @@ spec:
         usage: test
         os.architecture: amd64
       containers:
-        - image: pkking/copr_keygen-signd@sha256:246a5a1c5b7352cdadf8a2167b5b62523021031d6f646bc686e04bcb7dd802d5
+        - image: pkking/copr_keygen-signd@sha256:9394b8562ac46b4d4da3b701598dd00011e2f556cd7aadae4564caa141eee59f
           imagePullPolicy: IfNotPresent
           args: ["/signd-entrypoint", "0.0.0.0/0"]
           name: copr-keygen-signer
@@ -42,7 +42,7 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/copr-keygen
               name: copr-keygen-data
-        - image: pkking/copr_keygen-signd@sha256:246a5a1c5b7352cdadf8a2167b5b62523021031d6f646bc686e04bcb7dd802d5
+        - image: pkking/copr_keygen-signd@sha256:9394b8562ac46b4d4da3b701598dd00011e2f556cd7aadae4564caa141eee59f
           imagePullPolicy: IfNotPresent
           name: copr-keygen-httpd
           livenessProbe:
@@ -125,7 +125,7 @@ spec:
             usage: test
             os.architecture: amd64
           containers:
-          - image: pkking/copr_keygen-signd@sha256:246a5a1c5b7352cdadf8a2167b5b62523021031d6f646bc686e04bcb7dd802d5
+          - image: pkking/copr_keygen-signd@sha256:9394b8562ac46b4d4da3b701598dd00011e2f556cd7aadae4564caa141eee59f
             name: keygen-cronjob
             args: ["sudo", "/etc/cron.daily/copr-keygen"]
             volumeMounts:

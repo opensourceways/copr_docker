@@ -23,7 +23,7 @@ spec:
           image: ebiqe/alpine-nc:latest
           command: [ "sh", "-c", "until nc -z redis.fedora-copr.svc.cluster.local 6379; do echo waiting for redis service ; sleep 2; done;" ]
       containers:
-        - image: pkking/copr_frontend@sha256:1f49410e3727f9646c3e868f3d068467524a746bf3605f7fb8edf4f3d0854a70
+        - image: pkking/copr_frontend@sha256:df318fc7c93e6832a146b29b4a4664732efcfda5461a576c65bca89d53d56527
           imagePullPolicy: IfNotPresent
           name: copr-frontend-httpd
           livenessProbe:
@@ -92,7 +92,7 @@ spec:
             usage: test
             os.architecture: amd64
           containers:
-          - image: pkking/copr_frontend@sha256:1f49410e3727f9646c3e868f3d068467524a746bf3605f7fb8edf4f3d0854a70
+          - image: pkking/copr_frontend@sha256:df318fc7c93e6832a146b29b4a4664732efcfda5461a576c65bca89d53d56527
             name: frontend-cronjob
             command:
             - /bin/sh
@@ -127,7 +127,7 @@ spec:
             usage: test
             os.architecture: amd64
           containers:
-          - image: pkking/copr_frontend@sha256:1f49410e3727f9646c3e868f3d068467524a746bf3605f7fb8edf4f3d0854a70
+          - image: pkking/copr_frontend@sha256:df318fc7c93e6832a146b29b4a4664732efcfda5461a576c65bca89d53d56527
             name: frontend-cronjob
             command:
             - /bin/sh

@@ -19,7 +19,7 @@ spec:
         os.architecture: amd64
       serviceAccountName: resalloc
       containers:
-        - image: pkking/copr_resalloc@sha256:0e307894d96ffad55603e704b9a64734d0f2757c336da5f0c1eb8c16754b6690
+        - image: pkking/copr_resalloc@sha256:6f94b2ffa1c0d8daa24ccae6fe9eccf873922b557fd53c63d7d1c9d015bf5f94
           imagePullPolicy: IfNotPresent
           name: resalloc
           livenessProbe:
@@ -41,7 +41,7 @@ spec:
               protocol: TCP
           env:
             - name: BUILDER_SHA256
-              value: "pkking/copr_builder@sha256:7c725f1aa29a729bab67b92c1582199cfad20617f8047e1130c423b5a68ed905"
+              value: "pkking/copr_builder@sha256:9ebfdf4a474f6712a9d6889fe4fa8a063842409c566e2347ee52b35d8e06d427"
             - name: BUILDER_CPU
               value: "1"
             - name: BUILDER_MEM
