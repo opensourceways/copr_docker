@@ -55,7 +55,8 @@ RUN sed -i 's/metalink=/#metalink=/g' /etc/yum.repos.d/* \
     && sed -i 's/download.example\/pub\/fedora\/linux/mirrors.huaweicloud.com\/fedora/g' /etc/yum.repos.d/*
 
 RUN echo 'config_opts["use_nspawn"] = False' >> /etc/mock/site-defaults.cfg
-
+# limit cpu number to 4
+RUN sed -i 's|#%_smp_ncpus_max 0|%_smp_ncpus_max 4|g' /usr/lib/rpm/platform/**/macros
 # install pyporter & rubyporter
 # using ADD to skip cache
 ADD "https://gitee.com/api/v5/repos/mywaaagh_admin/pyporter/commits?page=1&per_page=1" pyporter_last_commit
