@@ -10,7 +10,7 @@ config_opts['dist'] = 'fc{{ releasever }}'  # only useful for --resultdir variab
 config_opts['extra_chroot_dirs'] = [ '/run/lock', ]
 config_opts['package_manager'] = 'dnf'
 config_opts['bootstrap_image'] = 'registry.fedoraproject.org/fedora:{{ releasever }}'
-
+config_opts['macros']['%_smp_ncpus_max'] = '4'
 config_opts['dnf.conf'] = """
 [main]
 keepcache=1

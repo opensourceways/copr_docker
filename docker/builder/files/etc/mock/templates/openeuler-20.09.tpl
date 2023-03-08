@@ -8,8 +8,8 @@ config_opts['useradd'] = '/usr/sbin/useradd -o -m -u {{chrootuid}} -g {{chrootgi
 config_opts['bootstrap_image'] = 'docker.io/openeuler/openeuler:20.09'
 config_opts['nosync'] = True
 config_opts['nosync_force'] = True
-config_opts['dnf.conf'] = """
 config_opts['macros']['%_smp_ncpus_max'] = '4'
+config_opts['dnf.conf'] = """
 [main]
 keepcache=1
 debuglevel=2
