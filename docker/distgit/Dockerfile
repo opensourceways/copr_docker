@@ -32,7 +32,9 @@ RUN echo "AliasMatch \"/repo(/.*)/md5(/.*)\" \"/var/lib/dist-git/cache/lookaside
 
 RUN sed -i 's/Listen 80/Listen 5001/' /etc/httpd/conf/httpd.conf && \
     sed -i 's/ErrorLog.*/ErrorLog "\/dev\/stdout"/g' /etc/httpd/conf/httpd.conf && \
-    sed -i 's/CustomLog.*/CustomLog "\/dev\/stdout" combined/g' /etc/httpd/conf/httpd.conf
+    sed -i 's/CustomLog.*/CustomLog "\/dev\/stdout" combined/g' /etc/httpd/conf/httpd.conf && \
+    sed -i 's|Fedora Release Engineering|openEuler infrastructure|g' /etc/dist-git/dist-git.conf && \
+    sed -i 's|rel-eng@lists.fedoraproject.org|infra@openeuler.org|g' /etc/dist-git/dist-git.conf
 
 RUN mkdir /tmp/copr-dist-git
 RUN chown copr-dist-git:packager /tmp/copr-dist-git
