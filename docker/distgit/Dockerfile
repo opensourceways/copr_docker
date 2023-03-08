@@ -18,7 +18,7 @@ RUN set -ex ; \
                    wget \
                    vim \
                    cgit \
-                   python3-rpkg \
+                   python3-rpkg-1.65 \
                    python3-ipdb \
                    tini \
                    && \
