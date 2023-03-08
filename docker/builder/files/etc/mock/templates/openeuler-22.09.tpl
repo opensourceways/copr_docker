@@ -9,6 +9,7 @@ config_opts['bootstrap_image'] = 'docker.io/openeuler/openeuler:22.09'
 config_opts['nosync'] = True
 config_opts['nosync_force'] = True
 config_opts['dnf.conf'] = """
+config_opts['macros']['%_smp_ncpus_max'] = '4'
 [main]
 keepcache=1
 debuglevel=2

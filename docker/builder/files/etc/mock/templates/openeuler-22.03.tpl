@@ -6,8 +6,10 @@ config_opts['description'] = 'openEuler 22.03'
 config_opts['extra_chroot_dirs'] = [ '/run/lock', ]
 config_opts['useradd'] = '/usr/sbin/useradd -o -m -u {{chrootuid}} -g {{chrootgid}} -d {{chroothome}} {{chrootuser}}'
 config_opts['bootstrap_image'] = 'docker.io/openeuler/openeuler:22.03-lts'
-
+config_opts['nosync'] = True
+config_opts['nosync_force'] = True
 config_opts['dnf.conf'] = """
+config_opts['macros']['%_smp_ncpus_max'] = '4'
 [main]
 keepcache=1
 debuglevel=2
