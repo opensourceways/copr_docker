@@ -33,7 +33,7 @@ jobs:
 
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
       # This is used to complete the identity challenge
       # with sigstore/fulcio when running outside of PRs.
@@ -110,3 +110,17 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign -y {}@${{ steps.build-and-push.outputs.digest }}
+      - uses: imranismail/setup-kustomize@v2
+      - name: Edit k8s config
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cd k8s/kustomize
+          kustomize edit set image ${{ env.DH_IMAGE_NAME }}@${{ steps.build-and-push.outputs.digest }}
+          git add .
+          git commit -m "Set ${{ env.DH_IMAGE_NAME }} image tag to ${{ steps.build-and-push.outputs.digest }}"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
