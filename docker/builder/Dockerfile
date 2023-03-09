@@ -18,6 +18,7 @@ RUN set -ex ; \
                    wget \
                    vim \
                    python3-ipdb \
+                   python3-pip \
                    openssh-server \
                    fedora-packager \
                    mock \
