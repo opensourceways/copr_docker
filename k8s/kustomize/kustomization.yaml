@@ -33,51 +33,22 @@ configMapGenerator:
 namespace: fedora-copr
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-images:
 # database image
-- name: copr_database:latest
-  newName: copr_database
-  newTag: latest
 # redis image
-- name: centos/redis-32-centos7
-  newName: centos/redis-32-centos7
-  newTag: latest
 # resalloc image
-- name: copr_resalloc:latest
-  newName: copr_resalloc
-  newTag: latest
 # distgit image
-- name: copr_distgit-httpd:latest
-  newName: copr_distgit-httpd
-  newTag: latest
-- name: copr_distgit:latest
-  newName: copr_distgit
-  newTag: latest
 # keygen image
-- name: copr_keygen-httpd:latest
-  newName: copr_keygen-httpd
-  newTag: latest
-- name: copr_keygen-signd:latest
-  newName: copr_keygen-signd
-  newTag: latest
 # frontend image
-- name: copr_frontend:latest
-  newName: copr_frontend
-  newTag: latest
 # builder image
-- name: copr_builder:latest
-  newName: copr_builder
-  newTag: latest
 # backend image
-- name: copr_backend_httpd:latest
-  newName: copr_backend_httpd
-  newTag: latest
-- name: copr_backend-log:latest
-  newName: copr_backend-log
-  newTag: latest
-- name: copr_backend-action:latest
-  newName: copr_backend-action
-  newTag: latest
-- name: copr_backend-build:latest
-  newName: copr_backend-build
-  newTag: latest
+images:
+- digest: sha256:ffe491e93ee335f0c0680c257bc3f471113523a7c3483a681725c169741e57bb
+  name: pkking/copr_backend
+- digest: sha256:222153a1a4e2de5b377077449e6de004b9403518bd29e6ebb4a46052614b02f1
+  name: pkking/copr_distgit
+- digest: sha256:4e6d9873c6bee7ceec905aa81585a9ff83db4962cef274f369b25d44036ed210
+  name: pkking/copr_frontend
+- digest: sha256:5baad202bf734c2b1ad6b4499d8d71a550066d005bba44c3f30a6176a29155e5
+  name: pkking/copr_keygen-signd
+- digest: sha256:1f6fc8f268eaba661f9b461c235dbc2185b302ebd32a071cc0a13af50c341963
+  name: pkking/copr_resalloc
