@@ -9,9 +9,9 @@ ARG TARGETARCH
 
 RUN dnf install -y ansible \
                    vim \
-                   resalloc \
-                   resalloc-aws \
-                   resalloc-server \
+                   resalloc-4.9 \
+                   resalloc-aws-1.3 \
+                   resalloc-server-4.9 \
                    findutils \
                    openssh-clients \
                    python3-psycopg2 \

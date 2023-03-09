@@ -32,7 +32,7 @@ RUN set -ex ; \
                    scl-utils-build \
                    ethtool \
                    git \
-    && dnf -y install copr-builder \
+    && dnf -y install coprcopr-rpmbuild-0.64 \
     && dnf clean all
 
 COPY files/ /

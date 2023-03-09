@@ -23,7 +23,7 @@ RUN dnf -y update && \
                    postgresql-server \
                    redis \
                    && \
-    dnf -y install copr-keygen && \
+    dnf -y install copr-keygen-1.88 && \
     dnf clean all
 
 # system setup for copr-keygen

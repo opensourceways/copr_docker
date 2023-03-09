@@ -22,7 +22,7 @@ RUN set -ex ; \
                    python3-ipdb \
                    tini \
                    && \
-    dnf -y install copr-dist-git && \
+    dnf -y install copr-dist-git-0.60 && \
     dnf clean all
 
 RUN rm /etc/httpd/conf.d/ssl.conf

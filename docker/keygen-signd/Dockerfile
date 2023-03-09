@@ -29,7 +29,7 @@ RUN set -ex ; \
                    tini \
                    obs-signd-2.5.10 \
                    && \
-    dnf -y install copr-keygen && \
+    dnf -y install copr-keygen-1.88 && \
     dnf clean all
 
 # Copy files from the host into the container

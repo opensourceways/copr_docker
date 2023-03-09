@@ -36,7 +36,7 @@ RUN set -ex ; \
                    rng-tools \
 # for unbuffer package
                    expect \
-    && dnf -y install copr-backend \
+    && dnf -y install copr-backend-1.165 \
     && dnf clean all
 
 # needed to be able to ping

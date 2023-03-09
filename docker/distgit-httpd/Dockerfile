@@ -15,7 +15,7 @@ RUN dnf -y update && \
                    vim \
                    cgit
 
-RUN dnf -y install copr-dist-git && \
+RUN dnf -y install copr-dist-git-0.60 && \
     dnf clean all
 
 RUN rm /etc/httpd/conf.d/ssl.conf

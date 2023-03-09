@@ -28,7 +28,7 @@ RUN set -ex ; \
                    redis \
                    mock-core-configs \
                    findutils \
-                   copr-frontend \
+                   copr-frontend-1.196 \
                    modulemd-tools \
                    python-pip \
                    patch \
