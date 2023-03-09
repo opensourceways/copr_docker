@@ -18,7 +18,7 @@ RUN dnf install -y ansible \
                    gcc \
                    cargo \
                    perl \
-    && dnf clean all
+    && dnf clean all && rm -rf /var/cache/dnf
 
 # install the resalloc-kubernetes
 RUN cargo install resalloc-kubernetes --root . && mv bin/resalloc-kubernetes /

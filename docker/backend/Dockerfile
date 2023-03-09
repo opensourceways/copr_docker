@@ -37,7 +37,7 @@ RUN set -ex ; \
 # for unbuffer package
                    expect \
     && dnf -y install copr-backend-1.165 \
-    && dnf clean all
+    && dnf clean all && rm -rf /var/cache/dnf
 
 # needed to be able to ping
 RUN setcap cap_net_raw,cap_net_admin+p /usr/bin/ping

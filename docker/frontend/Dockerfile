@@ -33,7 +33,7 @@ RUN set -ex ; \
                    python-pip \
                    patch \
                    git \
-    && dnf clean all
+    && dnf clean all && rm -rf /var/cache/dnf
 
 COPY files/ /
 RUN cp -r /copr_design/sources/usr / && rm -rf /copr_design

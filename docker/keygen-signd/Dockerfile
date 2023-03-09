@@ -30,7 +30,7 @@ RUN set -ex ; \
                    obs-signd-2.5.10 \
                    && \
     dnf -y install copr-keygen-1.88 && \
-    dnf clean all
+    dnf clean all && rm -rf /var/cache/dnf
 
 # Copy files from the host into the container
 COPY files/ /

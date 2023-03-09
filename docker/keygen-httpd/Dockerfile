@@ -24,7 +24,7 @@ RUN dnf -y update && \
                    redis \
                    && \
     dnf -y install copr-keygen-1.88 && \
-    dnf clean all
+    dnf clean all && rm -rf /var/cache/dnf
 
 # system setup for copr-keygen
 RUN mkdir /var/log/uwsgi /var/run/uwsgi && \

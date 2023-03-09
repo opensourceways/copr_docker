@@ -32,15 +32,13 @@ RUN set -ex ; \
                    scl-utils-build \
                    ethtool \
                    git \
-    && dnf -y install copr-rpmbuild-0.64 \
-    && dnf clean all
+    && dnf -y install copr-rpmbuild-0.64 nosync-1.1 \
+    && dnf clean all && rm -rf /var/cache/dnf
 
 COPY files/ /
 RUN mv /pypi.py /usr/lib/python*/site-packages/copr_rpmbuild/providers/ && \
     mv /rubygems.py /usr/lib/python*/site-packages/copr_rpmbuild/providers/
 
-RUN dnf -y downgrade nosync \
-    && dnf -y downgrade nosync && dnf clean all
 # needed to run sshd
 RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -q
 # setup root user
