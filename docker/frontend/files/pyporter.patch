@@ -1,0 +1,14 @@
+--- frontend/coprs_frontend/coprs/forms.py	2023-01-29 11:52:20.854449497 +0800
++++ ../copr_docker/docker/frontend/files/usr/share/copr/coprs_frontend/coprs/forms.py	2023-03-09 15:54:15.738204996 +0800
+@@ -931,9 +931,8 @@
+     spec_generator = wtforms.SelectField(
+         "Spec generator",
+         choices=[
+-            ("pyp2rpm", "pyp2rpm"),
+-            ("pyp2spec", "pyp2spec"),
+-        ], default="pyp2rpm")
++            ("pyporter", "pyporter"),
++        ], default="pyporter")
+ 
+     spec_template = wtforms.SelectField(
+         "Spec template",

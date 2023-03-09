@@ -86,8 +86,15 @@ RUN pip install flask-pyoidc oic==1.5.0
 # looks bad in copy-pasted outputs and tutorials. I borrowed this one from
 # /root/.bashrc
 ENV PS1="[\u@\h \W]\$ "
+
+# do some patching works
 # authing return updated_at as a string, there's a patch for it
-RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.11/site-packages/oic/oic/message.py < /authing.patch
+RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.11/site-packages/oic/oic/message.py < /authing.patch && \
+    patch /usr/share/copr/coprs_frontend/application < /proxyfix.patch && \
+    patch /usr/share/copr/coprs_frontend/coprs/auth.py < /oidc-auth.patch && \
+    patch /usr/share/copr/coprs_frontend/coprs/context_processors.py < /oidc-context_processors.patch && \
+    patch /usr/share/copr/coprs_frontend/coprs/views/misc.py < /oidc-misc.patch && \
+    patch /usr/share/copr/coprs_frontend/coprs/forms.py < /pyporter.patch
 
 EXPOSE 5000
 

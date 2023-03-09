@@ -1,0 +1,19 @@
+--- frontend/coprs_frontend/application	2022-10-26 10:08:42.246723528 +0800
++++ ../copr_docker/docker/frontend/files/usr/share/copr/coprs_frontend/application	2023-03-09 15:43:53.968537266 +0800
+@@ -9,9 +9,14 @@
+ sys.path.insert(0, os.path.dirname(__file__))
+ 
+ from coprs import app
++from werkzeug.middleware.proxy_fix import ProxyFix
++
++app.wsgi_app = ProxyFix(
++    app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
++)
+ 
+ if app.debug:
+     from werkzeug.debug import DebuggedApplication
+     app = DebuggedApplication(app, True)
+ 
+-application = app
++application = app
+\ No newline at end of file

@@ -1,0 +1,98 @@
+--- frontend/coprs_frontend/coprs/views/misc.py	2022-12-24 09:28:09.584076550 +0800
++++ ../copr_docker/docker/frontend/files/usr/share/copr/coprs_frontend/coprs/views/misc.py	2023-03-03 10:24:28.014351617 +0800
+@@ -16,8 +16,9 @@
+ from coprs.logic.users_logic import UsersLogic
+ from coprs.exceptions import ObjectNotFound
+ from coprs.measure import checkpoint_start
+-from coprs.auth import FedoraAccounts, UserAuth
+-
++from coprs.auth import FedoraAccounts, UserAuth, OpenIDConnect
++from flask_pyoidc import OIDCAuthentication
++from flask_pyoidc.provider_configuration import ProviderConfiguration, ClientMetadata, ProviderMetadata
+ 
+ @app.before_request
+ def before_request():
+@@ -99,6 +100,9 @@
+         return flask.redirect(oid.get_next_url())
+ 
+     user = UserAuth.user_object(oid_resp=resp)
++    return _do_create_or_login(user)
++
++def _do_create_or_login(user):
+     db.session.add(user)
+     db.session.commit()
+     flask.flash(u"Welcome, {0}".format(user.name), "success")
+@@ -113,12 +117,6 @@
+                                             username=user.name))
+     return flask.redirect(oid.get_next_url())
+ 
+-
+-@misc.route("/logout/")
+-def logout():
+-    return UserAuth.logout()
+-
+-
+ def api_login_required(f):
+     @functools.wraps(f)
+     def decorated_function(*args, **kwargs):
+@@ -271,3 +269,60 @@
+             raise ObjectNotFound("Invalid pagination format") from err
+         return f(*args, page=page, **kwargs)
+     return wrapper
++
++
++if OpenIDConnect.enabled(app.config):
++    auth_params = None
++    oidc_provider = app.config.get('OIDC_PROVIDER_NAME', 'invalid_provider')
++    user_info_path = app.config.get('OIDC_USERINFO_PATH', [])
++    if app.config['OIDC_SCOPES']:
++        auth_params = {'scope': app.config['OIDC_SCOPES']} # specify the scope to request
++    if OpenIDConnect.is_config_valid(app.config):
++        if app.config.get('OIDC_ISSUER') :
++            PROVIDER_CONFIG = ProviderConfiguration(issuer=app.config['OIDC_ISSUER'],
++                                            client_metadata=ClientMetadata(app.config['OIDC_CLIENT'], app.config['OIDC_SECRET'],
++                                            post_logout_redirect_uris = [app.config['OIDC_POST_LOGOUT_REDIRECT_URI']]),
++                                            auth_request_params=auth_params)
++        else:
++            token_endpoint_auth_method = app.config.get('OIDC_TOKEN_AUTH_METHOD', 'client_secret_basic')
++
++            provider_metadata = ProviderMetadata(app.config['OIDC_CLIENT_ISSUER'], app.config['OIDC_AUTH_URL'], token_endpoint=app.config['OIDC_TOKEN_URL'], userinfo_endpoint=app.config['OIDC_USERINFO_URL'])
++            PROVIDER_CONFIG = ProviderConfiguration(provider_metadata=provider_metadata,
++                                client_metadata=ClientMetadata(app.config['OIDC_CLIENT'], app.config['OIDC_SECRET'], token_endpoint_auth_method=token_endpoint_auth_method,
++                                post_logout_redirect_uris = [app.config['OIDC_POST_LOGOUT_REDIRECT_URI']]),
++                                auth_request_params=auth_params)
++        auth = OIDCAuthentication({oidc_provider: PROVIDER_CONFIG}, app)
++
++        @misc.route("/oidc_login/", methods=["GET"])
++        @auth.oidc_auth(oidc_provider)
++        def oidc_login():
++            if not app.config['OIDC_LOGIN']:
++                flask.flash("oidc login is disabled")
++                return flask.redirect(oid.get_next_url())
++
++            user_info = OpenIDConnect.get_userinfo(user_info_path)
++            if 'username' not in user_info:
++                flask.flash("The {} user do not has a username, can't login to openEuler copr".format(oidc_provider))
++                return flask.redirect(oid.get_next_url())
++            if 'email' not in user_info:
++                flask.flash("The {} user({}) do not has a email address, can't login to openEuler copr".format(oidc_provider, user_info['username']))
++                return flask.redirect(oid.get_next_url())
++            flask.session["oidc"] = user_info['username']
++
++            user = OpenIDConnect.user_from_username(user_info)
++            return _do_create_or_login(user)
++
++        @misc.route("/logout/")
++        @auth.oidc_logout
++        def logout():
++            return UserAuth.logout()
++
++    else:
++        @misc.route("/logout/")
++        def logout():
++            return UserAuth.logout()
++
++else:
++    @misc.route("/logout/")
++    def logout():
++        return UserAuth.logout()
