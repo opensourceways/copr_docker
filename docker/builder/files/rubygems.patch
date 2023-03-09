@@ -1,0 +1,33 @@
+--- rpmbuild/copr_rpmbuild/providers/rubygems.py	2023-03-09 20:38:48.622403821 +0800
++++ ../copr_docker/docker/builder/files/rubygems.py	2023-03-09 20:38:48.622403821 +0800
+@@ -1,3 +1,4 @@
++import os
+ import logging
+ from ..helpers import run_cmd
+ from .base import Provider
+@@ -11,15 +12,16 @@
+ 
+     def tool_presence_check(self):
+         try:
+-            run_cmd(["which", "gem2rpm"])
++            run_cmd(["which", "rubyporter"])
+         except RuntimeError as err:
+-            log.error("Please, install gem2rpm.")
++            log.error("Please, install rubyporter.")
+             raise err
+ 
+     def produce_srpm(self):
+         self.tool_presence_check()
++        spec = os.path.join(self.resultdir, "rubygem-{0}.spec".format(self.gem_name))
+ 
+-        cmd = ["gem2rpm", self.gem_name, "--srpm", "-C", self.resultdir, "--fetch"]
++        cmd = ["rubyporter", "-s", self.gem_name, "-o", spec]
+         result = run_cmd(cmd)
+ 
+         if "Empty tag: License" in result.stderr:
+@@ -29,4 +31,4 @@
+                 "others have no rights to use the code for any purpose.",
+                 "See http://guides.rubygems.org/specification-reference/#license="]))
+ 
+-        return result
++        return self.build_srpm_from_spec(spec)

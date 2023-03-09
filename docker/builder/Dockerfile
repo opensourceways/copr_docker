@@ -33,12 +33,11 @@ RUN set -ex ; \
                    scl-utils-build \
                    ethtool \
                    git \
+                   patch \
     && dnf -y install copr-rpmbuild-0.64 nosync-1.1 \
     && dnf clean all && rm -rf /var/cache/dnf
 
 COPY files/ /
-RUN mv /pypi.py /usr/lib/python*/site-packages/copr_rpmbuild/providers/ && \
-    mv /rubygems.py /usr/lib/python*/site-packages/copr_rpmbuild/providers/
 
 # needed to run sshd
 RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -q
@@ -55,6 +54,9 @@ RUN sed -i 's/metalink=/#metalink=/g' /etc/yum.repos.d/* \
 
 RUN echo 'config_opts["use_nspawn"] = False' >> /etc/mock/site-defaults.cfg
 
+# do some patch works
+RUN patch /usr/lib/python3.11/site-packages/copr_rpmbuild/providers/pypi.py < /pypi.patch
+RUN patch /usr/lib/python3.11/site-packages/copr_rpmbuild/providers/rubygems.py < /rubygems.patch
 # install pyporter & rubyporter
 # using ADD to skip cache
 ADD "https://gitee.com/api/v5/repos/mywaaagh_admin/pyporter/commits?page=1&per_page=1" pyporter_last_commit
