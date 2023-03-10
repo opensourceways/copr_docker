@@ -151,9 +151,16 @@ spec:
     spec:
       template:
         spec:
-          nodeSelector:
-            usage: test
-            os.architecture: amd64
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: component
+                    operator: In
+                    values:
+                    - copr-distgit
+                topologyKey: kubernetes.io/hostname
           containers:
           - image: pkking/copr_distgit@sha256:069bc9c2af013ece024cfa17f333b125eec36cf75d33a09cefd8736303f0020c
             name: distgit-cronjob

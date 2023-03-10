@@ -154,9 +154,16 @@ spec:
     spec:
       template:
         spec:
-          nodeSelector:
-            usage: test
-            os.architecture: amd64
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: component
+                    operator: In
+                    values:
+                    - copr-backend
+                topologyKey: kubernetes.io/hostname
           containers:
           - image: pkking/copr_backend@sha256:42e11f03e8e8e87c0b45103685e23672d3747b6d0e06c2804b5725f803eb1564
             name: backend-cronjob
@@ -198,9 +205,16 @@ spec:
     spec:
       template:
         spec:
-          nodeSelector:
-            usage: test
-            os.architecture: amd64
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: component
+                    operator: In
+                    values:
+                    - copr-backend
+                topologyKey: kubernetes.io/hostname
           containers:
           - image: pkking/copr_backend@sha256:42e11f03e8e8e87c0b45103685e23672d3747b6d0e06c2804b5725f803eb1564
             name: backend-cronjob

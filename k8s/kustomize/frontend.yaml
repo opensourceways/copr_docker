@@ -88,9 +88,16 @@ spec:
     spec:
       template:
         spec:
-          nodeSelector:
-            usage: test
-            os.architecture: amd64
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: component
+                    operator: In
+                    values:
+                    - copr-frontend
+                topologyKey: kubernetes.io/hostname
           containers:
           - image: pkking/copr_frontend@sha256:df318fc7c93e6832a146b29b4a4664732efcfda5461a576c65bca89d53d56527
             name: frontend-cronjob
@@ -123,9 +130,16 @@ spec:
     spec:
       template:
         spec:
-          nodeSelector:
-            usage: test
-            os.architecture: amd64
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: component
+                    operator: In
+                    values:
+                    - copr-frontend
+                topologyKey: kubernetes.io/hostname
           containers:
           - image: pkking/copr_frontend@sha256:df318fc7c93e6832a146b29b4a4664732efcfda5461a576c65bca89d53d56527
             name: frontend-cronjob
