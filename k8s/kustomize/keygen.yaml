@@ -121,9 +121,16 @@ spec:
     spec:
       template:
         spec:
-          nodeSelector:
-            usage: test
-            os.architecture: amd64
+          affinity:
+            podAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: component
+                    operator: In
+                    values:
+                    - copr-keygen
+                topologyKey: kubernetes.io/hostname
           containers:
           - image: pkking/copr_keygen-signd@sha256:9394b8562ac46b4d4da3b701598dd00011e2f556cd7aadae4564caa141eee59f
             name: keygen-cronjob
