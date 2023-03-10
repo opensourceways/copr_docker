@@ -1,0 +1,23 @@
+diff --git a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py b/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py
+index 19cb83af3..527c73d1d 100644
+--- a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py
++++ b/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py
+@@ -12,6 +12,7 @@
+     render_add_build_pypi,
+     render_add_build_custom,
+     render_add_build_distgit,
++    render_add_build_rubygems,
+ )
+ from coprs.views.misc import (
+     login_required,
+@@ -136,6 +137,10 @@ def copr_rebuild_package(copr, package_name):
+         form = forms.BuildFormPyPIFactory
+         f = render_add_build_pypi
+         view_suffix = "_pypi"
++    elif package.source_type_text == "rubygems":
++        form = forms.BuildFormRubyGemsFactory
++        f = render_add_build_rubygems
++        view_suffix = "_rubygems"
+     elif package.source_type_text == "custom":
+         form = forms.BuildFormCustomFactory
+         f = render_add_build_custom

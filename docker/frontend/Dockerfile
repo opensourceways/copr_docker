@@ -94,7 +94,8 @@ RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.11/site-packages/oic
     patch /usr/share/copr/coprs_frontend/coprs/auth.py < /oidc-auth.patch && \
     patch /usr/share/copr/coprs_frontend/coprs/context_processors.py < /oidc-context_processors.patch && \
     patch /usr/share/copr/coprs_frontend/coprs/views/misc.py < /oidc-misc.patch && \
-    patch /usr/share/copr/coprs_frontend/coprs/forms.py < /pyporter.patch
+    patch /usr/share/copr/coprs_frontend/coprs/forms.py < /pyporter.patch && \
+    patch /usr/share/copr/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py < /rubygem.patch
 
 EXPOSE 5000
 
