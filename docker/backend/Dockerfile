@@ -32,6 +32,7 @@ RUN set -ex ; \
                    python3-ipdb \
                    findutils \
                    tini \
+                   patch \
 # to get more entropy for generation of gpg keys
                    rng-tools \
 # for unbuffer package
