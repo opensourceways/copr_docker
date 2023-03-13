@@ -111,6 +111,7 @@ jobs:
 
       - uses: imranismail/setup-kustomize@v2
       - name: Edit k8s config
+        if: github.event_name != 'pull_request'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -119,6 +120,7 @@ jobs:
           git add .
           git commit -m "Set ${{ env.DH_IMAGE_NAME }} image tag to ${{ steps.build-and-push.outputs.digest }}"
       - name: Push changes
+        if: github.event_name != 'pull_request'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

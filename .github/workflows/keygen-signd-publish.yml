@@ -110,6 +110,7 @@ jobs:
         run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign -y {}@${{ steps.build-and-push.outputs.digest }}
       - uses: imranismail/setup-kustomize@v2
       - name: Edit k8s config
+        if: github.event_name != 'pull_request'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -119,6 +120,7 @@ jobs:
           git commit -m "Set ${{ env.DH_IMAGE_NAME }} image tag to ${{ steps.build-and-push.outputs.digest }}"
       - name: Push changes
         uses: ad-m/github-push-action@master
+        if: github.event_name != 'pull_request'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
