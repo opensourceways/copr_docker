@@ -42,7 +42,7 @@ kind: Kustomization
 # builder image
 # backend image
 images:
-- digest: sha256:64348ccab895ada7e897991328d7839fe9ac16b6bb46711fa0f6153f16a7ea99
+- digest: sha256:a02770508ac816f85ec3cfff940ed7ddcd7eb42e86dad9d152ae9746c4760c1a
   name: pkking/copr_backend
 - digest: sha256:b335ae666a7efbc6f99c1da43d24d9afb61fffce30210fcba9b961e6932e6a6c
   name: pkking/copr_backend_httpd
