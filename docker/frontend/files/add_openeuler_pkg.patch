@@ -1,7 +1,16 @@
 diff -ur usr/share/copr/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py /usr/share/copr/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py
 --- usr/share/copr/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py        2023-03-05 12:59:27.000000000 +0000
-+++ /usr/share/copr/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py       2023-03-16 06:57:53.701032584 +0000
-@@ -121,6 +121,21 @@
++++ /usr/share/copr/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py       2023-03-16 07:34:03.013117136 +0000
+@@ -25,7 +25,7 @@
+ from coprs.logic.users_logic import UsersLogic
+ from coprs.exceptions import (ActionInProgressException, ObjectNotFound, NoPackageSourceException,
+                               InsufficientRightsException, MalformedArgumentException)
+-
++from os.path import dirname
+
+
+ @coprs_ns.route("/<username>/<coprname>/packages/")
+@@ -121,6 +121,18 @@
          view="coprs_ns.copr_rebuild_all_packages",
          form=form, copr=copr)
 
@@ -13,25 +22,22 @@ diff -ur usr/share/copr/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py /u
 +    data = package.source_json_dict
 +
 +    base_url = app.config["OPENEULER_PKG_ENDPOINT"]
-+    url = f"{base_url}?pkg_name={package_name}"
-+    if pkg_license:
-+        url += f"&license={pkg_license}"
-+    if pkg_desc:
-+        url += f"&desc={pkg_desc}"
-+
++    pkg_url = flask.request.url_root + dirname(flask.request.path)
++    desc = f"This package is imported from EUR: {pkg_url}"
++    url = f"{base_url}?pkg_name={package_name}&desc={desc}"
 +    return flask.redirect(url)
 
  @coprs_ns.route("/<username>/<coprname>/package/<package_name>/rebuild")
  @coprs_ns.route("/g/<group_name>/<coprname>/package/<package_name>/rebuild")
 diff -ur usr/share/copr/coprs_frontend/coprs/templates/coprs/detail/package.html /usr/share/copr/coprs_frontend/coprs/templates/coprs/detail/package.html
 --- usr/share/copr/coprs_frontend/coprs/templates/coprs/detail/package.html     2023-03-05 12:59:27.000000000 +0000
-+++ /usr/share/copr/coprs_frontend/coprs/templates/coprs/detail/package.html    2023-03-16 02:51:30.804203009 +0000
++++ /usr/share/copr/coprs_frontend/coprs/templates/coprs/detail/package.html    2023-03-16 07:41:31.465271430 +0000
 @@ -24,6 +24,9 @@
  <a class="btn btn-default pull-right button-build-action" href="{{ copr_url('coprs_ns.copr_rebuild_package', copr, package_name=package.name) }}">
    <span class="pficon pficon-restart"></span> Rebuild
  </a>
 +<a class="btn btn-default pull-right button-build-action" href="{{ copr_url('coprs_ns.copr_add_openeuler_package', copr, package_name=package.name) }}">
-+  <span class="pficon pficon-restart"></span> Add to openEuler
++  <span class="fa fa-plus"></span> Add to openEuler
 +</a>
  {% endif %}
 
