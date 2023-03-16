@@ -1,0 +1,38 @@
+diff -ur usr/share/copr/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py /usr/share/copr/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py
+--- usr/share/copr/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py        2023-03-05 12:59:27.000000000 +0000
++++ /usr/share/copr/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py       2023-03-16 06:57:53.701032584 +0000
+@@ -121,6 +121,21 @@
+         view="coprs_ns.copr_rebuild_all_packages",
+         form=form, copr=copr)
+
++@coprs_ns.route("/<username>/<coprname>/package/<package_name>/add_openeuler_pkg")
++@coprs_ns.route("/g/<group_name>/<coprname>/package/<package_name>/add_openeuler_pkg")
++@req_with_copr
++def copr_add_openeuler_package(copr, package_name):
++    package = ComplexLogic.get_package_safe(copr, package_name)
++    data = package.source_json_dict
++
++    base_url = app.config["OPENEULER_PKG_ENDPOINT"]
++    url = f"{base_url}?pkg_name={package_name}"
++    if pkg_license:
++        url += f"&license={pkg_license}"
++    if pkg_desc:
++        url += f"&desc={pkg_desc}"
++
++    return flask.redirect(url)
+
+ @coprs_ns.route("/<username>/<coprname>/package/<package_name>/rebuild")
+ @coprs_ns.route("/g/<group_name>/<coprname>/package/<package_name>/rebuild")
+diff -ur usr/share/copr/coprs_frontend/coprs/templates/coprs/detail/package.html /usr/share/copr/coprs_frontend/coprs/templates/coprs/detail/package.html
+--- usr/share/copr/coprs_frontend/coprs/templates/coprs/detail/package.html     2023-03-05 12:59:27.000000000 +0000
++++ /usr/share/copr/coprs_frontend/coprs/templates/coprs/detail/package.html    2023-03-16 02:51:30.804203009 +0000
+@@ -24,6 +24,9 @@
+ <a class="btn btn-default pull-right button-build-action" href="{{ copr_url('coprs_ns.copr_rebuild_package', copr, package_name=package.name) }}">
+   <span class="pficon pficon-restart"></span> Rebuild
+ </a>
++<a class="btn btn-default pull-right button-build-action" href="{{ copr_url('coprs_ns.copr_add_openeuler_package', copr, package_name=package.name) }}">
++  <span class="pficon pficon-restart"></span> Add to openEuler
++</a>
+ {% endif %}
+
+ <h2 class="page-title"> Package: {{ package.name }} </h2>
