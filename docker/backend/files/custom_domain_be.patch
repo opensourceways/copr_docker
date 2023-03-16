@@ -1,34 +1,34 @@
 diff --git a/backend/copr_backend/actions.py b/backend/copr_backend/actions.py
-index 825b9577..023be38e 100644
+index 4a46bc3f9..60256738e 100644
 --- a/backend/copr_backend/actions.py
 +++ b/backend/copr_backend/actions.py
-@@ -176,7 +176,7 @@ class Fork(Action, GPGMixin):
+@@ -176,7 +176,7 @@ def run(self):
                  # Generate brand new gpg key.
                  self.generate_gpg_key(data["user"], data["copr"])
                  # Put the new public key into forked build directory.
 -                get_pubkey(data["user"], data["copr"], self.log, pubkey_path)
-+                get_pubkey(data["user"], data["copr"], self.log, self.opts, pubkey_path)
++                get_pubkey(data["user"], data["copr"], self.log, self.opts.sign_domain, pubkey_path)
  
              chroot_paths = set()
              for chroot, src_dst_dir in builds_map.items():
 diff --git a/backend/copr_backend/background_worker_build.py b/backend/copr_backend/background_worker_build.py
-index 637f73fe..a0a8afab 100644
+index af53b209f..5fc22eb92 100644
 --- a/backend/copr_backend/background_worker_build.py
 +++ b/backend/copr_backend/background_worker_build.py
-@@ -693,7 +693,7 @@ class BuildBackgroundWorker(BackendBackgroundWorker):
+@@ -699,7 +699,7 @@ def _add_pubkey(self):
          # TODO: uncomment this when key revoke/change will be implemented
          # if os.path.exists(pubkey_path):
          #    return
 -        get_pubkey(user, project, self.log, pubkey_path)
-+        get_pubkey(user, project, self.log, self.opts, pubkey_path)
++        get_pubkey(user, project, self.log, self.opts.sign_domain, pubkey_path)
          self.log.info("Added pubkey for user %s project %s into: %s",
                        user, project, pubkey_path)
  
 diff --git a/backend/copr_backend/helpers.py b/backend/copr_backend/helpers.py
-index f730f81b..c785d253 100644
+index 36705337e..dad101042 100644
 --- a/backend/copr_backend/helpers.py
 +++ b/backend/copr_backend/helpers.py
-@@ -35,6 +35,7 @@ from copr_backend.exceptions import CoprBackendError, CoprBackendSrpmError
+@@ -35,6 +35,7 @@
  
  from . import constants
  
@@ -36,7 +36,7 @@ index f730f81b..c785d253 100644
  
  LOG_COMPONENTS = [
      "spawner", "terminator", "vmm", "build_dispatcher", "action_dispatcher",
-@@ -301,6 +302,9 @@ class BackendConfigReader(object):
+@@ -301,6 +302,9 @@ def _read_unsafe(self):
          opts.build_groups_count = _get_conf(
              cp, "backend", "build_groups", 1, mode="int")
  
@@ -47,10 +47,10 @@ index f730f81b..c785d253 100644
          for group_id in range(opts.build_groups_count):
              archs = _get_conf(cp, "backend",
 diff --git a/backend/copr_backend/sign.py b/backend/copr_backend/sign.py
-index 54687ccf..679b4802 100644
+index 08083af74..6655fb98a 100644
 --- a/backend/copr_backend/sign.py
 +++ b/backend/copr_backend/sign.py
-@@ -17,15 +17,13 @@ from .exceptions import CoprSignError, CoprSignNoKeyError, \
+@@ -17,15 +17,13 @@
  
  
  SIGN_BINARY = "/bin/sign"
@@ -68,30 +68,33 @@ index 54687ccf..679b4802 100644
  
  
  def call_sign_bin(cmd, log):
-@@ -54,7 +52,7 @@ def call_sign_bin(cmd, log):
+@@ -54,17 +52,18 @@ def call_sign_bin(cmd, log):
      return handle.returncode, stdout, stderr
  
  
 -def get_pubkey(username, projectname, log, outfile=None):
-+def get_pubkey(username, projectname, log, opts, outfile=None):
++def get_pubkey(username, projectname, log, sign_domain, outfile=None):
      """
      Retrieves public key for user/project from signer host.
  
-@@ -64,7 +62,7 @@ def get_pubkey(username, projectname, log, outfile=None):
++    :param sign_domain: the domain name of the sign key
+     :param outfile: [optional] file to write obtained key
+     :return: public keys
+ 
      :raises CoprSignError: failed to retrieve key, see error message
      :raises CoprSignNoKeyError: if there are no such user in keyring
      """
 -    usermail = create_gpg_email(username, projectname)
-+    usermail = create_gpg_email(username, projectname, opts.sign_domain)
++    usermail = create_gpg_email(username, projectname, sign_domain)
      cmd = [SIGN_BINARY, "-u", usermail, "-p"]
  
      returncode, stdout, stderr = call_sign_bin(cmd, log)
-@@ -163,14 +161,14 @@ def sign_rpms_in_dir(username, projectname, path, chroot, opts, log):
+@@ -166,14 +165,14 @@ def sign_rpms_in_dir(username, projectname, path, chroot, opts, log):
      hashtype = gpg_hashtype_for_chroot(chroot, opts)
  
      try:
 -        get_pubkey(username, projectname, log)
-+        get_pubkey(username, projectname, log, opts)
++        get_pubkey(username, projectname, log, opts.sign_domain)
      except CoprSignNoKeyError:
          create_user_keys(username, projectname, opts)
  
@@ -101,9 +104,9 @@ index 54687ccf..679b4802 100644
 -            _sign_one(rpm, create_gpg_email(username, projectname),
 +            _sign_one(rpm, create_gpg_email(username, projectname, opts.sign_domain),
                        hashtype, log)
-             log.info("signed rpm: {}".format(rpm))
+             log.info("signed rpm: %s", rpm)
  
-@@ -195,7 +193,7 @@ def create_user_keys(username, projectname, opts):
+@@ -198,7 +197,7 @@ def create_user_keys(username, projectname, opts):
      """
      data = {
          "name_real": "{}_{}".format(username, projectname),

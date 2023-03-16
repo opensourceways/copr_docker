@@ -76,7 +76,8 @@ RUN chmod 700 /root && \
 # container scenario it is not desired.  We use the downstream-only option
 # allow-unprivileged-ports option: https://github.com/openSUSE/obs-sign/pull/36
 RUN chmod 0755 /usr/bin/sign
-RUN cd /usr/lib/python3.11/site-packages/ && patch -p2 -i /custom_domain_be.patch
+RUN cd /usr/lib/python3.11/site-packages/ && patch -p2 -i /custom_domain_be.patch && \
+    cd /usr/bin && patch -p3 -i /custom_domain_bin.patch
 
 # entrypoint needs to have write access here (group=0)
 RUN chown copr:root /etc/sign.conf && \
