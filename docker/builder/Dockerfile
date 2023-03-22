@@ -41,11 +41,11 @@ COPY files/ /
 
 # needed to run sshd
 RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -q
-# setup root user
-RUN echo 'root:passwd' | chpasswd && \
-    chmod 700 /root /root/.ssh && \
-    touch /root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys && \
-    cat /root/.ssh/id_backend.pub >> /root/.ssh/authorized_keys
+# setup mock user
+RUN useradd -m -u 1000 -g 135 -n mockbuild && \
+    mkdir -p /home/mockbuild/.ssh && chmod 700 /home/mockbuild /home/mockbuild/.ssh && \
+    touch /home/mockbuild/.ssh/authorized_keys && chmod 600 /home/mockbuild/.ssh/authorized_keys && \
+    cat /home/mockbuild/.ssh/id_backend.pub >> /home/mockbuild/.ssh/authorized_keys
 
 # using huawei cloud mirrors
 RUN sed -i 's/metalink=/#metalink=/g' /etc/yum.repos.d/* \
