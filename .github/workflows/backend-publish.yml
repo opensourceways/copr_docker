@@ -120,6 +120,8 @@ jobs:
           kustomize edit set image ${{ env.DH_IMAGE_NAME }}@${{ steps.build-and-push.outputs.digest }}
           git add .
           git commit -m "Set ${{ env.DH_IMAGE_NAME }} image tag to ${{ steps.build-and-push.outputs.digest }}"
+          git config pull.rebase true
+          git pull
       - name: Push changes
         uses: ad-m/github-push-action@master
         if: github.event_name != 'pull_request'
