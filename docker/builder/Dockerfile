@@ -45,7 +45,8 @@ RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -q
 RUN useradd -m -u 1000 -g 135 -n mockbuild && \
     mkdir -p /home/mockbuild/.ssh && chmod 700 /home/mockbuild /home/mockbuild/.ssh && \
     touch /home/mockbuild/.ssh/authorized_keys && chmod 600 /home/mockbuild/.ssh/authorized_keys && \
-    cat /home/mockbuild/.ssh/id_backend.pub >> /home/mockbuild/.ssh/authorized_keys
+    cat /home/mockbuild/.ssh/id_backend.pub >> /home/mockbuild/.ssh/authorized_keys && \
+    chown mockbuild:135 /home/mockbuild -R
 
 # using huawei cloud mirrors
 RUN sed -i 's/metalink=/#metalink=/g' /etc/yum.repos.d/* \
