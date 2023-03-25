@@ -34,7 +34,7 @@ RUN set -ex ; \
                    ethtool \
                    git \
                    patch \
-    && dnf -y install copr-rpmbuild-0.64 nosync-1.1 \
+    && dnf -y install copr-rpmbuild-0.64 nosync-1.1 copr-builder-0.64 copr-distgit-client-0.64 \
     && dnf clean all && rm -rf /var/cache/dnf
 
 COPY files/ /
