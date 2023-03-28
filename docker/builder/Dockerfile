@@ -57,8 +57,9 @@ RUN sed -i 's/metalink=/#metalink=/g' /etc/yum.repos.d/* \
 RUN echo 'config_opts["use_nspawn"] = False' >> /etc/mock/site-defaults.cfg
 
 # do some patch works
-RUN patch /usr/lib/python3.11/site-packages/copr_rpmbuild/providers/pypi.py < /pypi.patch
-RUN patch /usr/lib/python3.11/site-packages/copr_rpmbuild/providers/rubygems.py < /rubygems.patch
+RUN patch /usr/lib/python3.11/site-packages/copr_rpmbuild/providers/pypi.py < /pypi.patch && \
+    patch /usr/lib/python3.11/site-packages/copr_rpmbuild/providers/rubygems.py < /rubygems.patch && \
+    patch /usr/lib/python3.11/site-packages/copr_rpmbuild/providers/scm.py < /scm.patch
 # install pyporter & rubyporter
 # using ADD to skip cache
 ADD "https://gitee.com/api/v5/repos/mywaaagh_admin/pyporter/commits?page=1&per_page=1" pyporter_last_commit
