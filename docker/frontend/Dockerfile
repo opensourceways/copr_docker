@@ -96,7 +96,7 @@ RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.11/site-packages/oic
     patch /usr/share/copr/coprs_frontend/coprs/views/misc.py < /oidc-misc.patch && \
     patch /usr/share/copr/coprs_frontend/coprs/forms.py < /pyporter.patch && \
     patch /usr/share/copr/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py < /rubygem.patch && \
-    cd /usr/share && patch -p2 < /add_openeuler_pkg.patch
+    cd /usr/share/copr && patch -p2 < /add_openeuler_pkg.patch
 
 EXPOSE 5000
 
