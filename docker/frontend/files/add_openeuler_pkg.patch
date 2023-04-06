@@ -13,7 +13,7 @@ index 2cb6f346..f05c16ad 100644
  
  <h2 class="page-title"> Package: {{ package.name }} </h2>
 diff --git a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py b/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py
-index 527c73d1..f5548374 100644
+index 527c73d1..121044d9 100644
 --- a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py
 +++ b/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py
 @@ -1,7 +1,10 @@
@@ -69,7 +69,7 @@ index 527c73d1..f5548374 100644
 +    base_url = app.config["OPENEULER_PKG_ENDPOINT"]
 +    pkg_url = flask.request.url_root + dirname(flask.request.path)
 +    desc = f"This package is imported from EUR: {pkg_url}"
-+    url = f"{base_url}?pkg_name={package_name}&desc={desc}&src_rpm_url={src_rpm_url}&spec_url={spec_url}"
++    url = f"{base_url}?pkg_name={package_name}&desc={desc}&src_rpm_url={src_rpm_url}&spec_url={spec_url}&sig=other"
 +    return flask.redirect(url)
 +
 +
