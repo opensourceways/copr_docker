@@ -42,7 +42,7 @@ skip_if_unavailable=False
 {% if mirrored %}
 [fedora]
 name=fedora
-baseurl=http://mirrors.huaweicloud.com/fedora/releases/$releasever/Everything/$basearch/os/
+baseurl=http://mirrors.tuna.tsinghua.edu.cn/fedora/releases/$releasever/Everything/$basearch/os/
 #metalink=https://mirrors.fedoraproject.org/metalink?repo=fedora-$releasever&arch=$basearch
 gpgkey=file:///usr/share/distribution-gpg-keys/fedora/RPM-GPG-KEY-fedora-{{ releasever }}-primary
 gpgcheck=1
@@ -50,7 +50,7 @@ skip_if_unavailable=False
 
 [updates]
 name=updates
-baseurl=http://mirrors.huaweicloud.com/fedora/updates/$releasever/Everything/$basearch/
+baseurl=http://mirrors.tuna.tsinghua.edu.cn/fedora/updates/$releasever/Everything/$basearch/
 #metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-f$releasever&arch=$basearch
 gpgkey=file:///usr/share/distribution-gpg-keys/fedora/RPM-GPG-KEY-fedora-{{ releasever }}-primary
 gpgcheck=1

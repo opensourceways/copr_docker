@@ -13,6 +13,7 @@ RUN set -ex ; \
         || dnf -y install dnf-plugins-core \
         && for repo in $ADDITIONAL_COPR_REPOSITORIES ; do dnf -y copr enable $repo; done ; \
     dnf -y update && \
+    dnf -y install nosync --repo fc34 && \
     dnf -y install htop \
                    which \
                    wget \
@@ -35,7 +36,7 @@ RUN set -ex ; \
                    git \
                    patch \
     && dnf -y install copr-rpmbuild-0.64 nosync-1.1 copr-builder-0.64 copr-distgit-client-0.64 \
-    && dnf -y downgrade nosync && dnf clean all && rm -rf /var/cache/dnf
+    && dnf clean all && rm -rf /var/cache/dnf
 
 COPY files/ /
 

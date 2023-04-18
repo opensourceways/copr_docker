@@ -34,50 +34,50 @@ user_agent={{ user_agent }}
 # all LTS-SPx is compatible with its LTS release
 [OS]
 name=OS
-baseurl=http://mirrors.huaweicloud.com/openeuler/openEuler-22.03-LTS-SP1/OS/$basearch/
+baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP1/OS/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=http://mirrors.huaweicloud.com/openeuler/openEuler-22.03-LTS-SP1/OS/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP1/OS/$basearch/RPM-GPG-KEY-openEuler
 
 [everything]
 name=everything
-baseurl=http://mirrors.huaweicloud.com/openeuler/openEuler-22.03-LTS-SP1/everything/$basearch/
+baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP1/everything/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=http://mirrors.huaweicloud.com/openeuler/openEuler-22.03-LTS-SP1/everything/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP1/everything/$basearch/RPM-GPG-KEY-openEuler
 
 [EPOL]
 name=EPOL
-baseurl=http://mirrors.huaweicloud.com/openeuler/openEuler-22.03-LTS-SP1/EPOL/main/$basearch/
+baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP1/EPOL/main/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=http://mirrors.huaweicloud.com/openeuler/openEuler-22.03-LTS-SP1/OS/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP1/OS/$basearch/RPM-GPG-KEY-openEuler
 
 [debuginfo]
 name=debuginfo
-baseurl=http://mirrors.huaweicloud.com/openeuler/openEuler-22.03-LTS-SP1/debuginfo/$basearch/
+baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP1/debuginfo/$basearch/
 enabled=0
 gpgcheck=1
-gpgkey=http://mirrors.huaweicloud.com/openeuler/openEuler-22.03-LTS-SP1/debuginfo/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP1/debuginfo/$basearch/RPM-GPG-KEY-openEuler
 
 [source]
 name=source
-baseurl=http://mirrors.huaweicloud.com/openeuler/openEuler-22.03-LTS-SP1/source/
+baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP1/source/
 enabled=0
 gpgcheck=1
-gpgkey=http://mirrors.huaweicloud.com/openeuler/openEuler-22.03-LTS-SP1/source/RPM-GPG-KEY-openEuler
+gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP1/source/RPM-GPG-KEY-openEuler
 
 [update]
 name=update
-baseurl=http://mirrors.huaweicloud.com/openeuler/openEuler-22.03-LTS-SP1/update/$basearch/
+baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP1/update/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=http://mirrors.huaweicloud.com/openeuler/openEuler-22.03-LTS-SP1/OS/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP1/OS/$basearch/RPM-GPG-KEY-openEuler
 
 [update-source]
 name=update-source
-baseurl=http://mirrors.huaweicloud.com/openeuler/openEuler-22.03-LTS-SP1/update/source/
+baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP1/update/source/
 enabled=0
 gpgcheck=1
-gpgkey=http://mirrors.huaweicloud.com/openeuler/openEuler-22.03-LTS-SP1/source/RPM-GPG-KEY-openEuler
+gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS-SP1/source/RPM-GPG-KEY-openEuler
 """
