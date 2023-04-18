@@ -6,6 +6,7 @@ ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr"
 # TERM is to make the tito work in container, rhbz#1733043
 ENV TERM=linux
 
+COPY files/ /
 # base packages
 RUN set -ex ; \
     rm /etc/yum.repos.d/fedora-cisco-openh264.repo && \
@@ -37,8 +38,6 @@ RUN set -ex ; \
                    patch \
     && dnf -y install copr-rpmbuild-0.64 nosync-1.1 copr-builder-0.64 copr-distgit-client-0.64 \
     && dnf clean all && rm -rf /var/cache/dnf
-
-COPY files/ /
 
 # needed to run sshd
 RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -q
