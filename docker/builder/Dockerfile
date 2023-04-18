@@ -14,7 +14,7 @@ RUN set -ex ; \
         || dnf -y install dnf-plugins-core \
         && for repo in $ADDITIONAL_COPR_REPOSITORIES ; do dnf -y copr enable $repo; done ; \
     dnf -y update && \
-    dnf -y install nosync --repo fc34 && \
+    dnf -y in nosync-1.1-10.fc34.*  --repo fc34 && \
     dnf -y install htop \
                    which \
                    wget \
