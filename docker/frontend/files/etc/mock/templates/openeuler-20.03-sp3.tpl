@@ -50,20 +50,12 @@ enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
-[debuginfo]
-name=debuginfo
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-20.03-LTS-SP3/debuginfo/$basearch/
-enabled=0
+[EPOL-update]
+name=EPOL-update
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-20.03-LTS-SP3/EPOL/update/main/$basearch/
+enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
-
-[source]
-name=source
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-20.03-LTS-SP3/source/
-enabled=0
-gpgcheck=1
-gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
-
 
 [update]
 name=update
