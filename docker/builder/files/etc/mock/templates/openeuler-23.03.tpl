@@ -34,33 +34,33 @@ name=OS
 baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/OS/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
+gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/OS/$basearch/RPM-GPG-KEY-openEuler
 
 [everything]
 name=everything
 baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/everything/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
+gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/everything/$basearch/RPM-GPG-KEY-openEuler
 
 [EPOL]
 name=EPOL
 baseurl=https://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/EPOL/main/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
+gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/OS/$basearch/RPM-GPG-KEY-openEuler
 
 [EOPL-update]
 name=debuginfo
 baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/EPOL/update/main/$basearch/
 enabled=0
 gpgcheck=1
-gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
+gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/OS/$basearch/RPM-GPG-KEY-openEuler
 
 [update]
 name=update
 baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/update/$basearch/
 enabled=1
 gpgcheck=1
-gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
+gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/OS/$basearch/RPM-GPG-KEY-openEuler
 """
