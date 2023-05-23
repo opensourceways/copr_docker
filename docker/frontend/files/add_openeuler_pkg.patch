@@ -73,7 +73,7 @@ index 527c73d1..0874214d 100644
 +
 +    pkg_url = flask.request.url_root + dirname(flask.request.path)
 +    desc = f"This package is imported from EUR: {pkg_url}"
-+    url = f"{base_url}?pkg_name={package_name}&desc={desc}&src_rpm_url={src_rpm_url}&spec_url={spec_url}&sig=other"
++    url = f"{base_url}?pkg_name={package_name}&desc={desc}&src_rpm_url={src_rpm_url}&spec_url={spec_url}&sig=ecopkg"
 +    return flask.redirect(url)
 +
 +
