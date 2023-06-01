@@ -1,4 +1,4 @@
-config_opts['chroot_setup_cmd'] = 'install tar gcc-c++ openEuler-rpm-config openEuler-release which xz sed make bzip2 gzip gcc coreutils unzip shadow-utils diffutils cpio bash gawk rpm-build info patch util-linux findutils grep procps-ng bc'
+config_opts['chroot_setup_cmd'] = 'install yum tar gcc-c++ openEuler-rpm-config openEuler-release which xz sed make bzip2 gzip gcc coreutils unzip shadow-utils diffutils cpio bash gawk rpm-build info patch util-linux findutils grep procps-ng bc'
 config_opts['dist'] = 'oe2303'  # only useful for --resultdir variable subst
 config_opts['releasever'] = '23.03'
 config_opts['package_manager'] = 'dnf'
@@ -23,44 +23,45 @@ syslog_ident=mock
 syslog_device=
 metadata_expire=0
 mdpolicy=group:primary
-best=1
+best=0
 install_weak_deps=0
 protected_packages=
 module_platform_id=platform:oe2303
 user_agent={{ user_agent }}
 
+
 [OS]
 name=OS
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/OS/$basearch/
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-23.03/OS&arch=$basearch
 enabled=1
 gpgcheck=1
-gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/OS/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 
 [everything]
 name=everything
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/everything/$basearch/
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-23.03/everything&arch=$basearch
 enabled=1
 gpgcheck=1
-gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/everything/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 
 [EPOL]
 name=EPOL
-baseurl=https://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/EPOL/main/$basearch/
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-23.03/EPOL/main&arch=$basearch
 enabled=1
 gpgcheck=1
-gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/OS/$basearch/RPM-GPG-KEY-openEuler
-
-[EOPL-update]
-name=debuginfo
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/EPOL/update/main/$basearch/
-enabled=0
-gpgcheck=1
-gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/OS/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 
 [update]
 name=update
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/update/$basearch/
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-23.03/update&arch=$basearch
 enabled=1
 gpgcheck=1
-gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-23.03/OS/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
+
+[EPOL-update]
+name=EPOL update
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-23.03/EPOL/update/main&arch=$basearch
+enabled=1
+gpgcheck=1
+gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 """

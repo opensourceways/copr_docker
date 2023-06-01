@@ -1,4 +1,4 @@
-config_opts['chroot_setup_cmd'] = 'install tar gcc-c++ openEuler-rpm-config openEuler-release which xz sed make bzip2 gzip gcc coreutils unzip shadow-utils diffutils cpio bash gawk rpm-build info patch util-linux findutils grep'
+config_opts['chroot_setup_cmd'] = 'install yum tar gcc-c++ openEuler-rpm-config openEuler-release which xz sed make bzip2 gzip gcc coreutils unzip shadow-utils diffutils cpio bash gawk rpm-build info patch util-linux findutils grep'
 config_opts['dist'] = 'oe2203'  # only useful for --resultdir variable subst
 config_opts['releasever'] = '22.03'
 config_opts['package_manager'] = 'dnf'
@@ -32,52 +32,39 @@ user_agent={{ user_agent }}
 # all openEuler LTS release will continue developing and releasing SPx version
 # such as 22.03-LTS -> 22.03-LTS -> 22.03-LTS-SP2 ...
 # all LTS-SPx is compatible with its LTS release
+
 [OS]
 name=OS
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS/OS/$basearch/
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-22.03-LTS/OS&arch=$basearch
 enabled=1
 gpgcheck=1
-gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS/OS/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [everything]
 name=everything
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS/everything/$basearch/
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-22.03-LTS/everything&arch=$basearch
 enabled=1
 gpgcheck=1
-gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS/everything/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [EPOL]
 name=EPOL
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS/EPOL/main/$basearch/
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-22.03-LTS/EPOL/main&arch=$basearch
 enabled=1
 gpgcheck=1
-gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS/OS/$basearch/RPM-GPG-KEY-openEuler
-
-[debuginfo]
-name=debuginfo
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS/debuginfo/$basearch/
-enabled=0
-gpgcheck=1
-gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS/debuginfo/$basearch/RPM-GPG-KEY-openEuler
-
-[source]
-name=source
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS/source/
-enabled=0
-gpgcheck=1
-gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS/source/RPM-GPG-KEY-openEuler
+gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [update]
 name=update
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS/update/$basearch/
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-22.03-LTS/update&arch=$basearch
 enabled=1
 gpgcheck=1
-gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS/OS/$basearch/RPM-GPG-KEY-openEuler
+gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
-[update-source]
-name=update-source
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS/update/source/
-enabled=0
+[EPOL-update]
+name=EPOL update
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-22.03-LTS/EPOL/update/main&arch=$basearch
+enabled=1
 gpgcheck=1
-gpgkey=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-22.03-LTS/source/RPM-GPG-KEY-openEuler
+gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 """

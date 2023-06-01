@@ -42,16 +42,14 @@ skip_if_unavailable=False
 {% if mirrored %}
 [fedora]
 name=fedora
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/fedora/releases/$releasever/Everything/$basearch/os/
-#metalink=https://mirrors.fedoraproject.org/metalink?repo=fedora-$releasever&arch=$basearch
+metalink=https://mirrors.fedoraproject.org/metalink?repo=fedora-$releasever&arch=$basearch
 gpgkey=file:///usr/share/distribution-gpg-keys/fedora/RPM-GPG-KEY-fedora-{{ releasever }}-primary
 gpgcheck=1
 skip_if_unavailable=False
 
 [updates]
 name=updates
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/fedora/updates/$releasever/Everything/$basearch/
-#metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-f$releasever&arch=$basearch
+metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-f$releasever&arch=$basearch
 gpgkey=file:///usr/share/distribution-gpg-keys/fedora/RPM-GPG-KEY-fedora-{{ releasever }}-primary
 gpgcheck=1
 skip_if_unavailable=False
@@ -141,7 +139,6 @@ skip_if_unavailable=False
 
 [updates-modular]
 name=Fedora Modular $releasever - $basearch - Updates
-#baseurl=http://download.fedoraproject.org/pub/fedora/linux/updates/$releasever/Modular/$basearch/
 metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-modular-f$releasever&arch=$basearch
 enabled=0
 repo_gpgcheck=0
@@ -152,7 +149,6 @@ skip_if_unavailable=False
 
 [updates-modular-debuginfo]
 name=Fedora Modular $releasever - $basearch - Updates - Debug
-#baseurl=http://download.fedoraproject.org/pub/fedora/linux/updates/$releasever/Modular/$basearch/debug/
 metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-modular-debug-f$releasever&arch=$basearch
 enabled=0
 repo_gpgcheck=0
@@ -163,7 +159,6 @@ skip_if_unavailable=False
 
 [updates-modular-source]
 name=Fedora Modular $releasever - Updates Source
-#baseurl=http://download.fedoraproject.org/pub/fedora/linux/updates/$releasever/Modular/SRPMS/
 metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-modular-source-f$releasever&arch=$basearch
 enabled=0
 repo_gpgcheck=0
