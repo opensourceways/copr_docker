@@ -1,17 +1,15 @@
-FROM registry.fedoraproject.org/fedora:37
+FROM openeuler/openeuler:22.03
 LABEL maintainer="infra@openeuler.org"
-
-ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr"
 
 # TERM is to make the tito work in container, rhbz#1733043
 ENV TERM=linux
 ENV PYTHONPATH=/usr/share/copr/
 
+# download EUR repo
+RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-22.03_LTS_SP1/mywaaagh_admin-eur-openeuler-22.03_LTS_SP1.repo
+
 # base packages
 RUN set -ex ; \
-    test -z "${ADDITIONAL_COPR_REPOSITORIES}" \
-        || dnf -y install dnf-plugins-core \
-        && for repo in $ADDITIONAL_COPR_REPOSITORIES ; do dnf -y copr enable $repo; done ; \
     dnf -y update && \
     dnf -y install htop \
                    which \
@@ -22,7 +20,7 @@ RUN set -ex ; \
                    python3-ipdb \
                    tini \
                    && \
-    dnf -y install copr-dist-git-0.60 && \
+    dnf -y install copr-dist-git-0.64 sudo && \
     dnf clean all && rm -rf /var/cache/dnf
 
 RUN rm /etc/httpd/conf.d/ssl.conf

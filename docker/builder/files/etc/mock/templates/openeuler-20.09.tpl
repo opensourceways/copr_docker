@@ -1,4 +1,4 @@
-config_opts['chroot_setup_cmd'] = 'install tar gcc-c++ openEuler-rpm-config openEuler-release which xz sed make bzip2 gzip gcc coreutils unzip shadow-utils diffutils cpio bash gawk rpm-build info patch util-linux findutils grep procps-ng bc'
+config_opts['chroot_setup_cmd'] = 'install yum tar gcc-c++ openEuler-rpm-config openEuler-release which xz sed make bzip2 gzip gcc coreutils unzip shadow-utils diffutils cpio bash gawk rpm-build info patch util-linux findutils grep procps-ng bc'
 config_opts['dist'] = 'oe1'  # only useful for --resultdir variable subst
 config_opts['releasever'] = '20.09'
 config_opts['package_manager'] = 'dnf'
@@ -31,35 +31,35 @@ user_agent={{ user_agent }}
 
 [OS]
 name=OS
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-20.09/OS/$basearch/
+baseurl=https://archives.openeuler.openatom.cn//openEuler-20.09/OS/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [everything]
 name=everything
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-20.09/everything/$basearch/
+baseurl=https://archives.openeuler.openatom.cn//openEuler-20.09/everything/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [EPOL]
 name=EPOL
-baseurl=https://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-20.09/EPOL/$basearch/
+baseurl=https://archives.openeuler.openatom.cn//openEuler-20.09/EPOL/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [debuginfo]
 name=debuginfo
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-20.09/debuginfo/$basearch/
+baseurl=https://archives.openeuler.openatom.cn//openEuler-20.09/debuginfo/$basearch/
 enabled=0
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [source]
 name=source
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-20.09/source/
+baseurl=https://archives.openeuler.openatom.cn//openEuler-20.09/source/
 enabled=0
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
@@ -67,7 +67,7 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [update]
 name=update
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-20.09/update/$basearch/
+baseurl=https://archives.openeuler.openatom.cn//openEuler-20.09/update/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler

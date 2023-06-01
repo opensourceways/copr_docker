@@ -1,4 +1,4 @@
-config_opts['chroot_setup_cmd'] = 'install tar gcc-c++ openEuler-rpm-config openEuler-release which xz sed make bzip2 gzip gcc coreutils unzip shadow-utils diffutils cpio bash gawk rpm-build info patch util-linux findutils grep procps-ng bc'
+config_opts['chroot_setup_cmd'] = 'install yum tar gcc-c++ openEuler-rpm-config openEuler-release which xz sed make bzip2 gzip gcc coreutils unzip shadow-utils diffutils cpio bash gawk rpm-build info patch util-linux findutils grep procps-ng bc'
 config_opts['dist'] = 'oe1'  # only useful for --resultdir variable subst
 config_opts['releasever'] = '20.03-LTS'
 config_opts['package_manager'] = 'dnf'
@@ -31,35 +31,35 @@ user_agent={{ user_agent }}
 
 [OS]
 name=OS
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-20.03-LTS-SP2/OS/$basearch/
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-20.03-LTS-SP2/OS&arch=$basearch
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [everything]
 name=everything
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-20.03-LTS-SP2/everything/$basearch/
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-20.03-LTS-SP2/everything&arch=$basearch
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [EPOL]
 name=EPOL
-baseurl=https://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-20.03-LTS-SP2/EPOL/main/$basearch/
-enabled=1
-gpgcheck=1
-gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
-
-[EPOL-update]
-name=EPOL-update
-baseurl=https://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-20.03-LTS-SP2/EPOL/update/main/$basearch/
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-20.03-LTS-SP2/EPOL/main&arch=$basearch
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [update]
 name=update
-baseurl=http://mirrors.tuna.tsinghua.edu.cn/openeuler/openEuler-20.03-LTS-SP2/update/$basearch/
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-20.03-LTS-SP2/update&arch=$basearch
+enabled=1
+gpgcheck=1
+gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
+
+[EPOL-update]
+name=EPOL update
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-20.03-LTS-SP2/EPOL/update/main&arch=$basearch
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler

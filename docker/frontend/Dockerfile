@@ -1,18 +1,16 @@
-FROM registry.fedoraproject.org/fedora:37
+FROM openeuler/openeuler:22.03
 LABEL maintainer="infra@openeuler.org"
-
-ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr"
 
 # TERM is to make the tito work in container, rhbz#1733043
 ENV TERM=linux
 ENV LANG=en_US.UTF-8
 ENV REDIS_HOST=redis
 
+# download EUR repo
+RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-22.03_LTS_SP1/mywaaagh_admin-eur-openeuler-22.03_LTS_SP1.repo
+
 # base packages
 RUN set -ex ; \
-    test -z "${ADDITIONAL_COPR_REPOSITORIES}" \
-        || dnf -y install dnf-plugins-core \
-        && for repo in $ADDITIONAL_COPR_REPOSITORIES ; do dnf -y copr enable $repo; done ; \
     dnf -y update && \
     dnf -y install htop \
                    make \
@@ -28,7 +26,7 @@ RUN set -ex ; \
                    redis \
                    mock-core-configs \
                    findutils \
-                   copr-frontend-1.197 \
+                   copr-frontend-1.199 \
                    modulemd-tools \
                    python-pip \
                    patch \
@@ -89,7 +87,7 @@ ENV PS1="[\u@\h \W]\$ "
 
 # do some patching works
 # authing return updated_at as a string, there's a patch for it
-RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.11/site-packages/oic/oic/message.py < /authing.patch && \
+RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.9/site-packages/oic/oic/message.py < /authing.patch && \
     patch /usr/share/copr/coprs_frontend/application < /proxyfix.patch && \
     patch /usr/share/copr/coprs_frontend/coprs/auth.py < /oidc-auth.patch && \
     patch /usr/share/copr/coprs_frontend/coprs/context_processors.py < /oidc-context_processors.patch && \
