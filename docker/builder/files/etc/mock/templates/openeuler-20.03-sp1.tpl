@@ -45,7 +45,7 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [EPOL]
 name=EPOL
-metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-20.03-LTS-SP1/EPOL/&arch=$basearch
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-20.03-LTS-SP1/EPOL&arch=$basearch
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
@@ -59,7 +59,7 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [EPOL-update]
 name=EPOL update
-metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-20.03-LTS-SP1/EPOL/update/&arch=$basearch
+metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-20.03-LTS-SP1/EPOL/update&arch=$basearch
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler

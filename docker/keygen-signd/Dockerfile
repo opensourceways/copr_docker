@@ -1,19 +1,21 @@
-FROM registry.fedoraproject.org/fedora:37
-
+FROM openeuler/openeuler:22.03
 LABEL maintainer="infra@openeuler.org"
 
-ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr"
-
+# base packages
+RUN set -ex ; \
+    dnf -y update && \
+    dnf -y install shadow
 # Create copr-signer:copr-signer manually, so we can
 # be sure that the UID and GID is same on all keygen containers
 RUN groupadd -r copr-signer -g 992
 RUN useradd -r copr-signer -u 993 -g 992 -G 0 -d /var/lib/copr-keygen
 RUN mkdir -p /var/lib/copr-keygen/.gnupg && chown copr-signer:copr-signer /var/lib/copr-keygen/.gnupg
+
+# download EUR repo
+RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-22.03_LTS_SP1/mywaaagh_admin-eur-openeuler-22.03_LTS_SP1.repo
+
 # base packages
 RUN set -ex ; \
-    test -z "${ADDITIONAL_COPR_REPOSITORIES}" \
-        || dnf -y install dnf-plugins-core \
-        && for repo in $ADDITIONAL_COPR_REPOSITORIES ; do dnf -y copr enable $repo; done ; \
     dnf -y update && \
     dnf -y install htop \
                    httpd \
@@ -27,9 +29,9 @@ RUN set -ex ; \
                    postgresql-server \
                    redis \
                    tini \
-                   obs-signd-2.5.10 \
+                   obs-signd \
                    && \
-    dnf -y install copr-keygen-1.88 && \
+    dnf -y install copr-keygen && \
     dnf clean all && rm -rf /var/cache/dnf
 
 # Copy files from the host into the container

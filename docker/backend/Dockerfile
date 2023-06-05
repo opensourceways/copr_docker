@@ -1,7 +1,5 @@
-FROM registry.fedoraproject.org/fedora:37
+FROM openeuler/openeuler:22.03
 LABEL maintainer="infra@openeuler.org"
-
-ARG ADDITIONAL_COPR_REPOSITORIES="@copr/copr"
 
 ENV export LANG=en_US.UTF-8
 ENV PYTHONPATH="/usr/share/copr/"
@@ -10,12 +8,11 @@ ENV PYTHONPATH="/usr/share/copr/"
 ENV TERM=linux \
     LANG=en_US.UTF-8
 
+# download EUR repo
+RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-22.03_LTS_SP1/mywaaagh_admin-eur-openeuler-22.03_LTS_SP1.repo
+
 # base packages
-RUN set -ex ; \
-    test -z "${ADDITIONAL_COPR_REPOSITORIES}" \
-        || dnf -y install dnf-plugins-core \
-        && for repo in $ADDITIONAL_COPR_REPOSITORIES ; do dnf -y copr enable $repo; done ; \
-    dnf -y update && \
+RUN set -ex ; dnf -y install dnf-plugins-core && dnf -y update && \
     dnf -y install htop \
                    make \
                    wget \
@@ -37,7 +34,7 @@ RUN set -ex ; \
                    rng-tools \
 # for unbuffer package
                    expect \
-    && dnf -y install copr-backend-1.165 \
+    && dnf -y install copr-backend-1.168 \
     && dnf clean all && rm -rf /var/cache/dnf
 
 # needed to be able to ping
@@ -62,7 +59,7 @@ RUN set -x ; \
     mkdir -p /home/copr/.gnupg && chown copr:copr -R /home/copr
 
 # system setup for copr-backend
-RUN usermod -a -G mock copr
+RUN usermod -a -G mock copr && usermod -u 989 copr && groupmod -g 988 copr
 
 # copy filesystem setup and setup ownership and permissions
 COPY files/ /
@@ -76,9 +73,6 @@ RUN chmod 700 /root && \
 # container scenario it is not desired.  We use the downstream-only option
 # allow-unprivileged-ports option: https://github.com/openSUSE/obs-sign/pull/36
 RUN chmod 0755 /usr/bin/sign
-RUN cd /usr/lib/python3.11/site-packages/ && patch -p2 -i /custom_domain_be.patch && \
-    cd /usr/bin && patch -p3 -i /custom_domain_bin.patch && \
-    cd /usr/lib/python3.11/site-packages/ && patch -p2 -i /copr_message.patch
 
 # entrypoint needs to have write access here (group=0)
 RUN chown copr:root /etc/sign.conf && \

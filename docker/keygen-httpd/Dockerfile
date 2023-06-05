@@ -1,5 +1,4 @@
-FROM registry.fedoraproject.org/fedora:35
-
+FROM openeuler/openeuler:22.03
 LABEL maintainer="infra@openeuler.org"
 
 
@@ -7,6 +6,9 @@ LABEL maintainer="infra@openeuler.org"
 # be sure that the UID and GID is same on all keygen containers
 RUN groupadd -r copr-signer -g 992
 RUN useradd -r copr-signer -u 993 -g 992 -d /var/lib/copr-keygen
+
+# download EUR repo
+RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-22.03_LTS_SP1/mywaaagh_admin-eur-openeuler-22.03_LTS_SP1.repo
 
 # base packages
 RUN dnf -y update && \

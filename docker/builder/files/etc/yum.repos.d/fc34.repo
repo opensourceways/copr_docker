@@ -1,6 +1,0 @@
-[fc34]
-name=Fedora 34
-baseurl= https://mirrors.nju.edu.cn/fedora-archive/fedora/linux/releases/34/Everything/$basearch/os/
-enabled=1
-gpgcheck=0
-skip_if_unavailable=False
