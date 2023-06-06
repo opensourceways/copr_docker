@@ -33,6 +33,9 @@ user_agent={{ user_agent }}
 [OS]
 name=OS
 metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-23.03/OS&arch=$basearch
+baseurl=https://mirrors.163.com/openeuler/openEuler-23.03/OS/$basearch/
+baseurl=https://mirrors.pku.edu.cn/openeuler/openEuler-23.03/OS/$basearch/
+baseurl=https://mirrors.nju.edu.cn/openeuler/openEuler-23.03/OS/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
@@ -40,6 +43,9 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-E
 [everything]
 name=everything
 metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-23.03/everything&arch=$basearch
+baseurl=https://mirrors.163.com/openeuler/openEuler-23.03/everything/$basearch/
+baseurl=https://mirrors.pku.edu.cn/openeuler/openEuler-23.03/everything/$basearch/
+baseurl=https://mirrors.nju.edu.cn/openeuler/openEuler-23.03/everything/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
@@ -47,6 +53,9 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-E
 [EPOL]
 name=EPOL
 metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-23.03/EPOL/main&arch=$basearch
+baseurl=https://mirrors.163.com/openeuler/openEuler-23.03/EPOL/main/$basearch/
+baseurl=https://mirrors.pku.edu.cn/openeuler/openEuler-23.03/EPOL/main/$basearch/
+baseurl=https://mirrors.nju.edu.cn/openeuler/openEuler-23.03/EPOL/main/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
@@ -54,6 +63,9 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-E
 [update]
 name=update
 metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-23.03/update&arch=$basearch
+baseurl=https://mirrors.163.com/openeuler/openEuler-23.03/update/$basearch/
+baseurl=https://mirrors.pku.edu.cn/openeuler/openEuler-23.03/update/$basearch/
+baseurl=https://mirrors.nju.edu.cn/openeuler/openEuler-23.03/update/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
@@ -61,6 +73,9 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-E
 [EPOL-update]
 name=EPOL update
 metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-23.03/EPOL/update/main&arch=$basearch
+baseurl=https://mirrors.163.com/openeuler/openEuler-23.03/EPOL/update/main/$basearch/
+baseurl=https://mirrors.pku.edu.cn/openeuler/openEuler-23.03/EPOL/update/main/$basearch/
+baseurl=https://mirrors.nju.edu.cn/openeuler/openEuler-23.03/EPOL/update/main/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker

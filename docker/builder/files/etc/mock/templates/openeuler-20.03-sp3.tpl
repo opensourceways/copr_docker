@@ -32,6 +32,9 @@ user_agent={{ user_agent }}
 [OS]
 name=OS
 metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-20.03-LTS-SP3/OS&arch=$basearch
+baseurl=https://mirrors.163.com/openeuler/openEuler-20.03-LTS-SP3/OS/$basearch/
+baseurl=https://mirrors.pku.edu.cn/openeuler/openEuler-20.03-LTS-SP3/OS/$basearch/
+baseurl=https://mirrors.nju.edu.cn/openeuler/openEuler-20.03-LTS-SP3/OS/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
@@ -39,6 +42,9 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 [everything]
 name=everything
 metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-20.03-LTS-SP3/everything&arch=$basearch
+baseurl=https://mirrors.163.com/openeuler/openEuler-20.03-LTS-SP3/everything/$basearch/
+baseurl=https://mirrors.pku.edu.cn/openeuler/openEuler-20.03-LTS-SP3/everything/$basearch/
+baseurl=https://mirrors.nju.edu.cn/openeuler/openEuler-20.03-LTS-SP3/everything/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
@@ -46,6 +52,9 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 [EPOL]
 name=EPOL
 metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-20.03-LTS-SP3/EPOL/main&arch=$basearch
+baseurl=https://mirrors.163.com/openeuler/openEuler-20.03-LTS-SP3/EPOL/main/$basearch/
+baseurl=https://mirrors.pku.edu.cn/openeuler/openEuler-20.03-LTS-SP3/EPOL/main/$basearch/
+baseurl=https://mirrors.nju.edu.cn/openeuler/openEuler-20.03-LTS-SP3/EPOL/main/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
@@ -53,6 +62,9 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 [update]
 name=update
 metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-20.03-LTS-SP3/update&arch=$basearch
+baseurl=https://mirrors.163.com/openeuler/openEuler-20.03-LTS-SP3/update/$basearch/
+baseurl=https://mirrors.pku.edu.cn/openeuler/openEuler-20.03-LTS-SP3/update/$basearch/
+baseurl=https://mirrors.nju.edu.cn/openeuler/openEuler-20.03-LTS-SP3/update/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
@@ -60,6 +72,9 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 [EPOL-update]
 name=EPOL update
 metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-20.03-LTS-SP3/EPOL/update/main&arch=$basearch
+baseurl=https://mirrors.163.com/openeuler/openEuler-20.03-LTS-SP3/EPOL/update/main/$basearch/
+baseurl=https://mirrors.pku.edu.cn/openeuler/openEuler-20.03-LTS-SP3/EPOL/update/main/$basearch/
+baseurl=https://mirrors.nju.edu.cn/openeuler/openEuler-20.03-LTS-SP3/EPOL/update/main/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler

@@ -32,20 +32,13 @@ user_agent={{ user_agent }}
 # all openEuler LTS release will continue developing and releasing SPx version
 # such as 22.03-LTS -> 22.03-LTS-SP1 -> 22.03-LTS-SP2 ...
 # all LTS-SPx is compatible with its LTS release
-[copr:eur.openeuler.openatom.cn:mywaaagh_admin:eur]
-name=Copr repo for eur owned by mywaaagh_admin
-baseurl=https://eur.openeuler.openatom.cn/results/mywaaagh_admin/eur/openeuler-22.03_LTS_SP1-$basearch/
-type=rpm-md
-skip_if_unavailable=True
-gpgcheck=1
-gpgkey=https://eur.openeuler.openatom.cn/results/mywaaagh_admin/eur/pubkey.gpg
-repo_gpgcheck=0
-enabled=1
-enabled_metadata=1
 
 [OS]
 name=OS
 metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-22.03-LTS-SP1/OS&arch=$basearch
+baseurl=https://mirrors.163.com/openeuler/openEuler-22.03-LTS-SP1/OS/$basearch/
+baseurl=https://mirrors.pku.edu.cn/openeuler/openEuler-22.03-LTS-SP1/OS/$basearch/
+baseurl=https://mirrors.nju.edu.cn/openeuler/openEuler-22.03-LTS-SP1/OS/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
@@ -53,6 +46,9 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-E
 [everything]
 name=everything
 metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-22.03-LTS-SP1/everything&arch=$basearch
+baseurl=https://mirrors.163.com/openeuler/openEuler-22.03-LTS-SP1/everything/$basearch/
+baseurl=https://mirrors.pku.edu.cn/openeuler/openEuler-22.03-LTS-SP1/everything/$basearch/
+baseurl=https://mirrors.nju.edu.cn/openeuler/openEuler-22.03-LTS-SP1/everything/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
@@ -60,6 +56,9 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-E
 [EPOL]
 name=EPOL
 metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-22.03-LTS-SP1/EPOL/main&arch=$basearch
+baseurl=https://mirrors.163.com/openeuler/openEuler-22.03-LTS-SP1/EPOL/main/$basearch/
+baseurl=https://mirrors.pku.edu.cn/openeuler/openEuler-22.03-LTS-SP1/EPOL/main/$basearch/
+baseurl=https://mirrors.nju.edu.cn/openeuler/openEuler-22.03-LTS-SP1/EPOL/main/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
@@ -67,6 +66,9 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-E
 [update]
 name=update
 metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-22.03-LTS-SP1/update&arch=$basearch
+baseurl=https://mirrors.163.com/openeuler/openEuler-22.03-LTS-SP1/update/$basearch/
+baseurl=https://mirrors.pku.edu.cn/openeuler/openEuler-22.03-LTS-SP1/update/$basearch/
+baseurl=https://mirrors.nju.edu.cn/openeuler/openEuler-22.03-LTS-SP1/update/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
@@ -74,6 +76,9 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-E
 [EPOL-update]
 name=EPOL update
 metalink=https://mirrors.openeuler.org/metalink?repo=openEuler-22.03-LTS-SP1/EPOL/update/main&arch=$basearch
+baseurl=https://mirrors.163.com/openeuler/openEuler-22.03-LTS-SP1/EPOL/update/main/$basearch/
+baseurl=https://mirrors.pku.edu.cn/openeuler/openEuler-22.03-LTS-SP1/EPOL/update/main/$basearch/
+baseurl=https://mirrors.nju.edu.cn/openeuler/openEuler-22.03-LTS-SP1/EPOL/update/main/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
