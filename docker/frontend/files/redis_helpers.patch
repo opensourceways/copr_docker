@@ -1,0 +1,12 @@
+diff --git a/common/copr_common/redis_helpers.py b/common/copr_common/redis_helpers.py
+index d63bbe70..0a0396b7 100644
+--- a/common/copr_common/redis_helpers.py
++++ b/common/copr_common/redis_helpers.py
+@@ -18,5 +18,7 @@ def get_redis_connection(opts):
+         kwargs["host"] = opts.redis_host
+     if hasattr(opts, "redis_port"):
+         kwargs["port"] = opts.redis_port
++    if hasattr(opts, "redis_pwd"):
++        kwargs["password"] = opts.redis_pwd
+ 
+     return StrictRedis(encoding="utf-8", decode_responses=True, **kwargs)

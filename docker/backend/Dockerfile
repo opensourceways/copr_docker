@@ -82,6 +82,9 @@ RUN chown copr:root /etc/sign.conf && \
 RUN mkdir /var/lock/copr-backend
 RUN chown copr:copr /var/lock/copr-backend /var/log/copr-backend
 
+RUN patch /usr/lib/python3.9/site-packages/copr_backend/helpers.py < /helpers.patch
+RUN patch /usr/bin/print_queues.py < /print_queues.py
+RUN patch /usr/lib/python3.9/site-packages/copr_common/redis_helpers.py < /redis_helpers.patch
 # using /dev/urandom is a hack just for devel, /dev/hwrandom or /dev/hwrng should be used in production
 RUN rngd -r /dev/urandom
 

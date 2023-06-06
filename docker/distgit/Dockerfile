@@ -20,7 +20,7 @@ RUN set -ex ; \
                    python3-ipdb \
                    tini \
                    && \
-    dnf -y install copr-dist-git-0.64 sudo && \
+    dnf -y install copr-dist-git sudo && \
     dnf clean all && rm -rf /var/cache/dnf
 
 RUN rm /etc/httpd/conf.d/ssl.conf
@@ -56,7 +56,8 @@ RUN directories="/etc/httpd /var/run/httpd /var/log/httpd /var/lib/dist-git /run
     chmod -R g+rwX $directories
 
 RUN echo "copr-dist-git ALL = (root) NOPASSWD: /copr-dist-git-assure-perm,/etc/cron.monthly/copr-dist-git" >> /etc/sudoers.d/copr-dist-git
-
+RUN patch /usr/lib/python3.9/site-packages/copr_common/redis_helpers.py < /redis_helpers.patch
+RUN patch /usr/lib/python3.9/site-packages/copr_dist_git/helpers.py < /helpers.patch
 USER copr-dist-git
 
 RUN ln -sf /proc/1/fd/1 /var/log/copr-dist-git/main.log

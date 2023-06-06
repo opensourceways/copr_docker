@@ -73,6 +73,7 @@ RUN chmod -R g+rwX \
 
 # setup for cronjob
 RUN echo 'copr-fe ALL=(root) NOPASSWD:/etc/cron.hourly/copr-frontend-optional,/etc/cron.hourly/copr-frontend,/etc/cron.daily/copr-frontend,/etc/cron.daily/copr-frontend-optional' >> /etc/sudoers.d/copr-fe
+RUN patch /usr/lib/python3.9/site-packages/copr_common/redis_helpers.py < /redis_helpers.patch
 # Use copr-fe user when running outside of OpenShift
 USER copr-fe
 
@@ -93,7 +94,8 @@ RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.9/site-packages/oic/
     patch /usr/share/copr/coprs_frontend/coprs/context_processors.py < /oidc-context_processors.patch && \
     patch /usr/share/copr/coprs_frontend/coprs/views/misc.py < /oidc-misc.patch && \
     patch /usr/share/copr/coprs_frontend/coprs/forms.py < /pyporter.patch && \
-    cd /usr/share/copr && patch -p2 < /add_openeuler_pkg.patch
+    cd /usr/share/copr && patch -p2 < /add_openeuler_pkg.patch && \
+    patch /usr/share/copr/coprs_frontend/coprs/helpers.py < /helpers.patch
 
 EXPOSE 5000
 

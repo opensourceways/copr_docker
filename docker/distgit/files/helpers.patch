@@ -1,0 +1,12 @@
+diff --git a/dist-git/copr_dist_git/helpers.py b/dist-git/copr_dist_git/helpers.py
+index f60cdfcb..5e9ed94f 100644
+--- a/dist-git/copr_dist_git/helpers.py
++++ b/dist-git/copr_dist_git/helpers.py
+@@ -153,6 +153,7 @@ class ConfigReader(object):
+ 
+         opts.redis_host = _get_conf(cp, "dist-git", "redis_host", "localhost")
+         opts.redis_port = _get_conf(cp, "dist-git", "redis_port", "6379")
++        opts.redis_pwd = _get_conf(cp, "dist-git", "redis_password", None)
+ 
+         return opts
+ 
