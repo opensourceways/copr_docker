@@ -60,8 +60,8 @@ RUN patch /usr/lib/python3.9/site-packages/copr_rpmbuild/providers/pypi.py < /py
     patch /usr/lib/python3.9/site-packages/copr_rpmbuild/providers/rubygems.py < /rubygems.patch
 # install pyporter & rubyporter
 # using ADD to skip cache
-ADD "https://gitee.com/api/v5/repos/mywaaagh_admin/pyporter/commits?page=1&per_page=1" pyporter_last_commit
-RUN git clone https://gitee.com/mywaaagh_admin/pyporter && cd pyporter && python3 -m pip install -e .
+ADD "https://gitee.com/api/v5/repos/openeuler/pyporter/commits?page=1&per_page=1" pyporter_last_commit
+RUN git clone https://gitee.com/openeuler/pyporter && cd pyporter && python3 -m pip install -e .
 
 ADD "https://gitee.com/api/v5/repos/openeuler/rubyporter/commits?page=1&per_page=1" rubyporter_last_commit
 RUN git clone https://gitee.com/openeuler/rubyporter && cd rubyporter && python3 -m pip install -e .
