@@ -50,7 +50,7 @@ images:
   name: pkking/copr_database
 - digest: sha256:4c08ec5307695b75cc7d4f9b2492bd28508c539ee39d942802db1185aae97b78
   name: pkking/copr_distgit
-- digest: sha256:6d94d42a6fb489982c290c409474da0331f121cd22be9931ee4962bf63bc700c
+- digest: sha256:31991461da33b3e68b646e60a27a59f8463585ea2363985a3a6be58ebfa5e1e3
   name: pkking/copr_frontend
 - digest: sha256:9cefeb590c76d8dec3fd6f80fcb07e522ceb520c8d7adc2bdb6163ee786d21c7
   name: pkking/copr_keygen-signd
