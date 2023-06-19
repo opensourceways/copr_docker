@@ -1,42 +1,35 @@
 diff --git a/frontend/coprs_frontend/coprs/logic/packages_logic.py b/frontend/coprs_frontend/coprs/logic/packages_logic.py
-index 63fe6f7a..d3a2c4d5 100644
+index 63fe6f7a..e479d1cf 100644
 --- a/frontend/coprs_frontend/coprs/logic/packages_logic.py
 +++ b/frontend/coprs_frontend/coprs/logic/packages_logic.py
-@@ -20,6 +20,12 @@ log = app.logger
- 
+@@ -21,6 +21,13 @@ log = app.logger
  
  class PackagesLogic(object):
+ 
 +    @classmethod
 +    def count(cls):
 +        """
 +        Get packages count
 +        """
 +        return models.Package.query.count()
- 
++
      @classmethod
      def get_by_id(cls, package_id):
+         return models.Package.query.filter(models.Package.id == package_id)
 diff --git a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_general.py b/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_general.py
-index f370e86a..a0c26d6e 100644
+index f370e86a..341c1e69 100644
 --- a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_general.py
 +++ b/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_general.py
-@@ -45,7 +45,7 @@ from coprs.views.misc import (
+@@ -86,6 +86,8 @@ def coprs_show(page=1):
+     # users_count = models.User.query.count()
+     users_count = users_logic.UsersLogic.get_multiple_with_projects().count()
  
- from coprs.views.coprs_ns import coprs_ns
- 
--from coprs.logic import builds_logic, coprs_logic, actions_logic, users_logic
-+from coprs.logic import builds_logic, coprs_logic, actions_logic, users_logic, packages_logic
- from coprs.helpers import generate_repo_url, \
-     url_for_copr_view, CounterStatType
- 
-@@ -90,6 +90,7 @@ def coprs_show(page=1):
++    packages_count = packages_logic.PackagesLogic.count() if app.config.get("PACKAGES_COUNT", False) else None
++
+     # flask.g.user is none when no user is logged - showing builds from everyone
      # TODO: builds_logic.BuildsLogic.get_recent_tasks(flask.g.user, 5) takes too much time, optimize sql
      # users_builds = builds_logic.BuildsLogic.get_recent_tasks(flask.g.user, 5)
-     users_builds = builds_logic.BuildsLogic.get_recent_tasks(None, 4)
-+    packages_count = packages_logic.PackagesLogic.count()
- 
-     data = builds_logic.BuildsLogic.get_small_graph_data('30min')
- 
-@@ -100,6 +101,7 @@ def coprs_show(page=1):
+@@ -100,6 +102,7 @@ def coprs_show(page=1):
                                   recent=recent,
                                   projects_count=projects_count,
                                   users_count=users_count,
