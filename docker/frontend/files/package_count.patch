@@ -17,9 +17,18 @@ index 63fe6f7a..e479d1cf 100644
      def get_by_id(cls, package_id):
          return models.Package.query.filter(models.Package.id == package_id)
 diff --git a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_general.py b/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_general.py
-index f370e86a..341c1e69 100644
+index f370e86a..88325a15 100644
 --- a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_general.py
 +++ b/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_general.py
+@@ -45,7 +45,7 @@ from coprs.views.misc import (
+ 
+ from coprs.views.coprs_ns import coprs_ns
+ 
+-from coprs.logic import builds_logic, coprs_logic, actions_logic, users_logic
++from coprs.logic import builds_logic, coprs_logic, actions_logic, users_logic, packages_logic
+ from coprs.helpers import generate_repo_url, \
+     url_for_copr_view, CounterStatType
+ 
 @@ -86,6 +86,8 @@ def coprs_show(page=1):
      # users_count = models.User.query.count()
      users_count = users_logic.UsersLogic.get_multiple_with_projects().count()
