@@ -1,6 +1,6 @@
 config_opts['chroot_setup_cmd'] = 'install yum tar gcc-c++ openEuler-rpm-config openEuler-release which xz sed make bzip2 gzip gcc coreutils unzip shadow-utils diffutils cpio bash gawk rpm-build info patch util-linux findutils grep procps-ng bc'
 config_opts['dist'] = 'oe1'  # only useful for --resultdir variable subst
-config_opts['releasever'] = '20.03-LTS'
+config_opts['releasever'] = '20.03LTS_SP2'
 config_opts['package_manager'] = 'dnf'
 config_opts['description'] = 'openEuler 20.03 LTS'
 config_opts['extra_chroot_dirs'] = [ '/run/lock', ]
