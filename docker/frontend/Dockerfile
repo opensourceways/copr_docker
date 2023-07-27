@@ -26,7 +26,7 @@ RUN set -ex ; \
                    redis \
                    mock-core-configs \
                    findutils \
-                   copr-frontend-1.199 \
+                   copr-frontend-1.200 \
                    modulemd-tools \
                    python-pip \
                    patch \
@@ -77,9 +77,6 @@ RUN patch /usr/lib/python3.9/site-packages/copr_common/redis_helpers.py < /redis
 # Use copr-fe user when running outside of OpenShift
 USER copr-fe
 
-# using pyodic which not existed in fedora repo
-RUN pip install flask-pyoidc oic==1.5.0
-
 # Since home directory for `copr-fe` user is `/usr/share/copr/coprs_frontend`
 # and we don't want .bashrc file in there, the bash prompt is `bash-5.0$` which
 # looks bad in copy-pasted outputs and tutorials. I borrowed this one from
@@ -88,11 +85,7 @@ ENV PS1="[\u@\h \W]\$ "
 
 # do some patching works
 # authing return updated_at as a string, there's a patch for it
-RUN patch /usr/share/copr/coprs_frontend/.local/lib/python3.9/site-packages/oic/oic/message.py < /authing.patch && \
-    patch /usr/share/copr/coprs_frontend/application < /proxyfix.patch && \
-    patch /usr/share/copr/coprs_frontend/coprs/auth.py < /oidc-auth.patch && \
-    patch /usr/share/copr/coprs_frontend/coprs/context_processors.py < /oidc-context_processors.patch && \
-    patch /usr/share/copr/coprs_frontend/coprs/views/misc.py < /oidc-misc.patch && \
+RUN patch /usr/share/copr/coprs_frontend/application < /proxyfix.patch && \
     patch /usr/share/copr/coprs_frontend/coprs/forms.py < /pyporter.patch && \
     cd /usr/share/copr && patch -p2 < /add_openeuler_pkg.patch && \
     patch -p2 < /package_count.patch && \
