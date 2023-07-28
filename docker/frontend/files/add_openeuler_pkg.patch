@@ -1,17 +1,3 @@
-diff --git a/frontend/coprs_frontend/coprs/templates/coprs/detail/package.html b/frontend/coprs_frontend/coprs/templates/coprs/detail/package.html
-index 2cb6f346..f05c16ad 100644
---- a/frontend/coprs_frontend/coprs/templates/coprs/detail/package.html
-+++ b/frontend/coprs_frontend/coprs/templates/coprs/detail/package.html
-@@ -24,6 +24,9 @@
- <a class="btn btn-default pull-right button-build-action" href="{{ copr_url('coprs_ns.copr_rebuild_package', copr, package_name=package.name) }}">
-   <span class="pficon pficon-restart"></span> Rebuild
- </a>
-+<a class="btn btn-default pull-right button-build-action" href="{{ copr_url('coprs_ns.copr_add_openeuler_package', copr, package_name=package.name) }}">
-+  <span class="fa fa-plus"></span> Add to openEuler
-+</a>
- {% endif %}
- 
- <h2 class="page-title"> Package: {{ package.name }} </h2>
 diff --git a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py b/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py
 index 527c73d1..0874214d 100644
 --- a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py

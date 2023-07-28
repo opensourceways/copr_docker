@@ -34,7 +34,6 @@ RUN set -ex ; \
     && dnf clean all && rm -rf /var/cache/dnf
 
 COPY files/ /
-RUN cp -r /copr_design/sources/usr / && rm -rf /copr_design
 RUN sed -i 's/User apache/User copr-fe/g' /etc/httpd/conf/httpd.conf
 RUN sed -i 's/Group apache/Group copr-fe/g' /etc/httpd/conf/httpd.conf
 
@@ -74,7 +73,7 @@ RUN chmod -R g+rwX \
 # setup for cronjob
 RUN echo 'copr-fe ALL=(root) NOPASSWD:/etc/cron.hourly/copr-frontend-optional,/etc/cron.hourly/copr-frontend,/etc/cron.daily/copr-frontend,/etc/cron.daily/copr-frontend-optional' >> /etc/sudoers.d/copr-fe
 RUN patch /usr/lib/python3.9/site-packages/copr_common/redis_helpers.py < /redis_helpers.patch
-# Use copr-fe user when running outside of OpenShift
+RUN chown -R copr-fe:copr-fe /copr_design
 USER copr-fe
 
 # Since home directory for `copr-fe` user is `/usr/share/copr/coprs_frontend`
@@ -89,8 +88,10 @@ RUN patch /usr/share/copr/coprs_frontend/application < /proxyfix.patch && \
     patch /usr/share/copr/coprs_frontend/coprs/forms.py < /pyporter.patch && \
     cd /usr/share/copr && patch -p2 < /add_openeuler_pkg.patch && \
     patch -p2 < /package_count.patch && \
-    patch /usr/share/copr/coprs_frontend/coprs/helpers.py < /helpers.patch
+    patch /usr/share/copr/coprs_frontend/coprs/helpers.py < /helpers.patch && \
+    patch -p2 < /oidc_group.patch
 
+RUN cp -r /copr_design/sources/usr / && find /copr_design ! -path /copr_design -exec rm -rf {} \+;
 EXPOSE 5000
 
 CMD ["/entrypoint"]
