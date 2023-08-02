@@ -42,146 +42,6 @@ index 038534b4..f33cbede 100644
  
      @property
      def at_name(self):
-diff --git a/frontend/coprs_frontend/coprs/auth.py b/frontend/coprs_frontend/coprs/auth.py
-index 64a57403..e07ce5ac 100644
---- a/frontend/coprs_frontend/coprs/auth.py
-+++ b/frontend/coprs_frontend/coprs/auth.py
-@@ -92,37 +92,26 @@ class GroupAuth:
-     `app.config["FAS_LOGIN"]` and `app.config["KRB5_LOGIN"]` should be
-     encapsulated within this class.
-     """
--
-     @classmethod
--    def update_user_groups(cls, user, oid_resp=None):
-+    def update_user_groups(cls, user, groups=None):
-         """
-         Upon a successful login, try to (a) load the list of groups from
-         authoritative source, and (b) (re)set the user.openid_groups.
-         """
--
-         def _do_update(user, grouplist):
-             user.openid_groups = {
-                 "fas_groups": grouplist,
-             }
-+        if not groups:
-+            groups = []
- 
--        if oid_resp:
--            _do_update(user, OpenIDGroups.group_names(oid_resp))
--            return
--
--        # If we have a LDAP pre-configured, now is the right time to load the
--        # data, or fail.
--        keys = ["LDAP_URL", "LDAP_SEARCH_STRING"]
--        if all(app.config[k] for k in keys):
--            _do_update(user, LDAPGroups.group_names(user.username))
-+        if not isinstance(groups, list):
-+            app.logger.error(f"groups should be a list object")
-             return
- 
--        # We only ever call update_user_groups() with oid_resp!= None with FAS
--        assert not app.config["FAS_LOGIN"]
--
--        app.logger.warning("Nowhere to get groups from")
--        # This copr doesn't support groups.
--        _do_update(user, [])
--
-+        app.logger.info(f"groups add: {groups}")
-+        _do_update(user, groups)
-+        return
- 
- class FedoraAccounts:
-     """
-@@ -193,7 +182,7 @@ class FedoraAccounts:
-         # Update user attributes from FAS
-         user.mail = oid_resp.email
-         user.timezone = oid_resp.timezone
--        GroupAuth.update_user_groups(user, oid_resp)
-+        GroupAuth.update_user_groups(user, OpenIDGroups.group_names(oid_resp))
-         return user
- 
- 
-@@ -239,7 +228,9 @@ class Kerberos:
-         # Create a new user object
-         krb_config = app.config['KRB5_LOGIN']
-         user.mail = username + "@" + krb_config['email_domain']
--        GroupAuth.update_user_groups(user)
-+        keys = ["LDAP_URL", "LDAP_SEARCH_STRING"]
-+        if all(app.config[k] for k in keys):
-+            GroupAuth.update_user_groups(user, LDAPGroups.group_names(user.username))
-         return user
- 
-     @staticmethod
-@@ -402,4 +393,15 @@ class OpenIDConnect:
-             and userinfo['zoneinfo'] else None
- 
-         user = UserAuth.get_or_create_user(userinfo['username'], userinfo['email'], zoneinfo)
-+        GroupAuth.update_user_groups(user, OpenIDConnect.groups_from_userinfo(userinfo))
-         return user
-+
-+    @staticmethod
-+    def groups_from_userinfo(userinfo):
-+        """
-+        Create a `models.User` object from oidc user info
-+        """
-+        if not userinfo:
-+            return None
-+
-+        return userinfo.get("groups")
-diff --git a/frontend/coprs_frontend/coprs/context_processors.py b/frontend/coprs_frontend/coprs/context_processors.py
-index 9b66928d..2a91f5f2 100644
---- a/frontend/coprs_frontend/coprs/context_processors.py
-+++ b/frontend/coprs_frontend/coprs/context_processors.py
-@@ -4,6 +4,7 @@ import flask
- from coprs import app
- from coprs.constants import BANNER_LOCATION
- from coprs.helpers import current_url
-+from coprs.oidc import oidc_enabled
- 
- 
- @app.context_processor
-@@ -67,7 +68,7 @@ def login_menu():
-                 'desc': 'sign up',
-             })
- 
--        if config['OIDC_LOGIN'] and config['OIDC_PROVIDER_NAME']:
-+        if oidc_enabled(config):
-             menu.append({
-                 'link': flask.url_for("misc.oidc_login"),
-                 'desc': '{} login'.format(app.config['OIDC_PROVIDER_NAME']),
-diff --git a/frontend/coprs_frontend/coprs/oidc.py b/frontend/coprs_frontend/coprs/oidc.py
-index 667c7bc9..f16428f3 100644
---- a/frontend/coprs_frontend/coprs/oidc.py
-+++ b/frontend/coprs_frontend/coprs/oidc.py
-@@ -11,13 +11,18 @@ def is_config_valid(config):
-     """
-     If OpenID Connect is enabled
-     """
--    return "OIDC_LOGIN" in config and config["OIDC_LOGIN"] is True
-+    return "OIDC_LOGIN" in config and config["OIDC_LOGIN"] is True and \
-+            "OIDC_PROVIDER_NAME" in config and config["OIDC_PROVIDER_NAME"]
- 
- 
- def oidc_enabled(config):
-     """
-     Check whether the config is valid
-     """
-+    if not is_config_valid(config):
-+        logger.error("OIDC_LOGIN or OIDC_PROVIDER_NAME is empty")
-+        return False
-+
-     if not config.get("OIDC_CLIENT"):
-         logger.error("OIDC_CLIENT is empty")
-         return False
-@@ -47,7 +52,7 @@ def init_oidc_app(app):
-     When configs check failed, a invalid client object is returned
-     """
-     oidc = OAuth(app)
--    if oidc_enabled(app.config) and is_config_valid(app.config):
-+    if oidc_enabled(app.config):
-         client_id = app.config.get("OIDC_CLIENT")
-         secret = app.config.get("OIDC_SECRET")
-         client_kwargs = {
 diff --git a/frontend/coprs_frontend/coprs/templates/_helpers.html b/frontend/coprs_frontend/coprs/templates/_helpers.html
 index 317d82e7..3956dd6f 100644
 --- a/frontend/coprs_frontend/coprs/templates/_helpers.html
@@ -241,7 +101,7 @@ index afb4abae..e35192f4 100644
          </a></td>
          <td>
 diff --git a/frontend/coprs_frontend/coprs/views/groups_ns/groups_general.py b/frontend/coprs_frontend/coprs/views/groups_ns/groups_general.py
-index 43194250..2880f7ef 100644
+index 43194250..7ef09c70 100644
 --- a/frontend/coprs_frontend/coprs/views/groups_ns/groups_general.py
 +++ b/frontend/coprs_frontend/coprs/views/groups_ns/groups_general.py
 @@ -10,6 +10,7 @@ from coprs.logic.complex_logic import ComplexLogic
@@ -260,7 +120,7 @@ index 43194250..2880f7ef 100644
 +
 +    group = UsersLogic.get_group_by_fas_name(fas_group).first()
 +    if group:
-+        # can't have more than one alias for a group
++         # can't have more than one alias for a group
 +        flask.flash(msg_fmt.format(group.fas_name, group.name), "success")
 +        return flask.redirect(url_for(
 +            "groups_ns.list_projects_by_group", group_name=group.name))
@@ -279,11 +139,9 @@ index 43194250..2880f7ef 100644
          alias = form.name.data
 -        group = UsersLogic.get_group_by_fas_name_or_create(
 -            fas_group, alias)
--
--        db.session.add(group)
 +        group = UsersLogic.create_group_by_fas_name(fas_group, alias)
-+        # db.session.add(group) is done by UsersLogic.create_group_by_fas_name()
-+        db.session.flush()
+ 
+         db.session.add(group)
          db.session.commit()
  
 -        flask.flash(

@@ -1,8 +1,17 @@
-FROM openeuler/openeuler:22.03
+FROM openeuler/openeuler:22.03 AS base
+
+RUN dnf -y update && dnf -y in git gcc openssl-devel protobuf-c-devel
+# prepare rust toolchain
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs |sh -s -- -y --default-toolchain nightly -c rust-std -c rust-src
+RUN git clone https://gitee.com/openeuler/signatrust.git && source $HOME/.cargo/env && cd signatrust && cargo build --bin client --release && install -m 755 target/release/client /usr/local/bin/
+
+FROM openeuler/openeuler:22.03 AS backend
 LABEL maintainer="infra@openeuler.org"
 
 ENV export LANG=en_US.UTF-8
 ENV PYTHONPATH="/usr/share/copr/"
+
+COPY --from=base /usr/local/bin/client /usr/local/bin/client
 
 # TERM is to make the tito work in container, rhbz#1733043
 ENV TERM=linux \
@@ -44,8 +53,7 @@ RUN setcap cap_net_raw,cap_net_admin+p /usr/bin/ping
 RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -q
 
 # setup root user
-RUN echo 'root:passwd' | chpasswd && \
-    mkdir /root/.ssh && chmod 700 /root /root/.ssh
+RUN mkdir /root/.ssh && chmod 700 /root /root/.ssh
 
 # setup copr user
 RUN set -x ; \
@@ -82,11 +90,11 @@ RUN chown copr:root /etc/sign.conf && \
 RUN mkdir /var/lock/copr-backend
 RUN chown copr:copr /var/lock/copr-backend /var/log/copr-backend
 
-RUN patch /usr/lib/python3.9/site-packages/copr_backend/helpers.py < /helpers.patch
-RUN patch /usr/bin/print_queues.py < /print_queues.py
-RUN patch /usr/lib/python3.9/site-packages/copr_common/redis_helpers.py < /redis_helpers.patch
-# using /dev/urandom is a hack just for devel, /dev/hwrandom or /dev/hwrng should be used in production
-RUN rngd -r /dev/urandom
+RUN patch /usr/lib/python3.9/site-packages/copr_backend/helpers.py < /helpers.patch && \
+    patch /usr/bin/print_queues.py < /print_queues.py && \
+    patch /usr/lib/python3.9/site-packages/copr_common/redis_helpers.py < /redis_helpers.patch && \
+    cd /usr/lib/python3.9/site-packages/copr_backend/ && patch -p3 < /support_signatrust_backend.patch && \
+    cd /usr/bin/ && patch -p3 < /signatrust_bin.patch
 
 USER copr
 RUN ln -sf /proc/1/fd/1 /var/log/copr-backend/action_dispatcher.log && \
