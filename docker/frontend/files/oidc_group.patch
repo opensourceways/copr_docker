@@ -1,3 +1,47 @@
+diff --git a/frontend/coprs_frontend/alembic/versions/daa62cd0743d_add_unique_constraint_to_fas_group.py b/frontend/coprs_frontend/alembic/versions/daa62cd0743d_add_unique_constraint_to_fas_group.py
+new file mode 100644
+index 00000000..7da6fdae
+--- /dev/null
++++ b/frontend/coprs_frontend/alembic/versions/daa62cd0743d_add_unique_constraint_to_fas_group.py
+@@ -0,0 +1,24 @@
++"""
++add unique constraint to fas_group
++
++Revision ID: daa62cd0743d
++Revises: ba6ac0936bfb
++Create Date: 2023-08-01 09:52:01.522171
++"""
++
++from alembic import op
++
++
++# revision identifiers, used by Alembic.
++revision = 'daa62cd0743d'
++down_revision = 'ba6ac0936bfb'
++branch_labels = None
++depends_on = None
++
++
++def upgrade():
++    op.create_unique_constraint(None, 'group', ['fas_name'])
++
++
++def downgrade():
++    op.drop_constraint(None, 'group', type_='unique')
+diff --git a/frontend/coprs_frontend/coprs/models.py b/frontend/coprs_frontend/coprs/models.py
+index 038534b4..f33cbede 100644
+--- a/frontend/coprs_frontend/coprs/models.py
++++ b/frontend/coprs_frontend/coprs/models.py
+@@ -2206,8 +2206,7 @@ class Group(db.Model, helpers.Serializer):
+     id = db.Column(db.Integer, primary_key=True)
+     name = db.Column(db.String(127))
+ 
+-    # TODO: add unique=True
+-    fas_name = db.Column(db.String(127))
++    fas_name = db.Column(db.String(127), unique=True)
+ 
+     @property
+     def at_name(self):
 diff --git a/frontend/coprs_frontend/coprs/auth.py b/frontend/coprs_frontend/coprs/auth.py
 index 64a57403..e07ce5ac 100644
 --- a/frontend/coprs_frontend/coprs/auth.py
@@ -197,7 +241,7 @@ index afb4abae..e35192f4 100644
          </a></td>
          <td>
 diff --git a/frontend/coprs_frontend/coprs/views/groups_ns/groups_general.py b/frontend/coprs_frontend/coprs/views/groups_ns/groups_general.py
-index 43194250..ac15e0a1 100644
+index 43194250..2880f7ef 100644
 --- a/frontend/coprs_frontend/coprs/views/groups_ns/groups_general.py
 +++ b/frontend/coprs_frontend/coprs/views/groups_ns/groups_general.py
 @@ -10,6 +10,7 @@ from coprs.logic.complex_logic import ComplexLogic
@@ -208,7 +252,23 @@ index 43194250..ac15e0a1 100644
  
  from ... import db
  from ..misc import login_required
-@@ -31,7 +32,7 @@ def activate_group(fas_group):
+@@ -21,6 +22,15 @@ from . import groups_ns
+ @groups_ns.route("/activate/<fas_group>", methods=["GET", "POST"])
+ @login_required
+ def activate_group(fas_group):
++    msg_fmt = "Group {} is activated in the system under the alias {}"
++
++    group = UsersLogic.get_group_by_fas_name(fas_group).first()
++    if group:
++        # can't have more than one alias for a group
++        flask.flash(msg_fmt.format(group.fas_name, group.name), "success")
++        return flask.redirect(url_for(
++            "groups_ns.list_projects_by_group", group_name=group.name))
++
+     form = ActivateFasGroupForm()
+ 
+     if form.validate_on_submit():
+@@ -31,22 +41,18 @@ def activate_group(fas_group):
  
          if fas_group not in flask.g.user.user_teams:
              raise InsufficientRightsException(
@@ -217,29 +277,27 @@ index 43194250..ac15e0a1 100644
                  .format(flask.g.user.username, fas_group))
  
          alias = form.name.data
-@@ -41,12 +42,16 @@ def activate_group(fas_group):
-         db.session.add(group)
+-        group = UsersLogic.get_group_by_fas_name_or_create(
+-            fas_group, alias)
+-
+-        db.session.add(group)
++        group = UsersLogic.create_group_by_fas_name(fas_group, alias)
++        # db.session.add(group) is done by UsersLogic.create_group_by_fas_name()
++        db.session.flush()
          db.session.commit()
  
 -        flask.flash(
 -            "FAS group {} is activated in the Copr under the alias {} "
 -            .format(fas_group, alias)
 -        )
-+        # can't have more than one alias for a group
-+        if group.name != alias:
-+            message = "Group {} already activated as alias {} ".format(
-+                fas_group, group.name)
-+        else:
-+            message = "Group {} is activated in the System under the alias {} ".format(
-+                fas_group, alias)
-+        flask.flash(message)
++        flask.flash(msg_fmt.format(group.fas_name, group.name), "success")
          return flask.redirect(url_for(
 -            "groups_ns.list_projects_by_group", group_name=alias))
 +            "groups_ns.list_projects_by_group", group_name=group.name))
  
      else:
          return flask.render_template(
-@@ -85,7 +90,7 @@ def list_projects_by_group(group_name, page=1):
+@@ -85,7 +91,7 @@ def list_projects_by_group(group_name, page=1):
  @groups_ns.route("/list/my")
  @login_required
  def list_user_groups():
