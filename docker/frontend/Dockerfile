@@ -6,6 +6,14 @@ ENV TERM=linux
 ENV LANG=en_US.UTF-8
 ENV REDIS_HOST=redis
 
+# base packages
+RUN set -ex ; \
+    dnf -y update && \
+    dnf -y install shadow
+
+RUN groupadd -r copr-fe -g 997
+RUN useradd -r copr-fe -u 997 -g 997 -d /usr/share/copr/coprs_frontend
+
 # download EUR repo
 RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-22.03_LTS_SP1/mywaaagh_admin-eur-openeuler-22.03_LTS_SP1.repo
 
@@ -83,7 +91,6 @@ USER copr-fe
 ENV PS1="[\u@\h \W]\$ "
 
 # do some patching works
-# authing return updated_at as a string, there's a patch for it
 RUN patch /usr/share/copr/coprs_frontend/application < /proxyfix.patch && \
     patch /usr/share/copr/coprs_frontend/coprs/forms.py < /pyporter.patch && \
     cd /usr/share/copr && patch -p2 < /add_openeuler_pkg.patch && \
