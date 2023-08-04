@@ -1,6 +1,16 @@
-FROM openeuler/openeuler:22.03
+FROM openeuler/openeuler:22.03 AS base
+
+RUN dnf -y update && dnf -y in openssl-devel curl gcc make perl autoconf
+# 22.03's rustc is 1.60 which lower than resalloc-kubernetes required(1.64)
+# so we try to get the nightly from rustup
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs |sh -s -- -y --default-toolchain nightly -c rust-std -c rust-src
+# install the resalloc-kubernetes
+RUN source $HOME/.cargo/env && cargo install resalloc-kubernetes --root . && install -m 755 bin/resalloc-kubernetes /
+
+From openeuler/openeuler:22.03
 LABEL maintainer="infra@openeuler.org"
 
+COPY --from=base /resalloc-kubernetes /resalloc-kubernetes
 # Deployment instructions are described here
 # https://github.com/praiskup/resalloc/blob/master/docs/start-resalloc-server.txt
 #
@@ -19,16 +29,11 @@ RUN dnf install -y ansible \
                    python3-psycopg2 \
                    gcc \
                    perl \
-                   openssl-devel \
                    make \
                    coreutils \
     && dnf clean all && rm -rf /var/cache/dnf
 
-# 22.03's rustc is 1.60 which lower than resalloc-kubernetes required(1.64)
-# so we try to get the nightly from rustup
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs |sh -s -- -y --default-toolchain nightly -c rust-std -c rust-src
-# install the resalloc-kubernetes
-RUN source $HOME/.cargo/env && cargo install resalloc-kubernetes --root . && install -m 755 bin/resalloc-kubernetes /
+
 # copy filesystem setup
 COPY files/ /
 # cleanup
