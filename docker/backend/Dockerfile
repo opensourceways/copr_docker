@@ -44,13 +44,10 @@ RUN setcap cap_net_raw,cap_net_admin+p /usr/bin/ping
 RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -q
 
 # setup root user
-RUN echo 'root:passwd' | chpasswd && \
-    mkdir /root/.ssh && chmod 700 /root /root/.ssh
+RUN mkdir /root/.ssh && chmod 700 /root /root/.ssh
 
 # setup copr user
 RUN set -x ; \
-    echo 'copr:passwd' | chpasswd && \
-    echo 'copr ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers && \
     mkdir -p /home/copr/.ssh && chmod 700 /home/copr /home/copr/.ssh && \
     ssh-keygen -f /home/copr/.ssh/id_rsa -N '' -q -C copr@locahost && \
     touch /home/copr/.ssh/authorized_keys && chmod 600 /home/copr/.ssh/authorized_keys && \

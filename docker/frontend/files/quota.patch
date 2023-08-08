@@ -1,0 +1,142 @@
+diff --git a/frontend/coprs_frontend/coprs/config.py b/frontend/coprs_frontend/coprs/config.py
+index c135be6b..46163e6d 100644
+--- a/frontend/coprs_frontend/coprs/config.py
++++ b/frontend/coprs_frontend/coprs/config.py
+@@ -177,6 +177,8 @@ class Config(object):
+ 
+     PACKAGES_COUNT = False
+ 
++    BUILD_QUOTA = 0
++
+ class ProductionConfig(Config):
+     DEBUG = False
+     # SECRET_KEY = "put_some_secret_here"
+diff --git a/frontend/coprs_frontend/coprs/exceptions.py b/frontend/coprs_frontend/coprs/exceptions.py
+index 8f1edad1..71eb8239 100644
+--- a/frontend/coprs_frontend/coprs/exceptions.py
++++ b/frontend/coprs_frontend/coprs/exceptions.py
+@@ -124,3 +124,6 @@ class NoPackageSourceException(Exception):
+ 
+ class UnrepeatableBuildException(Exception):
+     pass
++
++class InsufficientBuildQuota(Exception):
++    pass
+diff --git a/frontend/coprs_frontend/coprs/logic/builds_logic.py b/frontend/coprs_frontend/coprs/logic/builds_logic.py
+index 030f3f17..99228f4e 100644
+--- a/frontend/coprs_frontend/coprs/logic/builds_logic.py
++++ b/frontend/coprs_frontend/coprs/logic/builds_logic.py
+@@ -1,3 +1,4 @@
++import datetime
+ import tempfile
+ import shutil
+ import json
+@@ -28,6 +29,7 @@ from coprs.exceptions import (
+     ConflictingRequest,
+     DuplicateException,
+     InsufficientRightsException,
++    InsufficientBuildQuota,
+     InsufficientStorage,
+     MalformedArgumentException,
+     UnrepeatableBuildException,
+@@ -804,6 +806,8 @@ class BuildsLogic(object):
+         users_logic.UsersLogic.raise_if_cant_build_in_copr(
+             user, copr,
+             "You don't have permissions to build in this copr.")
++        if BuildsLogic.is_out_of_quota(user):
++            raise InsufficientBuildQuota("Not enough build quota within today, please try tomorrow.")
+ 
+         batch = cls._setup_batch(batch, after_build_id, with_build_id, user)
+ 
+@@ -1285,6 +1289,29 @@ class BuildsLogic(object):
+         else:
+             return query.join(models.BuildChroot).filter(models.BuildChroot.ended_on.is_(None))
+ 
++    @classmethod
++    def is_out_of_quota(cls, user):
++        if not user:
++            return False
++
++        quota = app.config["BUILD_QUOTA"]
++        builds_count = 0
++        if quota > 0:
++            current_date = datetime.date.today()
++            day_begin = int(time.mktime(datetime.datetime.combine(
++                current_date, datetime.datetime.min.time()).timetuple()))
++            day_end = int(time.mktime(datetime.datetime.combine(
++                current_date, datetime.datetime.max.time()).timetuple()))
++            builds_count = models.Build.query.filter(
++                models.Build.submitted_on >= day_begin, models.Build.submitted_on <= day_end, models.Build.user_id == user.id).count()
++            if builds_count > quota:
++                app.logger.warning(
++                    f"builds count: {builds_count} exceed limit:{quota}")
++                return True
++        app.logger.info(
++            f"builds count: {builds_count} not exceed limit:{quota}")
++        return False
++
+     @classmethod
+     def filter_by_group_name(cls, query, group_name):
+         return query.filter(models.Group.name == group_name)
+diff --git a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_builds.py b/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_builds.py
+index f4e83715..28a4acb7 100644
+--- a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_builds.py
++++ b/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_builds.py
+@@ -28,6 +28,7 @@ from coprs.exceptions import (
+     ConflictingRequest,
+     InsufficientRightsException,
+     UnrepeatableBuildException,
++    InsufficientBuildQuota,
+ )
+ 
+ 
+@@ -101,13 +102,13 @@ def copr_builds(copr, page=1):
+ @req_with_copr
+ def copr_add_build(copr, form=None):
+     return render_add_build(
+-        copr, form, view='coprs_ns.copr_new_build')
++        copr, form, view='coprs_ns.copr_new_build_scm')
+ 
+ 
+ def render_add_build(copr, form, view):
+     if not form:
+-        form = forms.BuildFormUrlFactory(copr.active_chroots)()
+-    return flask.render_template("coprs/detail/add_build/url.html",
++        form = forms.BuildFormScmFactory(copr.active_chroots)()
++    return flask.render_template("coprs/detail/add_build/scm.html",
+                                  copr=copr, view=view, form=form)
+ 
+ 
+@@ -153,7 +154,7 @@ def process_new_build(copr, form, create_new_build_factory, add_function, add_vi
+         try:
+             create_new_build_factory(**build_options)
+             db.session.commit()
+-        except (ActionInProgressException, InsufficientRightsException, UnrepeatableBuildException, BadRequest) as e:
++        except (ActionInProgressException, InsufficientRightsException, InsufficientBuildQuota, UnrepeatableBuildException, BadRequest) as e:
+             db.session.rollback()
+             flask.flash(str(e), "error")
+         else:
+diff --git a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py b/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py
+index 527c73d1..defcf85c 100644
+--- a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py
++++ b/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py
+@@ -24,7 +24,8 @@ from coprs.logic.complex_logic import ComplexLogic
+ from coprs.logic.packages_logic import PackagesLogic
+ from coprs.logic.users_logic import UsersLogic
+ from coprs.exceptions import (ActionInProgressException, ObjectNotFound, NoPackageSourceException,
+-                              InsufficientRightsException, MalformedArgumentException)
++                              InsufficientRightsException, MalformedArgumentException,
++                              InsufficientBuildQuota)
+ 
+ 
+ 
+@@ -108,7 +109,8 @@ def copr_rebuild_all_packages(copr):
+             )
+ 
+         except (ObjectNotFound, ActionInProgressException, NoPackageSourceException, \
+-                InsufficientRightsException, MalformedArgumentException) as e:
++                InsufficientRightsException, MalformedArgumentException, \
++                InsufficientBuildQuota) as e:
+             db.session.rollback()
+             flask.flash(str(e), "error")
+         else:
