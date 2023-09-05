@@ -1,6 +1,6 @@
 FROM openeuler/openeuler:22.03 AS base
 
-RUN dnf -y update && dnf -y in openssl-devel curl gcc make perl autoconf
+RUN dnf -y update && dnf -y in openssl-devel curl gcc make perl autoconf git musl-*
 # 22.03's rustc is 1.60 which lower than resalloc-kubernetes required(1.64)
 # so we try to get the nightly from rustup
 ENV RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
@@ -11,7 +11,9 @@ ADD /cargo_config $HOME/.cargo/config
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs |sh -s -- -y --default-toolchain nightly -c rust-std -c rust-src
 
 # install the resalloc-kubernetes
-RUN source $HOME/.cargo/env && cargo install resalloc-kubernetes --root . && install -m 755 bin/resalloc-kubernetes /
+# RUN source $HOME/.cargo/env && cargo install resalloc-kubernetes --root . && install -m 755 bin/resalloc-kubernetes /
+RUN source $HOME/.cargo/env && git clone https://github.com/pkking/resalloc-kubernetes/ rk && cd rk && \
+    cargo build --release && install target/release/resalloc-kubernetes /
 
 From openeuler/openeuler:22.03
 LABEL maintainer="infra@openeuler.org"
