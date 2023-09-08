@@ -11,9 +11,7 @@ ADD /cargo_config $HOME/.cargo/config
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs |sh -s -- -y --default-toolchain nightly -c rust-std -c rust-src
 
 # install the resalloc-kubernetes
-# RUN source $HOME/.cargo/env && cargo install resalloc-kubernetes --root . && install -m 755 bin/resalloc-kubernetes /
-RUN source $HOME/.cargo/env && git clone https://github.com/pkking/resalloc-kubernetes/ rk && cd rk && \
-    cargo build --release && install target/release/resalloc-kubernetes /
+ RUN source $HOME/.cargo/env && cargo install resalloc-kubernetes --root . && install -m 755 bin/resalloc-kubernetes /
 
 From openeuler/openeuler:22.03
 LABEL maintainer="infra@openeuler.org"
@@ -35,9 +33,6 @@ RUN dnf install -y ansible \
                    findutils \
                    openssh-clients \
                    python3-psycopg2 \
-                   gcc \
-                   perl \
-                   make \
                    coreutils \
     && dnf clean all && rm -rf /var/cache/dnf
 
@@ -45,7 +40,7 @@ RUN dnf install -y ansible \
 # copy filesystem setup
 COPY files/ /
 # cleanup
-RUN dnf remove gcc perl make -y && dnf clean all && rm -rf /var/cache/dnf && chmod +x /home/resalloc/provision/local-*
+RUN dnf clean all && rm -rf /var/cache/dnf && chmod +x /home/resalloc/provision/local-*
 
 RUN cd $(rpm -ql resalloc-server |grep alembic.ini |xargs dirname) \
     && alembic upgrade head
