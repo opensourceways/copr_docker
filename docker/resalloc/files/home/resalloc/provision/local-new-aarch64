@@ -6,5 +6,5 @@ fi
 /resalloc-kubernetes add --image-tag ${BUILDER_SHA256} \
     --namespace $namespace --cpu-resource ${BUILDER_CPU} --memory-resource ${BUILDER_MEM} --privileged \
     --timeout ${BUILDER_TIMEOUT} --node-selector "os.architecture=aarch64" --node-selector "copr=${BUILDER_TYPE}" \
-    --secret ${BUILDER_SECRET}  --additional-volume-size ${BUILDER_DISK_SIZE} --additional-volume-class ${BUILD_PVC_NAME}  --additional-volume-mount-path ${BUILDER_PVC_PATH} \
+    --secret ${BUILDER_SECRET}  --additional-volume-size ${BUILDER_DISK_SIZE} --additional-volume-class ${BUILDER_PVC_NAME}  --additional-volume-mount-path ${BUILDER_PVC_PATH} \
     --additional-pvc-labels ${BUILDER_PVC_LABEL0}
