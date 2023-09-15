@@ -44,7 +44,7 @@ kind: Kustomization
 images:
 - digest: sha256:5e5b470ab5360703184dec491d0393fc5aab01e6e8cbcbb43bca4ff0161d9310
   name: pkking/copr_backend
-- digest: sha256:b4b41f9a7b1c7fdfd4f68dee652e237e0bce2e11b066b053cd0c6425f15b2818
+- digest: sha256:126ef81436d9e0a5b9ed826eb2b3b023abe5e1a9d0e0ffcde0b8af8b2662af35
   name: pkking/copr_backend_httpd
 - digest: sha256:dff8af52f01939ce98f80ac8f5e90660543d06d5f2cb7235383eda377488dea7
   name: pkking/copr_database
