@@ -9,9 +9,7 @@ RUN mkdir -p $HOME/.cargo/
 ADD /cargo_config $HOME/.cargo/config
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs |sh -s -- -y --default-toolchain nightly -c rust-std -c rust-src
-
-# install the resalloc-kubernetes
- RUN source $HOME/.cargo/env && cargo install resalloc-kubernetes --root . && install -m 755 bin/resalloc-kubernetes /
+RUN git clone https://github.com/pkking/resalloc-kubernetes.git rs && cd rs &&  source $HOME/.cargo/env && cargo build --release && install -m 755 target/release/resalloc-kubernetes /
 
 From openeuler/openeuler:22.03
 LABEL maintainer="infra@openeuler.org"
