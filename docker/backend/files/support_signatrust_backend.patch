@@ -137,20 +137,18 @@ index 21afb14c..0865fcc8 100644
                  .format(self.response.status_code, self.response.content)
          return out
 diff --git a/backend/copr_backend/helpers.py b/backend/copr_backend/helpers.py
-index 05348366..aef4b5e7 100644
+index 05348366..db4af7f4 100644
 --- a/backend/copr_backend/helpers.py
 +++ b/backend/copr_backend/helpers.py
-@@ -31,8 +31,8 @@ from munch import Munch
+@@ -31,7 +31,7 @@ from munch import Munch
  from copr_common.redis_helpers import get_redis_connection
  from copr.v3 import Client
  from copr_backend.constants import DEF_BUILD_USER, DEF_BUILD_TIMEOUT, DEF_CONSECUTIVE_FAILURE_THRESHOLD, \
 -    CONSECUTIVE_FAILURE_REDIS_KEY, default_log_format
--from copr_backend.exceptions import CoprBackendError
 +    CONSECUTIVE_FAILURE_REDIS_KEY, default_log_format, DEF_SIGN_BACKEND
-+from copr_backend.exceptions import CoprBackendError, CoprBackendSrpmError
+ from copr_backend.exceptions import CoprBackendError, CoprBackendSrpmError
  
  from . import constants
- 
 @@ -309,6 +309,18 @@ class BackendConfigReader(object):
          opts.sign_domain = _get_conf(
              cp, "backend", "sign_domain", DOMAIN)
