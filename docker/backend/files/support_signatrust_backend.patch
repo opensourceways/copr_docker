@@ -169,7 +169,7 @@ index 05348366..db4af7f4 100644
          for group_id in range(opts.build_groups_count):
              archs = _get_conf(cp, "backend",
 diff --git a/backend/copr_backend/sign.py b/backend/copr_backend/sign.py
-index 6655fb98..957e8cb2 100644
+index 6655fb98..31af3c8a 100644
 --- a/backend/copr_backend/sign.py
 +++ b/backend/copr_backend/sign.py
 @@ -4,8 +4,11 @@
@@ -272,7 +272,7 @@ index 6655fb98..957e8cb2 100644
  def gpg_hashtype_for_chroot(chroot, opts):
      """
      Given the chroot name (in "mock format", like "fedora-rawhide-x86_64")
-@@ -135,133 +64,440 @@ def gpg_hashtype_for_chroot(chroot, opts):
+@@ -135,133 +64,438 @@ def gpg_hashtype_for_chroot(chroot, opts):
      # fallback to sha256
      return "sha256"
  
@@ -560,10 +560,7 @@ index 6655fb98..957e8cb2 100644
 +            "accept": "application/json",
 +            "Authorization": cls.signatrust_token
 +        }
-         try:
--            _sign_one(rpm, create_gpg_email(username, projectname, opts.sign_domain),
--                      hashtype, log)
--            log.info("signed rpm: %s", rpm)
++        try:
 +            r = requests.get("{}/api/v1/users/info".format(cls.signatrust_host), headers=headers).json()
 +            cls.prefix = r.get("email")
 +        except Exception as e:
@@ -599,7 +596,10 @@ index 6655fb98..957e8cb2 100644
 +
 +        key_name = cls.get_key_name(username, projectname)
 +        url = "{}/api/v1/keys/{}/public_key".format(cls.signatrust_host, key_name)
-+        try:
+         try:
+-            _sign_one(rpm, create_gpg_email(username, projectname, opts.sign_domain),
+-                      hashtype, log)
+-            log.info("signed rpm: %s", rpm)
 +            r = requests.get(url, headers=headers)
 +        except Exception as e:
 +            raise CoprKeygenRequestError(
@@ -629,13 +629,8 @@ index 6655fb98..957e8cb2 100644
 +        """batch sign rpms"""
 +        if not cls.prefix:
 +            cls.get_prefix()
- 
--    if errors:
--        raise CoprSignError("Rpm sign failed, affected rpms: {}"
--                            .format([err[0] for err in errors]))
-+        try:
-+            cls.get_pubkey(username, projectname, log, opts.sign_domain)
-+        except CoprSignNoKeyError:
++
++        if not cls._key_existed(username, projectname, opts):
 +            cls.create_user_keys(username, projectname, opts)
 +
 +        # when we migrate copr keys into signatrust
@@ -651,6 +646,9 @@ index 6655fb98..957e8cb2 100644
 +                return_code=returncode,
 +                cmd=cmd, stdout=stdout, stderr=stderr)
  
+-    if errors:
+-        raise CoprSignError("Rpm sign failed, affected rpms: {}"
+-                            .format([err[0] for err in errors]))
 +        if stderr:
 +            # signatrust client will print error message for one rpm per line
 +            failed_list = re.findall(r"failed to sign file (.*.rpm) due to error", stderr)
@@ -669,21 +667,23 @@ index 6655fb98..957e8cb2 100644
 +        """
 +        return
  
--def create_user_keys(username, projectname, opts):
--    """
--    Generate a new key-pair at sign host
 +    @classmethod
 +    def _key_existed(cls, username, projectname, opts):
 +        """
 +            check keyname existence
  
--    :param username:
--    :param projectname:
--    :param opts: backend config
+-def create_user_keys(username, projectname, opts):
+-    """
+-    Generate a new key-pair at sign host
 +            HEAD /api/v1/keys/
 +        """
 +        if not cls.prefix:
 +            cls.get_prefix()
+ 
+-    :param username:
+-    :param projectname:
+-    :param opts: backend config
++        key_name = cls.get_key_name(username, projectname, prefix=False)
  
 -    :return: None
 -    """
@@ -740,29 +740,27 @@ index 6655fb98..957e8cb2 100644
 -        for filename in os.listdir(path)
 -        if filename.endswith(".rpm")
 -        ]
-+        key_name = cls.get_key_name(username, projectname, prefix=False)
- 
--    if not rpm_list:
--        return
 +        query = {
 +            "name": key_name,
 +            "visibility": "private"
 +        }
  
--    errors = []  # tuples (rpm_filepath, exception)
--    for rpm in rpm_list:
--        try:
--            _unsign_one(rpm)
--            log.info("unsigned rpm: %s", rpm)
+-    if not rpm_list:
+-        return
 +        headers = {
 +            "accept": "application/json",
 +            "Authorization": cls.signatrust_token
 +        }
  
+-    errors = []  # tuples (rpm_filepath, exception)
+-    for rpm in rpm_list:
+         try:
+-            _unsign_one(rpm)
+-            log.info("unsigned rpm: %s", rpm)
+-
 -        except CoprSignError as e:
 -            log.exception("failed to unsign rpm: %s", rpm)
 -            errors.append((rpm, e))
-+        try:
 +            res = requests.head("{}/api/v1/keys/name_identical".format(opts.signatrust_host), headers=headers, params=query)
 +        except Exception as e:
 +            raise CoprKeygenRequestError(
