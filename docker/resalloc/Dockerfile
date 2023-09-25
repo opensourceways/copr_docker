@@ -33,9 +33,6 @@ RUN dnf install -y ansible \
                    findutils \
                    openssh-clients \
                    python3-psycopg2 \
-                   gcc \
-                   perl \
-                   make \
                    coreutils \
     && dnf clean all && rm -rf /var/cache/dnf
 
@@ -43,7 +40,7 @@ RUN dnf install -y ansible \
 # copy filesystem setup
 COPY files/ /
 # cleanup
-RUN dnf remove gcc perl make -y && dnf clean all && rm -rf /var/cache/dnf && chmod +x /home/resalloc/provision/local-*
+RUN dnf clean all && rm -rf /var/cache/dnf && chmod +x /home/resalloc/provision/local-*
 
 RUN cd $(rpm -ql resalloc-server |grep alembic.ini |xargs dirname) \
     && alembic upgrade head
