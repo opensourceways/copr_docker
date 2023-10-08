@@ -31,42 +31,42 @@ user_agent={{ user_agent }}
 
 [OS]
 name=OS
-baseurl=https://archives.openeuler.openatom.cn/openEuler-21.09/OS/$basearch/
+baseurl=http://172.16.2.231/openEuler-21.09/OS/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [everything]
 name=everything
-baseurl=https://archives.openeuler.openatom.cn/openEuler-21.09/everything/$basearch/
+baseurl=http://172.16.2.231/openEuler-21.09/everything/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [EPOL]
 name=EPOL
-baseurl=https://archives.openeuler.openatom.cn/openEuler-21.09/EPOL/main/$basearch/
+baseurl=http://172.16.2.231/openEuler-21.09/EPOL/main/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [debuginfo]
 name=debuginfo
-baseurl=https://archives.openeuler.openatom.cn/openEuler-21.09/debuginfo/$basearch/
+baseurl=http://172.16.2.231/openEuler-21.09/debuginfo/$basearch/
 enabled=0
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [source]
 name=source
-baseurl=https://archives.openeuler.openatom.cn/openEuler-21.09/source/
+baseurl=http://172.16.2.231/openEuler-21.09/source/
 enabled=0
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [update]
 name=update
-baseurl=https://archives.openeuler.openatom.cn/openEuler-21.09/update/$basearch/
+baseurl=http://172.16.2.231/openEuler-21.09/update/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
