@@ -35,35 +35,35 @@ user_agent={{ user_agent }}
 
 [OS]
 name=OS
-baseurl=http://172.16.1.105/openEuler-22.03-LTS/OS/$basearch/
+baseurl=http://172.16.2.231/openEuler-22.03-LTS/OS/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [everything]
 name=everything
-baseurl=http://172.16.1.105/openEuler-22.03-LTS/everything/$basearch/
+baseurl=http://172.16.2.231/openEuler-22.03-LTS/everything/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [EPOL]
 name=EPOL
-baseurl=http://172.16.1.105/openEuler-22.03-LTS/EPOL/main/$basearch/
+baseurl=http://172.16.2.231/openEuler-22.03-LTS/EPOL/main/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [update]
 name=update
-baseurl=http://172.16.1.105/openEuler-22.03-LTS/update/$basearch/
+baseurl=http://172.16.2.231/openEuler-22.03-LTS/update/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
 
 [EPOL-update]
 name=EPOL update
-baseurl=http://172.16.1.105/openEuler-22.03-LTS/EPOL/update/main/$basearch/
+baseurl=http://172.16.2.231/openEuler-22.03-LTS/EPOL/update/main/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler
