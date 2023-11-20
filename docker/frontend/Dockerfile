@@ -97,7 +97,8 @@ RUN patch /usr/share/copr/coprs_frontend/application < /proxyfix.patch && \
     patch -p2 < /package_count.patch && \
     patch /usr/share/copr/coprs_frontend/coprs/helpers.py < /helpers.patch && \
     patch -p2 < /oidc_group.patch && \
-    patch -p2 < /quota.patch
+    patch -p2 < /quota.patch && \
+    patch -p2 < /packages_statistics.patch
 
 RUN cp -r /copr_design/sources/usr / && find /copr_design ! -path /copr_design -exec rm -rf {} \+;
 EXPOSE 5000
