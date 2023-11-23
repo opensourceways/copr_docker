@@ -81,7 +81,7 @@ RUN chmod -R g+rwX \
 # setup for cronjob
 RUN echo 'copr-fe ALL=(root) NOPASSWD:/etc/cron.hourly/copr-frontend-optional,/etc/cron.hourly/copr-frontend,/etc/cron.daily/copr-frontend,/etc/cron.daily/copr-frontend-optional' >> /etc/sudoers.d/copr-fe
 RUN patch /usr/lib/python3.9/site-packages/copr_common/redis_helpers.py < /redis_helpers.patch
-RUN chown -R copr-fe:copr-fe /copr_design
+RUN chown -R copr-fe:copr-fe /copr_design && chmod 555 /entrypoint
 USER copr-fe
 
 # Since home directory for `copr-fe` user is `/usr/share/copr/coprs_frontend`

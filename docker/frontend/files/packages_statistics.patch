@@ -1,28 +1,113 @@
+diff --git a/frontend/coprs_frontend/coprs/__init__.py b/frontend/coprs_frontend/coprs/__init__.py
+index 5332f21e..652ce93a 100644
+--- a/frontend/coprs_frontend/coprs/__init__.py
++++ b/frontend/coprs_frontend/coprs/__init__.py
+@@ -94,6 +94,7 @@ cache_rcp = RedisConnectionProvider(config=app.config, db=1)
+ cache = Cache(app, config={
+     'CACHE_REDIS_HOST': cache_rcp.host,
+     'CACHE_REDIS_PORT': cache_rcp.port,
++    'CACHE_REDIS_PASSWORD': cache_rcp.password,
+ })
+ app.cache = cache
+ 
 diff --git a/frontend/coprs_frontend/coprs/logic/packages_logic.py b/frontend/coprs_frontend/coprs/logic/packages_logic.py
-index 84f23d6e..5febc5cf 100644
+index 84f23d6e..be2b067c 100644
 --- a/frontend/coprs_frontend/coprs/logic/packages_logic.py
 +++ b/frontend/coprs_frontend/coprs/logic/packages_logic.py
-@@ -28,6 +28,13 @@ class PackagesLogic(object):
+@@ -1,7 +1,7 @@
+ import json
+ from typing import List, Optional
+ 
+-from sqlalchemy import bindparam, Integer, func, or_
++from sqlalchemy import bindparam, Integer, func, or_, and_
+ from sqlalchemy.sql import true, text
+ from sqlalchemy.orm import selectinload
+ 
+@@ -22,10 +22,18 @@ log = app.logger
+ class PackagesLogic(object):
+ 
+     @classmethod
+-    def count(cls):
++    def count(cls, success=True):
          """
+         Get packages count
+         """
++        if success:
++            id = "succeed_package_count"
++            count = app.cache.get(id)
++            if not count:
++                count = cls.get_all_success_packages().count()
++                app.cache.set(id, count, 3600)
++            return count
++
          return models.Package.query.count()
  
-+    @classmethod
-+    def get_all_packages(cls, order=models.Package.name):
-+        """
-+        Get all packages in copr ordered by name
-+        """
-+        return (models.Package.query.order_by(order))
-+
      @classmethod
-     def get_by_id(cls, package_id):
-         return models.Package.query.filter(models.Package.id == package_id)
-@@ -84,6 +91,61 @@ class PackagesLogic(object):
-             .yield_per(1000)
-         )
- 
+@@ -433,3 +441,116 @@ class PackagesLogic(object):
+                             user.name,
+                             package.name,
+                             package.copr.full_name)
++
 +    @classmethod
-+    def get_packages_with_latest_builds(
-+            cls, small_build=True, packages=None):
++    def get_all_success_packages(cls):
++        """
++        Get all succeed packages
++        """
++        copr_ids = [
++            copr.id
++            for copr in models.Copr.query.filter(models.Copr.deleted == False)
++            .with_entities(models.Copr.id)
++            .all()
++        ]
++
++        pkg_ids = [
++            pkg.id
++            for pkg in models.Package.query.filter(models.Package.copr_id.in_(copr_ids))
++            .with_entities(models.Package.id)
++            .all()
++        ]
++
++        pkg_ids = cls.get_packages_with_success_builds_ids(pkg_ids)
++
++        packages = models.Package.query.filter(
++            and_(models.Package.id.in_(pkg_ids), models.Package.copr_id.in_(copr_ids))
++        ).order_by(models.Package.name)
++
++        return packages
++
++    @classmethod
++    def get_packages_with_success_builds_ids(cls, pkg_ids):
++        """
++        Obtain the list of package ids with the latest build assigned.
++        Parameters:
++
++        :param packages: Don't query the list of Package objects from DB, but
++            use the given 'packages' array.
++        :return: array of Package ids, with assigned latest Build object
++        """
++        builds_ids = (
++            models.Build.query.join(models.CoprDir)
++            .filter(models.Build.package_id.in_(pkg_ids))
++            .with_entities(func.max(models.Build.id))
++            .group_by(models.Build.package_id)
++        )
++
++        builds = (
++            models.Build.query.filter(models.Build.id.in_(builds_ids))
++            .options(selectinload("build_chroots"))
++            .yield_per(1000)
++            .all()
++        )
++
++        results = []
++        for build in builds:
++            if build.status == StatusEnum("succeeded"):
++                results.append(build.package_id)
++
++        return results
++
++    @classmethod
++    def get_packages_with_succ_builds(cls, small_build=True, packages=None):
 +        """
 +        Obtain the list of package objects with the
 +        latest build assigned.
@@ -48,12 +133,15 @@ index 84f23d6e..5febc5cf 100644
 +        # map package.id => package object in packages array
 +        packages_map = {package.id: package for package in packages}
 +
-+        builds = (models.Build.query.filter(models.Build.id.in_(builds_ids))
-+                  .options(selectinload('build_chroots'))
-+                  .yield_per(1000))
++        builds = (
++            models.Build.query.filter(models.Build.id.in_(builds_ids))
++            .options(selectinload("build_chroots"))
++            .yield_per(1000)
++        )
 +
 +        for build in builds:
-+            class SmallBuild():
++
++            class SmallBuild:
 +                pass
 +
 +            if not build.package_id:
@@ -61,8 +149,7 @@ index 84f23d6e..5febc5cf 100644
 +
 +            if small_build:
 +                small_build_object = SmallBuild()
-+                for param in ['state', 'status', 'pkg_version',
-+                              'submitted_on']:
++                for param in ["state", "status", "pkg_version", "submitted_on"]:
 +                    # we don't want to keep all the attributes here in memory, and
 +                    # also we don't need any further info about assigned
 +                    # build_chroot(s).  So we only pick the info we need, and throw
@@ -72,14 +159,9 @@ index 84f23d6e..5febc5cf 100644
 +            else:
 +                packages_map[build.package_id].latest_build = build
 +
-+
 +        return packages
-+
-     @classmethod
-     def get_packages_with_latest_builds_for_dir(
-             cls, copr_dir, small_build=True, packages=None):
 diff --git a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py b/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py
-index 527c73d1..b1f1f5c0 100644
+index 527c73d1..363c532f 100644
 --- a/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py
 +++ b/frontend/coprs_frontend/coprs/views/coprs_ns/coprs_packages.py
 @@ -23,6 +23,7 @@ from coprs.views.misc import (
@@ -90,7 +172,7 @@ index 527c73d1..b1f1f5c0 100644
  from coprs.exceptions import (ActionInProgressException, ObjectNotFound, NoPackageSourceException,
                                InsufficientRightsException, MalformedArgumentException)
  
-@@ -322,3 +323,37 @@ def copr_delete_package(copr, package_id):
+@@ -322,3 +323,32 @@ def copr_delete_package(copr, package_id):
          flask.flash("Package has been deleted successfully.")
  
      return flask.redirect(helpers.copr_url("coprs_ns.copr_packages", copr))
@@ -100,10 +182,10 @@ index 527c73d1..b1f1f5c0 100644
 +@req_with_pagination
 +def packages_statistics(page=1):
 +    flashes = flask.session.pop('_flashes', [])
-+    params = flask.request.args
-+    query_packages = PackagesLogic.get_all_packages()
++    query_packages = PackagesLogic.get_all_success_packages()
 +
-+    allowed_keys = ["order"]
++    count = query_packages.count()
++
 +    pagination = None
 +    if query_packages.count() > 1000:
 +        pagination = query_packages.paginate(page=page, per_page=50)
@@ -111,20 +193,15 @@ index 527c73d1..b1f1f5c0 100644
 +    else:
 +        packages = query_packages.all()
 +
-+    app.logger.info(f"Packages1: {packages[0].__dict__}")
-+    # Assign the latest builds to the package array set.
-+    packages = PackagesLogic.get_packages_with_latest_builds(packages=packages)
++    packages = PackagesLogic.get_packages_with_succ_builds(packages=packages)
 +
-+    for p in packages:
-+        p.copr = CoprsLogic.get_by_id(p.copr_id).one()
-+
-+    app.logger.info(f"Packages2: {packages[0].__dict__} {packages[0].copr.__dict__}")
 +    response = flask.Response(
 +        stream_with_context(helpers.stream_template(
 +            "coprs/show/package_statistics.html",
 +            packages=packages,
 +            flashes=flashes,
 +            serverside_pagination=pagination,
++            count=count,
 +        )))
 +    flask.session.pop('_flashes', [])
 +    return response
