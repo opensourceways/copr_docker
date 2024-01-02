@@ -1,10 +1,22 @@
-#!/bin/bash
-namespace=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
-if [ -z $namespace ];then
-    exit 1
-fi
-/resalloc-kubernetes add --image-tag ${BUILDER_SHA256} \
-    --namespace $namespace --cpu-resource ${BUILDER_CPU} --memory-resource ${BUILDER_MEM} --privileged \
-    --timeout ${BUILDER_TIMEOUT} --node-selector "os.architecture=amd64" --node-selector "copr=${BUILDER_TYPE}" \
-    --secret ${BUILDER_SECRET}  --additional-volume-size ${BUILDER_DISK_SIZE} --additional-volume-class ${BUILDER_PVC_NAME}  --additional-volume-mount-path ${BUILDER_PVC_PATH} \
-    --additional-pvc-labels ${BUILDER_PVC_LABEL0}
+#!/bin/python3
+import os
+import sys
+import ecs_servers
+
+name = os.getenv('RESALLOC_NAME')
+if name is None:
+    print('RESALLOC_NAME not set')
+    sys.exit(1)
+
+e = ecs_servers.ECSServers(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ecs_servers.yaml'))
+res = e.create_servers('x86', 'l1', e.name_prefix + name)
+if res['code'] != 200:
+    print(res['error'])
+    sys.exit(1)
+else:
+    if len(res['server_ips']) != 1:
+        print('create servers failed, more than one server ip returned')
+        sys.exit(1)
+    else:
+        print(res['server_ips'][0])
+        sys.exit(0)

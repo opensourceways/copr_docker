@@ -1,3 +1,29 @@
-#!/bin/bash
-ip=$(echo $RESALLOC_RESOURCE_DATA |base64 -d)
-/resalloc-kubernetes delete --name $ip --namespace $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+#!/bin/python3
+import os
+import sys
+import base64
+import logging
+import ecs_servers
+
+log_file = "/proc/1/fd/1"
+logging.basicConfig(filename=log_file, level=logging.INFO)
+logger = logging.getLogger('local-delete')
+
+ID=os.getenv('RESALLOC_ID')
+NAME=os.getenv('RESALLOC_NAME')
+POOL_ID=os.getenv('RESALLOC_POOL_ID')
+ID_IN_POOL=os.getenv('RESALLOC_ID_IN_POOL')
+IP_DATA=os.getenv('RESALLOC_RESOURCE_DATA')
+logger.info(f"ID:{ID} NAME:{NAME} POOL_ID:{POOL_ID} ID_IN_POOL:{ID_IN_POOL} DATA:{IP_DATA}")
+
+e = ecs_servers.ECSServers(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ecs_servers.yaml'))
+if IP_DATA:
+    IP = base64.b64decode(IP_DATA).decode('utf-8')
+    res = e.delete_servers([IP])
+else:
+    res = e.delete_server_by_name(e.name_prefix + NAME)
+if res['code'] != 200:
+    logger.error(res['error'])
+    sys.exit(1)
+else:
+    sys.exit(0)

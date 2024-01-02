@@ -1,0 +1,14 @@
+#!/bin/python3
+import os
+import sys
+import base64
+import ecs_servers
+
+e = ecs_servers.ECSServers(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ecs_servers.yaml'))
+res = e.list_servers()
+if res['code'] != 200:
+    sys.exit(1)
+else:
+    for _, k in enumerate(res['servers']):
+        print(k['name'].lstrip(e.name_prefix))
+    sys.exit(0)
