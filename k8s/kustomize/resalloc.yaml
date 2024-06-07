@@ -41,7 +41,7 @@ spec:
               protocol: TCP
           env:
             - name: BUILDER_SHA256
-              value: "pkking/copr_builder@sha256:d62d438bce52bdb8a0a66d83e2167ca09fa35f44c16fe4928122859afc072d5e"
+              value: "pkking/copr_builder@sha256:d10494daa67962186c12ae8588e43be3a7f5a96ff471a7861d95e5e09846c8e8"
             - name: BUILDER_CPU
               value: "1"
             - name: BUILDER_MEM
