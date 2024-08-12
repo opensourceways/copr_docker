@@ -3,7 +3,7 @@ new file mode 100644
 index 000000000..1f523e827
 --- /dev/null	2024-05-21 11:37:56.000000000 +0800
 +++ b/euler_msgbus.py	2024-05-21 11:34:08.000000000 +0800
-@@ -0,0 +1,62 @@
+@@ -0,0 +1,66 @@
 +from kafka import KafkaProducer
 +import os
 +import datetime
@@ -30,6 +30,10 @@ index 000000000..1f523e827
 +            'what': "build start: user:{user} copr:{copr}" \
 +                    " pkg:{pkg} build:{build} ip:{ip} pid:{pid}",
 +        },
++        'chroot.start': {
++             'what': "chroot start: chroot:{chroot} user:{user}" \
++                     " copr:{copr} pkg:{pkg} build:{build} ip:{ip} pid:{pid}",
++         },
 +        'build.end': {
 +            'what': "build end: user:{user} copr:{copr} build:{build}" \
 +                    " pkg:{pkg} version:{version} ip:{ip} pid:{pid} status:{status}",
