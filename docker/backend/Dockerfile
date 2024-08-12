@@ -2,8 +2,8 @@ FROM openeuler/openeuler:22.03 AS base
 
 RUN dnf -y update && dnf -y in git gcc openssl-devel protobuf-c-devel make
 # prepare rust toolchain
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs |sh -s -- -y --default-toolchain nightly -c rust-std -c rust-src
-RUN git clone https://gitee.com/openeuler/signatrust.git && source $HOME/.cargo/env && cd signatrust && cargo build --bin client --release && install -m 755 target/release/client /usr/local/bin/
+#RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs |sh -s -- -y --default-toolchain nightly -c rust-std -c rust-src
+#RUN git clone https://gitee.com/openeuler/signatrust.git && source $HOME/.cargo/env && cd signatrust && cargo build --bin client --release && install -m 755 target/release/client /usr/local/bin/
 
 FROM openeuler/openeuler:22.03 AS backend
 LABEL maintainer="infra@openeuler.org"
@@ -11,7 +11,7 @@ LABEL maintainer="infra@openeuler.org"
 ENV export LANG=en_US.UTF-8
 ENV PYTHONPATH="/usr/share/copr/"
 
-COPY --from=base /usr/local/bin/client /usr/local/bin/client
+#COPY --from=base /usr/local/bin/client /usr/local/bin/client
 
 # TERM is to make the tito work in container, rhbz#1733043
 ENV TERM=linux \
@@ -22,8 +22,8 @@ RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs
 
 # base packages
 RUN set -ex ; dnf -y install dnf-plugins-core && dnf -y update
-RUN dnf -y install python3-pip
-RUN pip3 install kafka-python
+#RUN dnf -y install python3-pip
+#RUN pip3 install kafka-python
 RUN dnf -y install htop \
                    make \
                    wget \
