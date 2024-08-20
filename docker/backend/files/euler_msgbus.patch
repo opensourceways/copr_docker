@@ -1,9 +1,10 @@
 diff --git a/backend/copr_backend/euler_msgbus.py b/backend/copr_backend/euler_msgbus.py
 new file mode 100644
-index 000000000..1f523e827
---- /dev/null	2024-05-21 11:37:56.000000000 +0800
-+++ b/euler_msgbus.py	2024-05-21 11:34:08.000000000 +0800
-@@ -0,0 +1,66 @@
+index 000000000..5a07e4cef
+--- /dev/null
++++ b/backend/copr_backend/euler_msgbus.py
+@@ -0,0 +1,70 @@
++from copr_backend.helpers import BackendConfigReader
 +from kafka import KafkaProducer
 +import os
 +import datetime
@@ -29,34 +30,33 @@ index 000000000..1f523e827
 +        'build.start': {
 +            'what': "build start: user:{user} copr:{copr}" \
 +                    " pkg:{pkg} build:{build} ip:{ip} pid:{pid}",
++            'topic': "eur.build.start",
 +        },
-+        'chroot.start': {
-+             'what': "chroot start: chroot:{chroot} user:{user}" \
-+                     " copr:{copr} pkg:{pkg} build:{build} ip:{ip} pid:{pid}",
-+         },
 +        'build.end': {
 +            'what': "build end: user:{user} copr:{copr} build:{build}" \
 +                    " pkg:{pkg} version:{version} ip:{ip} pid:{pid} status:{status}",
++            'topic': "eur.build.end",
 +        },
 +    }
 +    content['what'] = message_types[topic]['what'].format(**content)
 +    message['body'] = content
-+    now = datetime.datetime.now().isoformat()
++    now = datetime.datetime.now()
 +    headers = {
-+        "openEuler_messaging_schema": "eur." + topic,
-+        "sent-at": now,
++        "fedora_messaging_schema": message_types[topic]['topic'],
++        "sent-at": now.isoformat(),
 +    }
 +    message['headers'] = headers
 +    message['id'] = str(uuid.uuid4())
-+    message['topic'] = "org.openEuler.prod.eur." + topic
++    message['topic'] = message_types[topic]['topic']
 +    return message
 +
 +
-+class MessageSender:
-+    def __init__(self, backend_opts, name, log):
++class EulerMessageSender:
++    def __init__(self, opts, name, log):
 +        self.log = log
 +        self.name = name
 +        self.pid = os.getpid()
++        self.opts = opts
 +
 +    def announce(self, topic, job, host):
 +        msg = message_from_worker_job(topic, job, self.name, host, self.pid)
@@ -65,20 +65,12 @@ index 000000000..1f523e827
 +    def send_message(self, msg):
 +        """ Send message to kafka """
 +        producer = KafkaProducer(
-+            bootstrap_servers=["182.160.6.195:9094"],
++            bootstrap_servers=self.opts.message.bootstrap_servers,
++            security_protocol='SASL_SSL',
++            sasl_mechanism='PLAIN',
++            sasl_plain_username=self.opts.message.user_name,
++            sasl_plain_password=self.opts.message.password,
 +            value_serializer=lambda v: json.dumps(v).encode('utf-8')
 +        )
-+        producer.send("test_message_center", msg)
++        producer.send(self.opts.message.topic, msg)
 +        producer.flush()
-
-
-
-+.. warning::
-+   Don't remove projects, packages, builds, etc while paginating over them. It
-+   may result in skipping some results. Instead, query all objects (using
-+   pagination) first, and then delete them.
-+
-+
- Pagination parameters
- ---------------------
-
