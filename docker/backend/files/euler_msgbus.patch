@@ -72,7 +72,7 @@ index 000000000..0e4e0bd98
 +            sasl_plain_password=self.opts.message.password,
 +            value_serializer=lambda v: json.dumps(v).encode('utf-8')
 +        )
-+        producer.send("test_message_center", msg)
++        producer.send(self.opts.message.topic, msg)
 +        producer.flush()
 
 

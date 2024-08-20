@@ -1,14 +1,24 @@
 diff --git a/backend/copr_backend/helpers.py b/backend/copr_backend/helpers.py
-index df2819e0..c85c7396 100644
+index bad80fbed..8d23ba072 100644
 --- a/backend/copr_backend/helpers.py
 +++ b/backend/copr_backend/helpers.py
-@@ -288,6 +288,9 @@ class BackendConfigReader(object):
-         opts.redis_port = _get_conf(
-             cp, "backend", "redis_port", "6379")
+@@ -416,6 +416,19 @@ class BackendConfigReader(object):
+         opts.aws_cloudfront_distribution = _get_conf(
+             cp, "backend", "aws_cloudfront_distribution", None)
 
-+        opts.redis_pwd = _get_conf(
-+            cp, "backend", "redis_password", None)
++        opts.message = Munch()
++        opts.message.bootstrap_servers = _get_conf(
++            cp, "message", "bootstrap_servers", None)
 +
-         opts.redis_db = _get_conf(
-             cp, "backend", "redis_db", "0")
-
++        opts.message.user_name = _get_conf(
++            cp, "message", "user_name", None)
++
++        opts.message.password = _get_conf(
++            cp, "message", "password", None)
++
++        opts.message.topic = _get_conf(
++            cp, "message", "topic", None)
++
+         # ssh options
+         opts.ssh = Munch()
+         opts.ssh.builder_config = _get_conf(
