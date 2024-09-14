@@ -1,9 +1,9 @@
 diff --git a/backend/copr_backend/euler_msgbus.py b/backend/copr_backend/euler_msgbus.py
 new file mode 100644
-index 000000000..0e4e0bd98
---- /dev/null
-+++ b/backend/copr_backend/euler_msgbus.py
-@@ -0,0 +1,70 @@
+index 000000000..1f523e827
+--- /dev/null	2024-05-21 11:37:56.000000000 +0800
++++ b/euler_msgbus.py	2024-05-21 11:34:08.000000000 +0800
+@@ -0,0 +1,66 @@
 +from kafka import KafkaProducer
 +import os
 +import datetime
@@ -24,15 +24,16 @@ index 000000000..0e4e0bd98
 +        'status': job.status,
 +    }
 +    content.update({'ip': ip, 'who': who, 'pid': pid})
++
 +    message_types = {
 +        'build.start': {
 +            'what': "build start: user:{user} copr:{copr}" \
 +                    " pkg:{pkg} build:{build} ip:{ip} pid:{pid}",
 +        },
 +        'chroot.start': {
-+            'what': "chroot start: chroot:{chroot} user:{user}" \
-+                    " copr:{copr} pkg:{pkg} build:{build} ip:{ip} pid:{pid}",
-+        },
++             'what': "chroot start: chroot:{chroot} user:{user}" \
++                     " copr:{copr} pkg:{pkg} build:{build} ip:{ip} pid:{pid}",
++         },
 +        'build.end': {
 +            'what': "build end: user:{user} copr:{copr} build:{build}" \
 +                    " pkg:{pkg} version:{version} ip:{ip} pid:{pid} status:{status}",
@@ -56,7 +57,6 @@ index 000000000..0e4e0bd98
 +        self.log = log
 +        self.name = name
 +        self.pid = os.getpid()
-+        self.opts = backend_opts
 +
 +    def announce(self, topic, job, host):
 +        msg = message_from_worker_job(topic, job, self.name, host, self.pid)
@@ -64,16 +64,11 @@ index 000000000..0e4e0bd98
 +
 +    def send_message(self, msg):
 +        """ Send message to kafka """
-+        self.log.info(self.opts.message, "1111111111111")
 +        producer = KafkaProducer(
-+            bootstrap_servers=self.opts.message.bootstrap_servers,
-+            security_protocol='SASL_SSL',
-+            sasl_mechanism='PLAIN',
-+            sasl_plain_username=self.opts.message.user_name,
-+            sasl_plain_password=self.opts.message.password,
++            bootstrap_servers=["182.160.6.195:9094"],
 +            value_serializer=lambda v: json.dumps(v).encode('utf-8')
 +        )
-+        producer.send(self.opts.message.topic, msg)
++        producer.send("test_message_center", msg)
 +        producer.flush()
 
 
