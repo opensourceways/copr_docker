@@ -64,7 +64,6 @@ index 000000000..0e4e0bd98
 +
 +    def send_message(self, msg):
 +        """ Send message to kafka """
-+        self.log.info(self.opts.message, "1111111111111")
 +        producer = KafkaProducer(
 +            bootstrap_servers=self.opts.message.bootstrap_servers,
 +            security_protocol='SASL_SSL',
