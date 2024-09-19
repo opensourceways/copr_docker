@@ -70,7 +70,7 @@ index 000000000..0e4e0bd98
 +            sasl_mechanism='PLAIN',
 +            sasl_plain_username=self.opts.message.user_name,
 +            sasl_plain_password=self.opts.message.password,
-+            api_version='3.x',
++            api_version='3.2',
 +            value_serializer=lambda v: json.dumps(v).encode('utf-8')
 +        )
 +        producer.send(self.opts.message.topic, msg)
