@@ -1,9 +1,9 @@
 FROM openeuler/openeuler:22.03 AS base
 
-RUN dnf -y update && dnf -y in git gcc openssl-devel protobuf-c-devel
+RUN dnf -y update && dnf -y in git gcc openssl-devel protobuf-c-devel make
 # prepare rust toolchain
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs |sh -s -- -y --default-toolchain nightly -c rust-std -c rust-src
-RUN git clone -b v1.0.0-rc.1 https://gitee.com/openeuler/signatrust.git && source $HOME/.cargo/env && cd signatrust && cargo build --bin client --release && install -m 755 target/release/client /usr/local/bin/
+RUN git clone https://gitee.com/openeuler/signatrust.git && source $HOME/.cargo/env && cd signatrust && cargo build --bin client --release && install -m 755 target/release/client /usr/local/bin/
 
 FROM openeuler/openeuler:22.03 AS backend
 LABEL maintainer="infra@openeuler.org"
@@ -21,8 +21,10 @@ ENV TERM=linux \
 RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-22.03_LTS_SP1/mywaaagh_admin-eur-openeuler-22.03_LTS_SP1.repo
 
 # base packages
-RUN set -ex ; dnf -y install dnf-plugins-core && dnf -y update && \
-    dnf -y install htop \
+RUN set -ex ; dnf -y install dnf-plugins-core && dnf -y update
+RUN dnf -y install python3-pip
+RUN pip3 install kafka-python
+RUN dnf -y install htop \
                    make \
                    wget \
                    net-tools \
@@ -44,7 +46,10 @@ RUN set -ex ; dnf -y install dnf-plugins-core && dnf -y update && \
 # for unbuffer package
                    expect \
     && dnf -y install copr-backend-1.168 \
-    && dnf clean all && rm -rf /var/cache/dnf
+    && dnf clean all && rm -rf /var/cache/dnf \
+
+
+
 
 # needed to be able to ping
 RUN setcap cap_net_raw,cap_net_admin+p /usr/bin/ping
@@ -74,20 +79,23 @@ RUN chmod 700 /root && \
 # container scenario it is not desired.  We use the downstream-only option
 # allow-unprivileged-ports option: https://github.com/openSUSE/obs-sign/pull/36
 RUN chmod 0755 /usr/bin/sign
+RUN chmod 0755 /run-backend
 
 # entrypoint needs to have write access here (group=0)
 RUN chown copr:root /etc/sign.conf && \
     chmod 0660 /etc/sign.conf
 
+
 # Not sure why the directory wasn't created automatically
 RUN mkdir /var/lock/copr-backend
 RUN chown copr:copr /var/lock/copr-backend /var/log/copr-backend
 
-RUN patch /usr/lib/python3.9/site-packages/copr_backend/helpers.py < /helpers.patch && \
-    patch /usr/bin/print_queues.py < /print_queues.py && \
-    patch /usr/lib/python3.9/site-packages/copr_common/redis_helpers.py < /redis_helpers.patch && \
-    cd /usr/lib/python3.9/site-packages/copr_backend/ && patch -p3 < /support_signatrust_backend.patch && \
-    cd /usr/bin/ && patch -p3 < /signatrust_bin.patch
+RUN patch /usr/lib/python3.9/site-packages/copr_backend/helpers.py < /helpers.patch
+RUN cd /usr/lib/python3.9/site-packages/copr_backend/ && patch -p3 < /euler_msgbus.patch
+RUN patch /usr/bin/print_queues.py < /print_queues.py
+RUN patch /usr/lib/python3.9/site-packages/copr_common/redis_helpers.py < /redis_helpers.patch
+RUN cd /usr/lib/python3.9/site-packages/copr_backend/ && patch -p3 < /support_signatrust_backend.patch
+RUN cd /usr/bin/ && patch -p3 < /signatrust_bin.patch
 
 USER copr
 RUN ln -sf /proc/1/fd/1 /var/log/copr-backend/action_dispatcher.log && \
