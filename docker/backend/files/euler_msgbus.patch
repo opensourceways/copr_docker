@@ -88,7 +88,7 @@ index 000000000..7888bfad1
 +        lIp = self.opts.message.bootstrap_servers.split(",")
 +        for ip in lIp:
 +            add, port = ip.split(":")
-+            self.log.info("the result is %s", self.test_kafka_connection(add, port))
++            self.log.info("the result is %s", self.test_kafka_connection(add, int(port)))
 +        producer = KafkaProducer(bootstrap_servers=self.opts.message.bootstrap_servers,
 +                                 sasl_mechanism="SCRAM-SHA-512",
 +                                 ssl_context=context,
