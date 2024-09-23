@@ -1,9 +1,9 @@
 diff --git a/backend/copr_backend/euler_msgbus.py b/backend/copr_backend/euler_msgbus.py
 new file mode 100644
-index 000000000..c774bdaa6
+index 000000000..e3056e23b
 --- /dev/null
 +++ b/backend/copr_backend/euler_msgbus.py
-@@ -0,0 +1,96 @@
+@@ -0,0 +1,97 @@
 +import socket
 +
 +from kafka import KafkaProducer
@@ -91,6 +91,7 @@ index 000000000..c774bdaa6
 +            add, port = ip.split(":")
 +            self.log.info("the result is %s", self.test_kafka_connection(add, int(port)))
 +        producer = KafkaProducer(bootstrap_servers=sIp,
++                                 api_version=(0, 10, 2),
 +                                 sasl_mechanism="SCRAM-SHA-512",
 +                                 ssl_context=context,
 +                                 security_protocol='SASL_SSL',
