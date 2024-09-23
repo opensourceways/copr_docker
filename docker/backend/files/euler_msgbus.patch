@@ -63,14 +63,34 @@ index 000000000..89efab5bf
 +        msg = message_from_worker_job(topic, job, self.name, host, self.pid)
 +        self.send_message(msg)
 +
++
++    def test_kafka_connection(kafka_ip, kafka_port):
++        try:
++            # 创建一个 socket 对象
++            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
++
++            # 设置连接超时，单位为秒
++            sock.settimeout(5)
++
++            # 尝试连接 Kafka 服务器
++            sock.connect((kafka_ip, kafka_port))
++
++            print(f"Successfully connected to Kafka at {kafka_ip}:{kafka_port}")
++        except socket.error as e:
++            print(f"Failed to connect to Kafka at {kafka_ip}:{kafka_port}: {e}")
++        finally:
++            sock.close()
++
 +    def send_message(self, msg):
 +        """ Send message to kafka """
 +
 +        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
 +        context.verify_mode = ssl.CERT_REQUIRED
 +        context.load_verify_locations("etc/copr/kafka.crt")
-+
-+        self.log.info("the data is %s, %s, %s, %s", os.path.isfile("etc/copr/kafka.crt"), self.opts.message.bootstrap_servers, self.opts.message.user_name, self.opts.message.password)
++        lIp = self.opts.message.bootstrap_servers.split(",")
++        for ip in lIp:
++            add, port = ip.split(":")
++            self.log.info("the result is %s", test_kafka_connection(add, port))
 +        producer = KafkaProducer(bootstrap_servers=self.opts.message.bootstrap_servers,
 +                                 sasl_mechanism="SCRAM-SHA-512",
 +                                 ssl_context=context,
