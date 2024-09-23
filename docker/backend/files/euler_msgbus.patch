@@ -1,9 +1,11 @@
 diff --git a/backend/copr_backend/euler_msgbus.py b/backend/copr_backend/euler_msgbus.py
 new file mode 100644
-index 000000000..89efab5bf
+index 000000000..7888bfad1
 --- /dev/null
 +++ b/backend/copr_backend/euler_msgbus.py
-@@ -0,0 +1,76 @@
+@@ -0,0 +1,95 @@
++import socket
++
 +from kafka import KafkaProducer
 +import os
 +import datetime
@@ -63,16 +65,12 @@ index 000000000..89efab5bf
 +        msg = message_from_worker_job(topic, job, self.name, host, self.pid)
 +        self.send_message(msg)
 +
-+
-+    def test_kafka_connection(kafka_ip, kafka_port):
++    def test_kafka_connection(self, kafka_ip, kafka_port):
 +        try:
-+            # 创建一个 socket 对象
 +            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 +
-+            # 设置连接超时，单位为秒
 +            sock.settimeout(5)
 +
-+            # 尝试连接 Kafka 服务器
 +            sock.connect((kafka_ip, kafka_port))
 +
 +            print(f"Successfully connected to Kafka at {kafka_ip}:{kafka_port}")
@@ -86,11 +84,11 @@ index 000000000..89efab5bf
 +
 +        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
 +        context.verify_mode = ssl.CERT_REQUIRED
-+        context.load_verify_locations("etc/copr/kafka.crt")
++        context.load_verify_locations("/etc/copr/kafka.crt")
 +        lIp = self.opts.message.bootstrap_servers.split(",")
 +        for ip in lIp:
 +            add, port = ip.split(":")
-+            self.log.info("the result is %s", test_kafka_connection(add, port))
++            self.log.info("the result is %s", self.test_kafka_connection(add, port))
 +        producer = KafkaProducer(bootstrap_servers=self.opts.message.bootstrap_servers,
 +                                 sasl_mechanism="SCRAM-SHA-512",
 +                                 ssl_context=context,
