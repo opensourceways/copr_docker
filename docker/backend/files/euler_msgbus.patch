@@ -1,6 +1,6 @@
 diff --git a/backend/copr_backend/euler_msgbus.py b/backend/copr_backend/euler_msgbus.py
 new file mode 100644
-index 000000000..7888bfad1
+index 000000000..c18e35bf9
 --- /dev/null
 +++ b/backend/copr_backend/euler_msgbus.py
 @@ -0,0 +1,95 @@
@@ -73,9 +73,9 @@ index 000000000..7888bfad1
 +
 +            sock.connect((kafka_ip, kafka_port))
 +
-+            return f"Successfully connected to Kafka at {kafka_ip}:{kafka_port}"
++            print(f"Successfully connected to Kafka at {kafka_ip}:{kafka_port}")
 +        except socket.error as e:
-+            return f"Failed to connect to Kafka at {kafka_ip}:{kafka_port}: {e}"
++            print(f"Failed to connect to Kafka at {kafka_ip}:{kafka_port}: {e}")
 +        finally:
 +            sock.close()
 +
@@ -88,8 +88,8 @@ index 000000000..7888bfad1
 +        lIp = self.opts.message.bootstrap_servers.split(",")
 +        for ip in lIp:
 +            add, port = ip.split(":")
-+            self.log.info("the result is %s", self.test_kafka_connection(add, int(port)))
-+        producer = KafkaProducer(bootstrap_servers=self.opts.message.bootstrap_servers,
++            self.log.info("the result is %s", self.test_kafka_connection(add, port))
++        producer = KafkaProducer(bootstrap_servers="114.116.224.39:9095,119.3.255.172:9095,124.70.71.209:9095",
 +                                 sasl_mechanism="SCRAM-SHA-512",
 +                                 ssl_context=context,
 +                                 security_protocol='SASL_SSL',
