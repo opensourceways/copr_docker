@@ -1,6 +1,6 @@
 diff --git a/backend/copr_backend/euler_msgbus.py b/backend/copr_backend/euler_msgbus.py
 new file mode 100644
-index 000000000..524b0fe0f
+index 000000000..115ac3959
 --- /dev/null
 +++ b/backend/copr_backend/euler_msgbus.py
 @@ -0,0 +1,95 @@
@@ -88,7 +88,7 @@ index 000000000..524b0fe0f
 +        lIp = self.opts.message.bootstrap_servers.split(",")
 +        for ip in lIp:
 +            add, port = ip.split(":")
-+            self.log.info("the result is %s", self.test_kafka_connection(add, port))
++            self.log.info("the result is %s", self.test_kafka_connection(add, int(port)))
 +        producer = KafkaProducer(bootstrap_servers="114.116.224.39:9095,119.3.255.172:9095,124.70.71.209:9095",
 +                                 sasl_mechanism="SCRAM-SHA-512",
 +                                 ssl_context=context,
