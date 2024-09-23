@@ -70,7 +70,7 @@ index 000000000..89efab5bf
 +        context.verify_mode = ssl.CERT_REQUIRED
 +        context.load_verify_locations("etc/copr/kafka.crt")
 +
-+        self.log.info(os.path.isfile("etc/copr/kafka.crt"), self.opts.message.bootstrap_servers, self.opts.message.user_name, self.opts.message.password)
++        self.log.info("the data is %s, %s, %s, %s", os.path.isfile("etc/copr/kafka.crt"), self.opts.message.bootstrap_servers, self.opts.message.user_name, self.opts.message.password)
 +        producer = KafkaProducer(bootstrap_servers=self.opts.message.bootstrap_servers,
 +                                 sasl_mechanism="SCRAM-SHA-512",
 +                                 ssl_context=context,
