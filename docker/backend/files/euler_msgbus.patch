@@ -1,6 +1,6 @@
 diff --git a/backend/copr_backend/euler_msgbus.py b/backend/copr_backend/euler_msgbus.py
 new file mode 100644
-index 000000000..30d4591b3
+index 000000000..c774bdaa6
 --- /dev/null
 +++ b/backend/copr_backend/euler_msgbus.py
 @@ -0,0 +1,96 @@
@@ -73,9 +73,9 @@ index 000000000..30d4591b3
 +
 +            sock.connect((kafka_ip, kafka_port))
 +
-+            print(f"Successfully connected to Kafka at {kafka_ip}:{kafka_port}")
++            return f"Successfully connected to Kafka at {kafka_ip}:{kafka_port}"
 +        except socket.error as e:
-+            print(f"Failed to connect to Kafka at {kafka_ip}:{kafka_port}: {e}")
++            return f"Failed to connect to Kafka at {kafka_ip}:{kafka_port}: {e}"
 +        finally:
 +            sock.close()
 +
