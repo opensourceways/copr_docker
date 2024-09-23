@@ -85,7 +85,7 @@ index 000000000..c774bdaa6
 +        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
 +        context.verify_mode = ssl.CERT_REQUIRED
 +        context.load_verify_locations("etc/copr/kafka.crt")
-+        sIp = "114.116.224.39:9095,119.3.255.172:9095,124.70.71.209:9095"
++        sIp = self.opts.message.bootstrap_servers
 +        lIp = sIp.split(",")
 +        for ip in lIp:
 +            add, port = ip.split(":")
