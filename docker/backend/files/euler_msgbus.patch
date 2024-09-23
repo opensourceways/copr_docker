@@ -1,9 +1,9 @@
 diff --git a/backend/copr_backend/euler_msgbus.py b/backend/copr_backend/euler_msgbus.py
 new file mode 100644
-index 000000000..e3056e23b
+index 000000000..e917581d6
 --- /dev/null
 +++ b/backend/copr_backend/euler_msgbus.py
-@@ -0,0 +1,97 @@
+@@ -0,0 +1,78 @@
 +import socket
 +
 +from kafka import KafkaProducer
@@ -65,32 +65,13 @@ index 000000000..e3056e23b
 +        msg = message_from_worker_job(topic, job, self.name, host, self.pid)
 +        self.send_message(msg)
 +
-+    def test_kafka_connection(self, kafka_ip, kafka_port):
-+        try:
-+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-+
-+            sock.settimeout(5)
-+
-+            sock.connect((kafka_ip, kafka_port))
-+
-+            return f"Successfully connected to Kafka at {kafka_ip}:{kafka_port}"
-+        except socket.error as e:
-+            return f"Failed to connect to Kafka at {kafka_ip}:{kafka_port}: {e}"
-+        finally:
-+            sock.close()
-+
 +    def send_message(self, msg):
 +        """ Send message to kafka """
 +
 +        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
 +        context.verify_mode = ssl.CERT_REQUIRED
 +        context.load_verify_locations("etc/copr/kafka.crt")
-+        sIp = self.opts.message.bootstrap_servers
-+        lIp = sIp.split(",")
-+        for ip in lIp:
-+            add, port = ip.split(":")
-+            self.log.info("the result is %s", self.test_kafka_connection(add, int(port)))
-+        producer = KafkaProducer(bootstrap_servers=sIp,
++        producer = KafkaProducer(bootstrap_servers=self.opts.message.bootstrap_servers,
 +                                 api_version=(0, 10, 2),
 +                                 sasl_mechanism="SCRAM-SHA-512",
 +                                 ssl_context=context,
@@ -98,6 +79,6 @@ index 000000000..e3056e23b
 +                                 sasl_plain_username=self.opts.message.user_name,
 +                                 sasl_plain_password=self.opts.message.password,
 +                                 value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-+
 +        producer.send(self.opts.message.topic, msg)
 +        producer.flush()
++        self.log.info("send eur build message done!")
