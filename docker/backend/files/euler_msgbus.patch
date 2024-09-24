@@ -1,6 +1,6 @@
 diff --git a/backend/copr_backend/euler_msgbus.py b/backend/copr_backend/euler_msgbus.py
 new file mode 100644
-index 000000000..680cd5fc1
+index 000000000..20579299d
 --- /dev/null
 +++ b/backend/copr_backend/euler_msgbus.py
 @@ -0,0 +1,79 @@
@@ -79,7 +79,7 @@ index 000000000..680cd5fc1
 +                                 sasl_plain_username=self.opts.message.user_name,
 +                                 sasl_plain_password=self.opts.message.password,
 +                                 value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-+        self.log.info("connect to kafka!")
++        self.log.info("====connect to kafka, the topic is  %s===", self.opts.message.topic)
 +        producer.send(str(self.opts.message.topic), msg)
 +        producer.flush()
 +        self.log.info("send eur build message done!")
