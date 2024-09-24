@@ -1,9 +1,9 @@
 diff --git a/backend/copr_backend/euler_msgbus.py b/backend/copr_backend/euler_msgbus.py
 new file mode 100644
-index 000000000..2f35aa1d9
+index 000000000..680cd5fc1
 --- /dev/null
 +++ b/backend/copr_backend/euler_msgbus.py
-@@ -0,0 +1,78 @@
+@@ -0,0 +1,79 @@
 +import socket
 +
 +from kafka import KafkaProducer
@@ -71,7 +71,7 @@ index 000000000..2f35aa1d9
 +        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
 +        context.verify_mode = ssl.CERT_REQUIRED
 +        context.load_verify_locations("etc/copr/kafka.crt")
-+        producer = KafkaProducer(bootstrap_servers=["172.16.2.235:9093", "172.16.2.223:9093", "172.16.2.206:9093"],
++        producer = KafkaProducer(bootstrap_servers=self.opts.message.bootstrap_servers,
 +                                 api_version=(0, 10, 2),
 +                                 sasl_mechanism="SCRAM-SHA-512",
 +                                 ssl_context=context,
@@ -79,6 +79,7 @@ index 000000000..2f35aa1d9
 +                                 sasl_plain_username=self.opts.message.user_name,
 +                                 sasl_plain_password=self.opts.message.password,
 +                                 value_serializer=lambda v: json.dumps(v).encode('utf-8'))
++        self.log.info("connect to kafka!")
 +        producer.send(str(self.opts.message.topic), msg)
 +        producer.flush()
 +        self.log.info("send eur build message done!")
