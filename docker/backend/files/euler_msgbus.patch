@@ -1,6 +1,6 @@
 diff --git a/backend/copr_backend/euler_msgbus.py b/backend/copr_backend/euler_msgbus.py
 new file mode 100644
-index 000000000..0fd6eb310
+index 000000000..b050b7e6c
 --- /dev/null
 +++ b/backend/copr_backend/euler_msgbus.py
 @@ -0,0 +1,80 @@
@@ -72,7 +72,7 @@ index 000000000..0fd6eb310
 +        context.verify_mode = ssl.CERT_REQUIRED
 +        context.load_verify_locations("etc/copr/kafka.crt")
 +        producer = KafkaProducer(bootstrap_servers=self.opts.message.bootstrap_servers,
-+                                 api_version=(0, 10, 2),
++                                 api_version=(3, 5, 0),
 +                                 sasl_mechanism="SCRAM-SHA-512",
 +                                 ssl_context=context,
 +                                 security_protocol='SASL_SSL',
