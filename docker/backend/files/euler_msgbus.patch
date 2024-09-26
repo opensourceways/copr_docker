@@ -1,9 +1,9 @@
 diff --git a/backend/copr_backend/euler_msgbus.py b/backend/copr_backend/euler_msgbus.py
 new file mode 100644
-index 000000000..b050b7e6c
+index 000000000..1395249be
 --- /dev/null
 +++ b/backend/copr_backend/euler_msgbus.py
-@@ -0,0 +1,80 @@
+@@ -0,0 +1,77 @@
 +import socket
 +
 +from kafka import KafkaProducer
@@ -79,8 +79,5 @@ index 000000000..b050b7e6c
 +                                 sasl_plain_username=self.opts.message.user_name,
 +                                 sasl_plain_password=self.opts.message.password,
 +                                 value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-+        self.log.info("====connect to kafka, the topic is %s, the type is %s===", self.opts.message.topic,
-+                      type(self.opts.message.topic))
 +        producer.send(str(self.opts.message.topic), msg)
 +        producer.flush()
-+        self.log.info("send eur build message done!")
