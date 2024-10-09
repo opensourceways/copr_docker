@@ -41,9 +41,7 @@ RUN set -ex ; dnf -y install dnf-plugins-core && dnf -y update && \
                    findutils \
                    tini \
                    patch \
-# to get more entropy for generation of gpg keys
                    rng-tools \
-# for unbuffer package
                    expect \
     && dnf -y install copr-backend-1.168 \
     && dnf clean all && rm -rf /var/cache/dnf \
