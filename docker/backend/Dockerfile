@@ -23,7 +23,8 @@ RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs
 # base packages
 RUN dnf -y install python3-pip
 RUN pip3 install kafka-python
-RUN set -ex ; dnf -y install dnf-plugins-core && dnf -y update && \
+RUN set -ex ;  \
+    dnf -y update && \
     dnf -y install htop \
                    make \
                    wget \
@@ -45,7 +46,7 @@ RUN set -ex ; dnf -y install dnf-plugins-core && dnf -y update && \
                    rng-tools \
 # for unbuffer package
                    expect \
-    && dnf -y install copr-backend-1.168 \
+                   copr-backend-1.168 \
     && dnf clean all && rm -rf /var/cache/dnf
 
 # needed to be able to ping
