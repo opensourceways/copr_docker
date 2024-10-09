@@ -21,10 +21,10 @@ ENV TERM=linux \
 RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-22.03_LTS_SP1/mywaaagh_admin-eur-openeuler-22.03_LTS_SP1.repo
 
 # base packages
-RUN set -ex ; dnf -y install dnf-plugins-core && dnf -y update
 RUN dnf -y install python3-pip
 RUN pip3 install kafka-python
-RUN dnf -y install htop \
+RUN set -ex ; dnf -y install dnf-plugins-core && dnf -y update && \
+    dnf -y install htop \
                    make \
                    wget \
                    net-tools \
