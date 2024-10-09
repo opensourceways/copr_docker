@@ -1,14 +1,17 @@
 diff --git a/backend/copr_backend/euler_msgbus.py b/backend/copr_backend/euler_msgbus.py
 new file mode 100644
-index 000000000..0e4e0bd98
+index 000000000..1395249be
 --- /dev/null
 +++ b/backend/copr_backend/euler_msgbus.py
-@@ -0,0 +1,70 @@
+@@ -0,0 +1,77 @@
++import socket
++
 +from kafka import KafkaProducer
 +import os
 +import datetime
 +import uuid
 +import json
++import ssl
 +
 +
 +def message_from_worker_job(topic, job, who, ip, pid):
@@ -64,26 +67,17 @@ index 000000000..0e4e0bd98
 +
 +    def send_message(self, msg):
 +        """ Send message to kafka """
-+        self.log.info(self.opts.message, "1111111111111")
-+        producer = KafkaProducer(
-+            bootstrap_servers=self.opts.message.bootstrap_servers,
-+            security_protocol='SASL_SSL',
-+            sasl_mechanism='PLAIN',
-+            sasl_plain_username=self.opts.message.user_name,
-+            sasl_plain_password=self.opts.message.password,
-+            value_serializer=lambda v: json.dumps(v).encode('utf-8')
-+        )
-+        producer.send(self.opts.message.topic, msg)
++
++        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
++        context.verify_mode = ssl.CERT_REQUIRED
++        context.load_verify_locations("etc/copr/kafka.crt")
++        producer = KafkaProducer(bootstrap_servers=self.opts.message.bootstrap_servers,
++                                 api_version=(3, 5, 0),
++                                 sasl_mechanism="PLAIN",
++                                 ssl_context=context,
++                                 security_protocol='SASL_SSL',
++                                 sasl_plain_username=self.opts.message.user_name,
++                                 sasl_plain_password=self.opts.message.password,
++                                 value_serializer=lambda v: json.dumps(v).encode('utf-8'))
++        producer.send(str(self.opts.message.topic), msg)
 +        producer.flush()
-
-
-
-+.. warning::
-+   Don't remove projects, packages, builds, etc while paginating over them. It
-+   may result in skipping some results. Instead, query all objects (using
-+   pagination) first, and then delete them.
-+
-+
- Pagination parameters
- ---------------------
-
