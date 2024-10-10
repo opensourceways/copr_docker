@@ -24,25 +24,25 @@ RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs
 RUN set -ex ; dnf -y install dnf-plugins-core && dnf -y update
 RUN dnf -y install python3-pip
 RUN pip3 install kafka-python
-RUN dnf -y install htop \
-                   make \
-                   wget \
-                   net-tools \
-                   iputils \
-                   vim \
-                   mlocate \
-                   git \
-                   sudo \
-                   openssh-server \
-                   resalloc \
-                   psmisc \
-                   nginx \
-                   --nogpgcheck python3-ipdb \
-                   findutils \
-                   tini \
-                   patch \
+RUN dnf -y install htop
+RUN dnf -y install                  make
+RUN dnf -y install                   wget
+RUN dnf -y install                   net-tools
+RUN dnf -y install                   iputils
+RUN dnf -y install                   vim
+RUN dnf -y install                   mlocate
+RUN dnf -y install                   git
+RUN dnf -y install                   sudo
+RUN dnf -y install                   openssh-server
+RUN dnf -y install                   resalloc
+RUN dnf -y install                   psmisc
+RUN dnf -y install                   nginx
+RUN dnf -y install                   python3-ipdb
+RUN dnf -y install                   findutils
+RUN dnf -y install                   tini
+RUN dnf -y install                   patch
 # to get more entropy for generation of gpg keys
-                   rng-tools \
+RUN dnf -y install                   rng-tools \
 # for unbuffer package
                    expect \
     && dnf -y install copr-backend-1.168 \
