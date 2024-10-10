@@ -38,7 +38,7 @@ RUN dnf -y install                   resalloc --nogpgcheck
 RUN dnf -y install                   psmisc
 RUN dnf -y install                   nginx
 RUN dnf -y install                   python3-ipdb --nogpgcheck
-RUN dnf -y install                   findutils
+RUN dnf -y install                   findutils --nogpgcheck
 RUN dnf -y install                   tini
 RUN dnf -y install                   patch
 # to get more entropy for generation of gpg keys
