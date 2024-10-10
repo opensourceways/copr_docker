@@ -42,11 +42,12 @@ RUN dnf -y install                   findutils
 RUN dnf -y install                   tini --nogpgcheck
 RUN dnf -y install                   patch
 # to get more entropy for generation of gpg keys
-RUN dnf -y install                   rng-tools \
+RUN dnf -y install                   rng-tools
 # for unbuffer package
-                   expect \
-    && dnf -y install copr-backend-1.168 \
-    && dnf clean all && rm -rf /var/cache/dnf
+RUN dnf -y install                  expect
+RUN dnf -y install copr-backend-1.168
+RUN dnf clean all
+RUN rm -rf /var/cache/dnf
 
 
 
