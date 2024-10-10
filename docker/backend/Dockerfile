@@ -18,7 +18,7 @@ ENV TERM=linux \
     LANG=en_US.UTF-8
 
 # download EUR repo
-RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/@Infrastructure/eur/repo/openeuler-22.03_LTS_SP1/mywaaagh_admin-eur-openeuler-22.03_LTS_SP1.repo
+RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/g/Infrastructure/eur/repo/openeuler-22.03_LTS_SP1/group_Infrastructure-eur-openeuler-22.03_LTS_SP1.repo
 
 # base packages
 RUN set -ex ; dnf -y install dnf-plugins-core && dnf -y update
