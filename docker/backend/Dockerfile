@@ -18,7 +18,7 @@ ENV TERM=linux \
     LANG=en_US.UTF-8
 
 # download EUR repo
-RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-22.03_LTS_SP1/mywaaagh_admin-eur-openeuler-22.03_LTS_SP1.repo
+RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/@Infrastructure/eur/repo/openeuler-22.03_LTS_SP1/mywaaagh_admin-eur-openeuler-22.03_LTS_SP1.repo
 
 # base packages
 RUN set -ex ; dnf -y install dnf-plugins-core && dnf -y update
@@ -34,18 +34,18 @@ RUN dnf -y install                   mlocate
 RUN dnf -y install                   git
 RUN dnf -y install                   sudo
 RUN dnf -y install                   openssh-server
-RUN dnf -y install                   resalloc --nogpgcheck
+RUN dnf -y install                   resalloc
 RUN dnf -y install                   psmisc
 RUN dnf -y install                   nginx
-RUN dnf -y install                   python3-ipdb --nogpgcheck
+RUN dnf -y install                   python3-ipdb
 RUN dnf -y install                   findutils
-RUN dnf -y install                   tini --nogpgcheck
+RUN dnf -y install                   tini
 RUN dnf -y install                   patch
 # to get more entropy for generation of gpg keys
 RUN dnf -y install                   rng-tools
 # for unbuffer package
 RUN dnf -y install                  expect
-RUN dnf -y install copr-backend-1.168 --nogpgcheck
+RUN dnf -y install copr-backend-1.168
 RUN dnf clean all
 RUN rm -rf /var/cache/dnf
 
