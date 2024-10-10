@@ -20,8 +20,6 @@ ENV TERM=linux \
 # download EUR repo
 RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/g/Infrastructure/eur/repo/openeuler-22.03_LTS_SP1/group_Infrastructure-eur-openeuler-22.03_LTS_SP1.repo
 
-RUN dnf -y install python3-pip
-RUN pip3 install kafka-python
 RUN set -ex ; \
     dnf -y install dnf-plugins-core && dnf -y update && \
     dnf -y install htop \
@@ -45,6 +43,7 @@ RUN set -ex ; \
                    rng-tools \
 # for unbuffer package
                    expect \
+                   python3-kafka-python \
     && dnf -y install copr-backend-1.168 \
     && dnf clean all && rm -rf /var/cache/dnf
 
