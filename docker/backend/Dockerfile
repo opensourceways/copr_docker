@@ -24,7 +24,6 @@ RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs
 RUN set -ex ; dnf -y install dnf-plugins-core && dnf -y update
 RUN dnf -y install python3-pip
 RUN pip3 install kafka-python
-RUN dnf -clean packages
 RUN dnf -y install --nogpgcheck htop \
                    make \
                    wget \
@@ -47,7 +46,7 @@ RUN dnf -y install --nogpgcheck htop \
 # for unbuffer package
                    expect \
     && dnf -y install copr-backend-1.168 \
-    && dnf clean all && rm -rf /var/cache/dnf \
+    && dnf clean all && rm -rf /var/cache/dnf
 
 
 
