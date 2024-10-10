@@ -34,7 +34,7 @@ RUN dnf -y install                   mlocate
 RUN dnf -y install                   git
 RUN dnf -y install                   sudo
 RUN dnf -y install                   openssh-server
-RUN dnf -y install                   resalloc
+RUN dnf -y install                   resalloc --nogpgcheck
 RUN dnf -y install                   psmisc
 RUN dnf -y install                   nginx
 RUN dnf -y install                   python3-ipdb
