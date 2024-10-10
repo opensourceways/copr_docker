@@ -20,34 +20,33 @@ ENV TERM=linux \
 # download EUR repo
 RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/g/Infrastructure/eur/repo/openeuler-22.03_LTS_SP1/group_Infrastructure-eur-openeuler-22.03_LTS_SP1.repo
 
-# base packages
-RUN set -ex ; dnf -y install dnf-plugins-core && dnf -y update
 RUN dnf -y install python3-pip
 RUN pip3 install kafka-python
-RUN dnf -y install htop
-RUN dnf -y install                  make
-RUN dnf -y install                   wget
-RUN dnf -y install                   net-tools
-RUN dnf -y install                   iputils
-RUN dnf -y install                   vim
-RUN dnf -y install                   mlocate
-RUN dnf -y install                   git
-RUN dnf -y install                   sudo
-RUN dnf -y install                   openssh-server
-RUN dnf -y install                   resalloc
-RUN dnf -y install                   psmisc
-RUN dnf -y install                   nginx
-RUN dnf -y install                   python3-ipdb
-RUN dnf -y install                   findutils
-RUN dnf -y install                   tini
-RUN dnf -y install                   patch
+RUN set -ex ; \
+    dnf -y install dnf-plugins-core && dnf -y update && \
+    dnf -y install htop \
+                   make \
+                   wget \
+                   net-tools \
+                   iputils \
+                   vim \
+                   mlocate \
+                   git \
+                   sudo \
+                   openssh-server \
+                   resalloc \
+                   psmisc \
+                   nginx \
+                   python3-ipdb \
+                   findutils \
+                   tini \
+                   patch \
 # to get more entropy for generation of gpg keys
-RUN dnf -y install                   rng-tools
+                   rng-tools \
 # for unbuffer package
-RUN dnf -y install                  expect
-RUN dnf -y install copr-backend-1.168
-RUN dnf clean all
-RUN rm -rf /var/cache/dnf
+                   expect \
+    && dnf -y install copr-backend-1.168 \
+    && dnf clean all && rm -rf /var/cache/dnf
 
 
 
