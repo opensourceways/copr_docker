@@ -39,7 +39,6 @@ RUN set -ex ; \
                    python-pip \
                    patch \
                    git \
-                   python3-copr-messaging \
     && dnf clean all && rm -rf /var/cache/dnf
 
 COPY files/ /
