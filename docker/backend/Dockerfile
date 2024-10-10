@@ -45,7 +45,7 @@ RUN dnf -y install                   patch
 RUN dnf -y install                   rng-tools
 # for unbuffer package
 RUN dnf -y install                  expect
-RUN dnf -y install copr-backend-1.168
+RUN dnf -y install copr-backend-1.168 --nogpgcheck
 RUN dnf clean all
 RUN rm -rf /var/cache/dnf
 
