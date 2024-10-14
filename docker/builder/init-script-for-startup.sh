@@ -9,5 +9,5 @@ while true; do
   rm -rf /root/pyporter
 done
 
-rm -rf /cpor_docker
+rm -rf /copr_docker
 rm -rf /root/pyporter
