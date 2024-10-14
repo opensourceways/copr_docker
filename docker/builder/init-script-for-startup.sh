@@ -1,6 +1,6 @@
 #!/bin/bash
 
-yes|cp -r -f /cpor_docker/docker/builder/files/* /
+yes|cp -r -f /copr_docker/docker/builder/files/* /
 
 while true; do
   git clone https://gitee.com/openeuler/pyporter /root/pyporter && cd /root/pyporter
