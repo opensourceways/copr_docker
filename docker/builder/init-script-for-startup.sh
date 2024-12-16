@@ -7,7 +7,7 @@ Pyporter_repo_url="https://gitee.com/openeuler/pyporter"
 
 while true
 do
-    python3 -m pip install git+$Pyporter_repo_url
+    python3 -m pip install git+$Pyporter_repo_url -i  https://mirrors.huaweicloud.com/repository/pypi/simple
     if [ $? -eq 0 ]; then 
         echo "$(date +"%Y-%m-%d %H:%M:%S")  Install Package Successed" >> /tmp/init-script-data.txt
         echo "$(date +"%Y-%m-%d %H:%M:%S")  Install Package Version:  $(su - mockbuild -c "pip list | grep $Pyporter_target_dir")" >> /tmp/init-script-data.txt
