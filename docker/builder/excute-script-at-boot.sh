@@ -1,7 +1,10 @@
 #!/bin/bash
 # Date: 2024-12
 
-# Start executing script at boot, script path: /etc/rc.d/rc.local
+# Start executing script at boot, script path: /etc/rc.d/rc.local 
+# /etc/rc.d/rc.local << /bin/bash /root/autoRsyncFiles.sh
+
+cat > /root/autoRsyncFiles.sh <<EOF
 Copr_target_dir="/copr_docker"
 
 while true
@@ -20,3 +23,4 @@ do
 done
 
 bash $Copr_target_dir/docker/builder/init-script-for-startup.sh
+EOF
