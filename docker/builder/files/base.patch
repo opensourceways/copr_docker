@@ -1,0 +1,16 @@
+diff --color -uNa providers/base.py provider1s/base.py
+--- providers/base.py	2023-05-24 01:48:51.000000000 +0800
++++ provider1s/base.py	2025-01-03 20:13:41.475560440 +0800
+@@ -51,6 +51,12 @@
+             if e.errno != errno.EEXIST:
+                 raise
+ 
++        try:
++            shutil.copy2(os.path.join(os.environ['HOME'], '.netrc'), self.workdir)
++        except OSError as e:
++            log.error(f"failed to copy netrc: {e}")
++            pass
++
+         # Change home directory to workdir and create .rpmmacros there
+         os.environ["HOME"] = self.workdir
+         self.create_rpmmacros()
