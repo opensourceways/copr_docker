@@ -1,6 +1,8 @@
---- frontend/coprs_frontend/application	2022-10-26 10:08:42.246723528 +0800
-+++ ../copr_docker/docker/frontend/files/usr/share/copr/coprs_frontend/application	2023-03-09 15:43:53.968537266 +0800
-@@ -9,9 +9,14 @@
+diff --git a/frontend/coprs_frontend/application b/frontend/coprs_frontend/application
+index 753add041..2a8d28ded 100644
+--- a/frontend/coprs_frontend/application
++++ b/frontend/coprs_frontend/application
+@@ -9,6 +9,14 @@ os.environ["COPRS_ENVIRON_PRODUCTION"] = "1"
  sys.path.insert(0, os.path.dirname(__file__))
  
  from coprs import app
@@ -9,11 +11,9 @@
 +app.wsgi_app = ProxyFix(
 +    app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
 +)
++
++from werkzeug import Request
++Request.max_form_parts = 5000 # fix /rebuild-all failed when submitted more than 1000 packages
  
  if app.debug:
      from werkzeug.debug import DebuggedApplication
-     app = DebuggedApplication(app, True)
- 
--application = app
-+application = app
-\ No newline at end of file
