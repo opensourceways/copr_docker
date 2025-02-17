@@ -2,10 +2,10 @@ config_opts['chroot_setup_cmd'] = 'install yum tar gcc-c++ openEuler-rpm-config 
 config_opts['dist'] = 'oe2203'  # only useful for --resultdir variable subst
 config_opts['releasever'] = '22.03LTS_SP4'
 config_opts['package_manager'] = 'dnf'
-config_opts['description'] = 'openEuler 22.03'
+config_opts['description'] = 'openEuler 22.03 LTS SP4'
 config_opts['extra_chroot_dirs'] = [ '/run/lock', ]
 config_opts['useradd'] = '/usr/sbin/useradd -o -m -u {{chrootuid}} -g {{chrootgid}} -d {{chroothome}} {{chrootuser}}'
-config_opts['bootstrap_image'] = 'docker.io/openeuler/openeuler:22.03-lts'
+config_opts['bootstrap_image'] = 'docker.io/openeuler/openeuler:22.03-lts-sp4'
 config_opts['nosync'] = True
 config_opts['nosync_force'] = True
 config_opts['macros']['%_smp_ncpus_max'] = '4'
@@ -64,6 +64,20 @@ gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-E
 [EPOL-update]
 name=EPOL update
 baseurl=http://192.168.0.17/openEuler-22.03-LTS-SP4/EPOL/update/main/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
+
+[multi_version-OpenStack]
+name=multi_version-OpenStack
+baseurl=http://192.168.0.17/openEuler-22.03-LTS-SP4/EPOL/multi_version/OpenStack/Wallaby/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
+
+[multi_version-OpenStack-update]
+name=multi_version-OpenStack
+baseurl=http://192.168.0.17/openEuler-22.03-LTS-SP4/EPOL/update/multi_version/OpenStack/Wallaby/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
