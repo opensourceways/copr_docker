@@ -41,6 +41,13 @@ spider_regex = re.compile(
     '|findlinks|crawler|yandex|blexbot|semrushbot).*',
     re.IGNORECASE)
 
+CHROOT_REPO_METADATA_STAT = 'chroot_repo_metadata_dl_stat'
+CHROOT_RPMS_STAT = 'chroot_rpms_dl_stat'
+PROJECT_RPMS_STAT = 'project_rpms_dl_stat'
+KEY_SEPARATOR = '|'
+REGEX_GROUP_OWNER = 'owner'
+REGEX_GROUP_PROJECT = 'project'
+REGEX_GROUP_CHROOT = 'chroot'
 
 def url_to_key_strings(url):
     """
@@ -50,29 +57,29 @@ def url_to_key_strings(url):
     url_match = repomd_url_regex.match(url)
     if url_match:
         chroot_key = (
-            'chroot_repo_metadata_dl_stat',
-            url_match.group('owner'),
-            url_match.group('project'),
-            url_match.group('chroot')
+            CHROOT_REPO_METADATA_STAT,
+            url_match.group(REGEX_GROUP_OWNER),
+            url_match.group(REGEX_GROUP_PROJECT),
+            url_match.group(REGEX_GROUP_CHROOT)
         )
-        chroot_key_str = '|'.join(chroot_key)
+        chroot_key_str = KEY_SEPARATOR.join(chroot_key)
         return [chroot_key_str]
 
     url_match = rpm_url_regex.match(url)
     if url_match:
         chroot_key = (
-            'chroot_rpms_dl_stat',
-            url_match.group('owner'),
-            url_match.group('project'),
-            url_match.group('chroot')
+            CHROOT_RPMS_STAT,
+            url_match.group(REGEX_GROUP_OWNER),
+            url_match.group(REGEX_GROUP_PROJECT),
+            url_match.group(REGEX_GROUP_CHROOT)
         )
-        chroot_key_str = '|'.join(chroot_key)
+        chroot_key_str = KEY_SEPARATOR.join(chroot_key)
         project_key = (
-            'project_rpms_dl_stat',
-            url_match.group('owner'),
-            url_match.group('project')
+            PROJECT_RPMS_STAT,
+            url_match.group(REGEX_GROUP_OWNER),
+            url_match.group(REGEX_GROUP_PROJECT)
         )
-        project_key_str = '|'.join(project_key)
+        project_key_str = KEY_SEPARATOR.join(project_key)
         return [chroot_key_str, project_key_str]
     return []
 
@@ -176,9 +183,12 @@ def get_hit_data(accesses):
             logger.debug("Skipping: %s", url)
             continue
 
-        if any(x for x in key_strings
-               if x.startswith("chroot_rpms_dl_stat|")
-               and x.endswith("|srpm-builds")):
+        found = False
+        for x in key_strings:
+            if x.startswith("chroot_rpms_dl_stat|") and x.endswith("|srpm-builds"):
+                found = True
+                break
+        if found:
             logger.debug("Skipping %s (SRPM build)", url)
             continue
 

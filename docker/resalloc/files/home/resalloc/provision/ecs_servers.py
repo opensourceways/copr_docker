@@ -9,6 +9,8 @@ import time
 import yaml
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+from dataclasses import dataclass
+from typing import Optional, List, Dict, Any
 
 # init logger
 logger = logging.getLogger(__name__)
@@ -18,6 +20,20 @@ retries = Retry(total=3, backoff_factor=0.1)
 session = requests.Session()
 session.mount('https://', HTTPAdapter(max_retries=retries))
 timeout = 5
+
+@dataclass
+class ServerCreateConfig:
+    """服务器创建配置参数"""
+    key_name: str
+    count: int
+    flavorRef: str
+    imageRef: str
+    name: str
+    vpcid: str
+    subnet_id: str
+    security_group_id: str
+    volumetype: str
+    user_data: Optional[str] = None  # 可选参数可设置默认值
 
 class ECSServers(object):
     """
@@ -95,6 +111,24 @@ class ECSServers(object):
             logger.error(f'Get authorized token: Fail to get auth token, ret: {response.status_code} msg: {response.json()}')
             raise
 
+    @staticmethod
+    def get_create_data(config: ServerCreateConfig) -> Dict[str, Any]:
+        """通过具名配置对象生成服务器创建数据"""
+        return {
+            'server': {
+                'count': config.count,
+                'key_name': config.key_name,
+                'flavorRef': config.flavorRef,
+                'imageRef': config.imageRef,
+                'name': config.name,
+                'user_data': config.user_data,
+                'nics': [{'subnet_id': config.subnet_id}],
+                'root_volume': {'volumetype': config.volumetype},
+                'security_groups': [{'id': config.security_group_id}],
+                'vpcid': config.vpcid
+            }
+        }
+
     def validate_create_fields(self, arch, flavor_level, count):
         """
         Validation of the created fields
@@ -124,47 +158,9 @@ class ECSServers(object):
             result = {'code': 400, 'error': 'Exceeds maximum number of servers that can be created.'}
             logger.error('Create servers: {}'.format(result))
             return result
-
-    @staticmethod
-    def get_create_data(key_name, count, flavorRef, imageRef, name, vpcid, subnet_id, security_group_id,
-                        volumetype, user_data):
-        """
-        Data for creating servers
-        :param count: numbers of servers
-        :param flavorRef: name of flavor
-        :param imageRef: UUID of image
-        :param name: server name
-        :param vpcid: UUID of VPC
-        :param subnet_id: UUID of subnet
-        :param security_group_id: UUID of security group
-        :param volumetype:
-        :return:
-        """
-        data = {
-            'server': {
-                'count': count,
-                'key_name': key_name,
-                'flavorRef': flavorRef,
-                'imageRef': imageRef,
-                'name': name,
-                'user_data': user_data,
-                'nics': [
-                    {
-                        'subnet_id': subnet_id
-                    }
-                ],
-                'root_volume': {
-                    'volumetype': volumetype
-                },
-                'security_groups': [
-                    {
-                        'id': security_group_id
-                    }
-                ],
-                'vpcid': vpcid
-            }
-        }
-        return data
+        
+        # 新增：所有验证通过时显式返回成功标识
+        return {'code': 200, 'error': None}
 
     def create_servers(self, arch, flavor_level, name, count=1):
         """
@@ -197,8 +193,19 @@ class ECSServers(object):
         waiting_time = self.waiting_time
         query_times = self.query_times
         server_boot_time = self.server_boot_time
-        data = self.get_create_data(self.key_name, count, flavorRef, imageRef, name, vpcid, subnet_id, security_group_id,
-                                    volumetype, self.user_data)
+        config = ServerCreateConfig(
+            key_name = self.key_name,
+            count = count,
+            flavorRef = flavorRef,
+            imageRef = imageRef,
+            name = name,
+            vpcid = vpcid,
+            subnet_id = subnet_id,
+            security_group_id = security_group_id,
+            volumetype = volumetype,
+            user_data = self.user_data
+        )
+        data = self.get_create_data(config)
         response = session.post(url, headers=self.headers, data=json.dumps(data), timeout=timeout)
         if response.status_code == 200:
             serverIds = response.json()['serverIds']
@@ -367,6 +374,7 @@ class ECSServers(object):
         for arch in self.archMapping:
             if flavor_name in self.archMapping.get(arch):
                 return arch
+        return None
 
     def get_server_maps(self):
         """
@@ -413,6 +421,7 @@ class ECSServers(object):
             if server.get(server_ip):
                 hostname = server.get(server_ip)
                 return hostname
+        return None
 
     def get_server_id(self, server_ip):
         """
@@ -425,6 +434,7 @@ class ECSServers(object):
             if server.get(server_ip):
                 server_id = server.get(server_ip)
                 return server_id
+        return None
 
     def get_server_ids(self, server_ips):
         """
@@ -452,6 +462,7 @@ class ECSServers(object):
         for server in servers:
             if server.get(list(server.keys())[0]) == server_id:
                 return list(server.keys())[0]
+        return None
 
     def get_server_ips(self, server_ids: list):
         """
