@@ -170,13 +170,21 @@ class ECSServers(object):
         :param count: numbers of servers
         :return: a list of IP address of the available servers
         """
+        start_time = time.time()
+        logger.info("Starting create_servers method")
+
         result = self.validate_create_fields(arch, flavor_level, count)
         if result:
+            end_time = time.time()
+            logger.info(f"validate_create_fields took {end_time - start_time:.2f} seconds")
             return result
         url = 'https://ecs.{}.myhuaweicloud.com/v1/{}/cloudservers'.format(self.region, self.project_id)
         try:
+            start_time = time.time()
             flavorRef = self.flavorMapping.get(arch).get(flavor_level)
             imageRef = self.flavorMapping.get(arch).get('imageRef')
+            end_time = time.time()
+            logger.info(f"Flavor and Image reference lookup took {end_time - start_time:.2f} seconds")
         except AttributeError as e:
             logger.error(e)
             result = {'code': 400, 'error': e}
@@ -205,10 +213,20 @@ class ECSServers(object):
             volumetype = volumetype,
             user_data = self.user_data
         )
+
+        start_time = time.time()
         data = self.get_create_data(config)
+        end_time = time.time()
+        logger.info(f"Preparing create data took {end_time - start_time:.2f} seconds")
+
+        start_time = time.time()
         response = session.post(url, headers=self.headers, data=json.dumps(data), timeout=timeout)
+        end_time = time.time()
+        logger.info(f"POST request to ECS API took {end_time - start_time:.2f} seconds")
+
         if response.status_code == 200:
             serverIds = response.json()['serverIds']
+            loop_start_time = time.time()  # 记录循环开始时间
             while query_times > 0:
                 server_ips = self.get_server_ips(serverIds)
                 if len(server_ips) == len(serverIds):
@@ -216,6 +234,9 @@ class ECSServers(object):
                     logger.info('Create servers: {}'.format(result))
                     # return after servers startup
                     time.sleep(server_boot_time)
+                    loop_end_time = time.time()  # 记录循环结束时间
+                    loop_duration = loop_end_time - loop_start_time  # 计算循环耗时
+                    logger.info(f"Server IP query loop took {loop_duration:.2f} seconds with {query_times_initial} initial query times")
                     return result
                 else:
                     query_times -= 1

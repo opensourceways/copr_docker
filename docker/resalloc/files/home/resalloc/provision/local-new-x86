@@ -1,7 +1,12 @@
 #!/bin/python3
 import os
 import sys
+import logging
 import ecs_servers
+
+log_file = "/home/resalloc/provision/create-x86.log"  # 修改为你的日志文件路径
+logging.basicConfig(filename=log_file, level=logging.INFO)
+logger = logging.getLogger('local-new-x86')
 
 name = os.getenv('RESALLOC_NAME')
 if name is None:
