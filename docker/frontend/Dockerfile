@@ -1,7 +1,6 @@
-FROM openeuler/openeuler:22.03
+FROM openeuler/openeuler:24.03-lts-sp1
 LABEL maintainer="infra@openeuler.org"
 
-# TERM is to make the tito work in container, rhbz#1733043
 ENV TERM=linux
 ENV LANG=en_US.UTF-8
 ENV REDIS_HOST=redis
@@ -15,11 +14,13 @@ RUN groupadd -r copr-fe -g 997
 RUN useradd -r copr-fe -u 997 -g 997 -d /usr/share/copr/coprs_frontend
 
 # download EUR repo
-RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-22.03_LTS_SP1/mywaaagh_admin-eur-openeuler-22.03_LTS_SP1.repo
+RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-24.03_LTS_SP1/mywaaagh_admin-eur-openeuler-24.03_LTS_SP1.repo 
+
+COPY files/ /
 
 # base packages
 RUN set -ex ; \
-    dnf -y update && \
+    dnf -y update && dnf in -y openstack-release-antelope &&\
     dnf -y install htop \
                    make \
                    which \
@@ -32,7 +33,7 @@ RUN set -ex ; \
                    python3-anytree \
                    postgresql-server \
                    redis \
-                   mock-core-configs \
+                   mock-core-configs-31.6 \
                    findutils \
                    copr-frontend-1.200 \
                    modulemd-tools \
@@ -41,7 +42,6 @@ RUN set -ex ; \
                    git \
     && dnf clean all && rm -rf /var/cache/dnf
 
-COPY files/ /
 RUN sed -i 's/User apache/User copr-fe/g' /etc/httpd/conf/httpd.conf
 RUN sed -i 's/Group apache/Group copr-fe/g' /etc/httpd/conf/httpd.conf
 
@@ -80,7 +80,6 @@ RUN chmod -R g+rwX \
 
 # setup for cronjob
 RUN echo 'copr-fe ALL=(root) NOPASSWD:/etc/cron.hourly/copr-frontend-optional,/etc/cron.hourly/copr-frontend,/etc/cron.daily/copr-frontend,/etc/cron.daily/copr-frontend-optional' >> /etc/sudoers.d/copr-fe
-RUN patch /usr/lib/python3.9/site-packages/copr_common/redis_helpers.py < /redis_helpers.patch
 RUN chown -R copr-fe:copr-fe /copr_design && chmod 555 /entrypoint
 USER copr-fe
 
