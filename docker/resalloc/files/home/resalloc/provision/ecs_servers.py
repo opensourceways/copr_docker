@@ -236,7 +236,7 @@ class ECSServers(object):
                     time.sleep(server_boot_time)
                     loop_end_time = time.time()  # 记录循环结束时间
                     loop_duration = loop_end_time - loop_start_time  # 计算循环耗时
-                    logger.info(f"Server IP query loop took {loop_duration:.2f} seconds with {query_times_initial} initial query times")
+                    logger.info(f"Server IP query loop took {loop_duration:.2f} seconds")
                     return result
                 else:
                     query_times -= 1
