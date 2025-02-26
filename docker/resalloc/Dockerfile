@@ -1,8 +1,8 @@
-FROM openeuler/openeuler:22.03
+FROM openeuler/openeuler:24.03-sp1
 LABEL maintainer="infra@openeuler.org"
 
 # download EUR repo
-RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-22.03_LTS_SP1/mywaaagh_admin-eur-openeuler-22.03_LTS_SP1.repo
+RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-24.03_LTS_SP1/mywaaagh_admin-eur-openeuler-24.03_LTS_SP1.repo
 
 RUN dnf install -y ansible \
                    vim \
