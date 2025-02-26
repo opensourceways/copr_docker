@@ -1,4 +1,4 @@
-FROM openeuler/openeuler:24.03-sp1
+FROM openeuler/openeuler:24.03-lts
 LABEL maintainer="infra@openeuler.org"
 
 # download EUR repo
