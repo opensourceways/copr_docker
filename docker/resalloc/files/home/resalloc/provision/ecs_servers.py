@@ -158,9 +158,8 @@ class ECSServers(object):
             result = {'code': 400, 'error': 'Exceeds maximum number of servers that can be created.'}
             logger.error('Create servers: {}'.format(result))
             return result
-        
-        # 新增：所有验证通过时显式返回成功标识
-        return {'code': 200, 'error': None}
+
+        return None
 
     def create_servers(self, arch, flavor_level, name, count=1):
         """
@@ -226,20 +225,26 @@ class ECSServers(object):
 
         if response.status_code == 200:
             serverIds = response.json()['serverIds']
-            loop_start_time = time.time()  # 记录循环开始时间
+            total_queries = query_times  # 记录总查询次数
+            loop_count = 0  # 记录当前循环次数
+
             while query_times > 0:
+                start_time = time.time()  # 记录循环开始时间
                 server_ips = self.get_server_ips(serverIds)
+                elapsed_time = time.time() - start_time  # 计算循环耗时
+                loop_count += 1  # 增加循环计数
+
                 if len(server_ips) == len(serverIds):
                     result = {'code': 200, 'server_ips': server_ips}
-                    logger.info('Create servers: {}'.format(result))
+                    logger.info(f'Create servers: {result}')
+                    logger.info(f'Loop exited on attempt {loop_count} out of {total_queries}')
+                    logger.info(f'Total time spent in loop: {elapsed_time * loop_count:.2f} seconds')
                     # return after servers startup
                     time.sleep(server_boot_time)
-                    loop_end_time = time.time()  # 记录循环结束时间
-                    loop_duration = loop_end_time - loop_start_time  # 计算循环耗时
-                    logger.info(f"Server IP query loop took {loop_duration:.2f} seconds")
                     return result
                 else:
                     query_times -= 1
+                    logger.info(f'Attempt {loop_count} failed, {query_times} attempts left, waiting for {waiting_time} seconds')
                     time.sleep(waiting_time)
         else:
             result = {'code': 400, 'error': response.content}
