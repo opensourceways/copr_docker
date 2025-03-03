@@ -199,7 +199,7 @@ class ECSServers(object):
         volumetype = self.volumetype
         waiting_time = self.waiting_time
         query_times = self.query_times
-        server_boot_time = self.server_boot_time
+        server_boot_time = 10
         config = ServerCreateConfig(
             key_name = self.key_name,
             count = count,
@@ -227,7 +227,7 @@ class ECSServers(object):
             serverIds = response.json()['serverIds']
             total_queries = query_times  # 记录总查询次数
             loop_count = 0  # 记录当前循环次数
-
+            org_time = time.time()
             while query_times > 0:
                 start_time = time.time()  # 记录循环开始时间
                 server_ips = self.get_server_ips(serverIds)
@@ -241,6 +241,8 @@ class ECSServers(object):
                     logger.info(f'Time spent in last loop: {elapsed_time} seconds')
                     # return after servers startup
                     time.sleep(server_boot_time)
+                    all_time = time.time() - org_time
+                    logger.info(f'Total time spent: {all_time} seconds')
                     return result
                 else:
                     query_times -= 1
