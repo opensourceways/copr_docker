@@ -238,13 +238,13 @@ class ECSServers(object):
                     result = {'code': 200, 'server_ips': server_ips}
                     logger.info(f'Create servers: {result}')
                     logger.info(f'Loop exited on attempt {loop_count} out of {total_queries}')
-                    logger.info(f'Total time spent in loop: {elapsed_time * loop_count:.2f} seconds')
+                    logger.info(f'Time spent in last loop: {elapsed_time} seconds')
                     # return after servers startup
                     time.sleep(server_boot_time)
                     return result
                 else:
                     query_times -= 1
-                    logger.info(f'Attempt {loop_count} failed, {query_times} attempts left, waiting for {waiting_time} seconds')
+                    logger.info(f'Attempt {loop_count} failed, {query_times} attempts left, time spent in loop: {elapsed_time} seconds, waiting for {waiting_time} seconds')
                     time.sleep(waiting_time)
         else:
             result = {'code': 400, 'error': response.content}
