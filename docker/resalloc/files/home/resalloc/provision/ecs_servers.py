@@ -159,8 +159,7 @@ class ECSServers(object):
             logger.error('Create servers: {}'.format(result))
             return result
         
-        # 新增：所有验证通过时显式返回成功标识
-        return {'code': 200, 'error': None}
+        return None
 
     def create_servers(self, arch, flavor_level, name, count=1):
         """
@@ -208,6 +207,8 @@ class ECSServers(object):
         data = self.get_create_data(config)
         response = session.post(url, headers=self.headers, data=json.dumps(data), timeout=timeout)
         if response.status_code == 200:
+            # ecs服务启动大概需要30s左右，所以等待30s再轮询去查询服务器是否成功分配IP
+            time.sleep(server_boot_time)
             serverIds = response.json()['serverIds']
             while query_times > 0:
                 server_ips = self.get_server_ips(serverIds)
@@ -215,7 +216,6 @@ class ECSServers(object):
                     result = {'code': 200, 'server_ips': server_ips}
                     logger.info('Create servers: {}'.format(result))
                     # return after servers startup
-                    time.sleep(server_boot_time)
                     return result
                 else:
                     query_times -= 1
