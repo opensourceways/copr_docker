@@ -35,49 +35,49 @@ user_agent={{ user_agent }}
 
 [OS]
 name=OS
-baseurl=http://192.168.0.17/openEuler-22.03-LTS-SP4/OS/$basearch/
+baseurl=http://172.16.1.109/openEuler-22.03-LTS-SP4/OS/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 
 [everything]
 name=everything
-baseurl=http://192.168.0.17/openEuler-22.03-LTS-SP4/everything/$basearch/
+baseurl=http://172.16.1.109/openEuler-22.03-LTS-SP4/everything/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 
 [EPOL]
 name=EPOL
-baseurl=http://192.168.0.17/openEuler-22.03-LTS-SP4/EPOL/main/$basearch/
+baseurl=http://172.16.1.109/openEuler-22.03-LTS-SP4/EPOL/main/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 
 [update]
 name=update
-baseurl=http://192.168.0.17/openEuler-22.03-LTS-SP4/update/$basearch/
+baseurl=http://172.16.1.109/openEuler-22.03-LTS-SP4/update/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 
 [EPOL-update]
 name=EPOL update
-baseurl=http://192.168.0.17/openEuler-22.03-LTS-SP4/EPOL/update/main/$basearch/
+baseurl=http://172.16.1.109/openEuler-22.03-LTS-SP4/EPOL/update/main/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 
 [multi_version-OpenStack]
 name=multi_version-OpenStack
-baseurl=http://192.168.0.17/openEuler-22.03-LTS-SP4/EPOL/multi_version/OpenStack/Wallaby/$basearch/
+baseurl=http://172.16.1.109/openEuler-22.03-LTS-SP4/EPOL/multi_version/OpenStack/Wallaby/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 
 [multi_version-OpenStack-update]
 name=multi_version-OpenStack
-baseurl=http://192.168.0.17/openEuler-22.03-LTS-SP4/EPOL/update/multi_version/OpenStack/Wallaby/$basearch/
+baseurl=http://172.16.1.109/openEuler-22.03-LTS-SP4/EPOL/update/multi_version/OpenStack/Wallaby/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
