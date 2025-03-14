@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Check PR source branch against target branch
         run: |
