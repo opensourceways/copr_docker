@@ -217,7 +217,7 @@ class ECSServers(object):
         data = self.get_create_data(config)
         end_time = time.time()
         logger.info(f"Preparing create data took {end_time - start_time:.2f} seconds")
-
+        logger.info("The request data is {}".format(data))
         start_time = time.time()
         response = session.post(url, headers=self.headers, data=json.dumps(data), timeout=timeout)
         end_time = time.time()
