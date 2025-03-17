@@ -225,6 +225,7 @@ class ECSServers(object):
 
         if response.status_code == 200:
             serverIds = response.json()['serverIds']
+            logger.info(f'Create servers: {serverIds}')
             total_queries = query_times  # 记录总查询次数
             loop_count = 0  # 记录当前循环次数
             org_time = time.time()
