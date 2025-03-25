@@ -35,11 +35,10 @@ RUN set -ex ; \
                    redis \
                    mock-core-configs-31.6 \
                    findutils \
-                   copr-frontend-1.200 \
                    modulemd-tools \
                    python-pip \
-                   patch \
-                   git \
+                   git 
+RUN dnf -y in copr-frontend-1.206 \
     && dnf clean all && rm -rf /var/cache/dnf
 
 RUN sed -i 's/User apache/User copr-fe/g' /etc/httpd/conf/httpd.conf
@@ -88,17 +87,6 @@ USER copr-fe
 # looks bad in copy-pasted outputs and tutorials. I borrowed this one from
 # /root/.bashrc
 ENV PS1="[\u@\h \W]\$ "
-
-# do some patching works
-RUN patch /usr/share/copr/coprs_frontend/application < /proxyfix.patch && \
-    patch /usr/share/copr/coprs_frontend/coprs/forms.py < /pyporter.patch && \
-    cd /usr/share/copr && patch -p2 < /add_openeuler_pkg.patch && \
-    patch -p2 < /package_count.patch && \
-    patch /usr/share/copr/coprs_frontend/coprs/helpers.py < /helpers.patch && \
-    patch -p2 < /oidc_group.patch && \
-    patch -p2 < /quota.patch && \
-    patch -p2 < /packages_statistics.patch && \
-    patch /usr/share/copr/coprs_frontend/coprs/views/misc.py < /views_misc.patch
 
 RUN cp -r /copr_design/sources/usr / && find /copr_design ! -path /copr_design -exec rm -rf {} \+;
 EXPOSE 5000
