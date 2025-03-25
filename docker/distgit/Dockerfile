@@ -1,4 +1,4 @@
-FROM openeuler/openeuler:22.03
+FROM openeuler/openeuler:24.03
 LABEL maintainer="infra@openeuler.org"
 
 # TERM is to make the tito work in container, rhbz#1733043
@@ -6,7 +6,7 @@ ENV TERM=linux
 ENV PYTHONPATH=/usr/share/copr/
 
 # download EUR repo
-RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-22.03_LTS_SP1/mywaaagh_admin-eur-openeuler-22.03_LTS_SP1.repo
+RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-24.03_LTS_SP1/mywaaagh_admin-eur-openeuler-24.03_LTS_SP1.repo
 
 # base packages
 RUN set -ex ; \
@@ -18,9 +18,8 @@ RUN set -ex ; \
                    cgit \
                    python3-rpkg-1.65 \
                    python3-ipdb \
-                   tini \
-                   && \
-    dnf -y install copr-dist-git sudo && \
+                   tini 
+RUN dnf -y install copr-dist-git-1.0 sudo && \
     dnf clean all && rm -rf /var/cache/dnf
 
 RUN rm /etc/httpd/conf.d/ssl.conf
@@ -56,8 +55,6 @@ RUN directories="/etc/httpd /var/run/httpd /var/log/httpd /var/lib/dist-git /run
     chmod -R g+rwX $directories
 
 RUN echo "copr-dist-git ALL = (root) NOPASSWD: /copr-dist-git-assure-perm,/etc/cron.monthly/copr-dist-git" >> /etc/sudoers.d/copr-dist-git
-RUN patch /usr/lib/python3.9/site-packages/copr_common/redis_helpers.py < /redis_helpers.patch
-RUN patch /usr/lib/python3.9/site-packages/copr_dist_git/helpers.py < /helpers.patch
 USER copr-dist-git
 
 RUN ln -sf /proc/1/fd/1 /var/log/copr-dist-git/main.log
