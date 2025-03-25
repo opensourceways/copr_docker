@@ -36,6 +36,9 @@ RUN sed -i 's/Listen 80/Listen 5001/' /etc/httpd/conf/httpd.conf && \
 RUN mkdir /tmp/copr-dist-git
 RUN chown copr-dist-git:packager /tmp/copr-dist-git
 
+RUN mkdir /var/lock/copr-dist-git/
+RUN chown copr-dist-git:copr-dist-git /var/log/copr-dist-git
+
 # copy filesystem setup and setup ownership and permissions
 COPY files/ /
 RUN chmod 644 /etc/copr/copr-dist-git.conf && chmod 755 /copr-dist-git-assure-perm
@@ -60,4 +63,4 @@ USER copr-dist-git
 RUN ln -sf /proc/1/fd/1 /var/log/copr-dist-git/main.log
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["bash", "-c", "mkdir -p /var/lib/dist-git/cache /var/lib/dist-git/git && sudo /copr-dist-git-assure-perm && exec /usr/bin/copr-run-dispatcher imports"]
+CMD ["bash", "-c", "mkdir -p /var/lib/dist-git/cache /var/lib/dist-git/git && sudo /copr-dist-git-assure-perm && exec /usr/bin/copr-run-dispatcher-dist-git imports"]
