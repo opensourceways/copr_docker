@@ -79,7 +79,7 @@ RUN chmod -R g+rwX \
 
 # setup for cronjob
 RUN echo 'copr-fe ALL=(root) NOPASSWD:/etc/cron.hourly/copr-frontend-optional,/etc/cron.hourly/copr-frontend,/etc/cron.daily/copr-frontend,/etc/cron.daily/copr-frontend-optional' >> /etc/sudoers.d/copr-fe
-RUN chown -R copr-fe:copr-fe /copr_design && chmod 555 /entrypoint
+#RUN chown -R copr-fe:copr-fe /copr_design && chmod 555 /entrypoint
 USER copr-fe
 
 # Since home directory for `copr-fe` user is `/usr/share/copr/coprs_frontend`
@@ -88,7 +88,7 @@ USER copr-fe
 # /root/.bashrc
 ENV PS1="[\u@\h \W]\$ "
 
-RUN cp -r /copr_design/sources/usr / && find /copr_design ! -path /copr_design -exec rm -rf {} \+;
+# RUN cp -r /copr_design/sources/usr / && find /copr_design ! -path /copr_design -exec rm -rf {} \+;
 EXPOSE 5000
 
 CMD ["/entrypoint"]
