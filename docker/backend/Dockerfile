@@ -45,7 +45,7 @@ RUN set -ex ; \
 # for unbuffer package
                    expect \
                    python3-kafka-python \
-    && dnf -y install copr-backend-1.173 \
+    && dnf -y install copr-backend-1.177 \
     && dnf clean all && rm -rf /var/cache/dnf
 
 
