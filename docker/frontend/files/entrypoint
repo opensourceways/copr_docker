@@ -5,8 +5,7 @@ ln -sf /proc/1/fd/1 /var/log/copr-frontend/alembic.log
 ln -sf /proc/1/fd/1 /var/log/copr-frontend/manage.log
 ln -sf /proc/1/fd/1 /var/log/copr-frontend/frontend.log
 
-cd /usr/share/copr/coprs_frontend/
-./manage.py create-db --alembic alembic.ini
+cd /usr/share/copr/coprs_frontend && alembic -c ./alembic.ini upgrade head
 
 exec /usr/sbin/httpd -DFOREGROUND
 
