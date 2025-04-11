@@ -1,4 +1,4 @@
-FROM openeuler/openeuler:22.03
+FROM openeuler/openeuler:24.03-lts
 LABEL maintainer="infra@openeuler.org"
 
 # TERM is to make the tito work in container, rhbz#1733043
@@ -7,12 +7,13 @@ ENV TERM=linux
 COPY files/ /
 
 # download EUR repo
-RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-20.03_LTS_SP3/mywaaagh_admin-eur-openeuler-20.03_LTS_SP3.repo
+RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-24.03_LTS_SP1/mywaaagh_admin-eur-openeuler-24.03_LTS_SP1.repo
 # install old nosync for ABI compatible
 RUN dnf -y update && dnf -y in nosync && rm -f /etc/yum.repos.d/eur.repo
 
 # download EUR repo
-RUN curl -o /etc/yum.repos.d/eur.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-22.03_LTS_SP1/mywaaagh_admin-eur-openeuler-22.03_LTS_SP1.repo
+RUN curl -o /etc/yum.repos.d/eur1.repo -L https://eur.openeuler.openatom.cn/coprs/mywaaagh_admin/eur/repo/openeuler-24.03_LTS_SP1/mywaaagh_admin-eur-openeuler-24.03_LTS_SP1.repo
+RUN curl -o /etc/yum.repos.d/eur2.repo -L https://eur.openeuler.openatom.cn/coprs/fuyong666/eur/repo/openeuler-24.03_LTS_SP1/fuyong666-eur-openeuler-24.03_LTS_SP1.repo
 
 # base packages
 RUN set -ex ; \
@@ -40,6 +41,7 @@ RUN set -ex ; \
                    python3-wheel \
                    make \
                    gem \
+    && dnf -y install git-lfs \
     && dnf -y install copr-rpmbuild-0.68 copr-builder-0.68 copr-distgit-client-0.68 \
     && dnf clean all && rm -rf /var/cache/dnf
 

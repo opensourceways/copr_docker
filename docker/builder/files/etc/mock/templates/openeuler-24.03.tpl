@@ -35,49 +35,49 @@ user_agent={{ user_agent }}
 
 [OS]
 name=OS
-baseurl=http://192.168.0.17/openEuler-24.03-LTS/OS/$basearch/
+baseurl=http://172.16.1.109/openEuler-24.03-LTS/OS/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 
 [everything]
 name=everything
-baseurl=http://192.168.0.17/openEuler-24.03-LTS/everything/$basearch/
+baseurl=http://172.16.1.109/openEuler-24.03-LTS/everything/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 
 [EPOL]
 name=EPOL
-baseurl=http://192.168.0.17/openEuler-24.03-LTS/EPOL/main/$basearch/
+baseurl=http://172.16.1.109/openEuler-24.03-LTS/EPOL/main/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 
 [update]
 name=update
-baseurl=http://192.168.0.17/openEuler-24.03-LTS/update/$basearch/
+baseurl=http://172.16.1.109/openEuler-24.03-LTS/update/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 
 [EPOL-update]
 name=EPOL update
-baseurl=http://192.168.0.17/openEuler-24.03-LTS/EPOL/update/main/$basearch/
+baseurl=http://172.16.1.109/openEuler-24.03-LTS/EPOL/update/main/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 
 [multi_version-OpenStack]
 name=multi_version-OpenStack
-baseurl=http://192.168.0.17/openEuler-24.03-LTS/EPOL/multi_version/OpenStack/Antelope/$basearch/
+baseurl=http://172.16.1.109/openEuler-24.03-LTS/EPOL/multi_version/OpenStack/Antelope/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
 
 [multi_version-OpenStack-update]
 name=multi_version-OpenStack
-baseurl=http://192.168.0.17/openEuler-24.03-LTS/EPOL/update/multi_version/OpenStack/Antelope/$basearch/
+baseurl=http://172.16.1.109/openEuler-24.03-LTS/EPOL/update/multi_version/OpenStack/Antelope/$basearch/
 enabled=1
 gpgcheck=1
 gpgkey=file:///usr/share/distribution-gpg-keys/openeuler/RPM-GPG-KEY-openEuler-EulerMaker
